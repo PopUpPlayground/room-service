@@ -1,0 +1,36 @@
+{
+    "name": "LiquidCrystal", 
+    "repository": {
+        "url": "https://bitbucket.org/fmalpartida/new-liquidcrystal", 
+        "type": "git"
+    }, 
+    "platforms": [
+        "atmelavr"
+    ], 
+    "frameworks": [
+        "arduino"
+    ], 
+    "version": "1.3.4", 
+    "export": {
+        "exclude": [
+            "def", 
+            "thirdparty libraries", 
+            "utility/docs", 
+            "doxygen*"
+        ]
+    }, 
+    "authors": [
+        {
+            "url": "https://bitbucket.org/fmalpartida", 
+            "maintainer": false, 
+            "email": null, 
+            "name": "F Malpartida"
+        }
+    ], 
+    "keywords": [
+        "lcd", 
+        "hd44780"
+    ], 
+    "id": 136, 
+    "description": "LiquidCrystal Library is faster and extensable, compatible with the original LiquidCrystal library"
+}
