@@ -1,0 +1,53 @@
+{
+    "description": "Keypad is a library for using matrix style keypads with the Arduino.", 
+    "repository": {
+        "url": "https://github.com/Chris--A/Keypad", 
+        "type": "git"
+    }, 
+    "platforms": [
+        "atmelavr", 
+        "atmelsam", 
+        "espressif8266", 
+        "intel_arc32", 
+        "microchippic32", 
+        "nordicnrf51", 
+        "teensy", 
+        "timsp430"
+    ], 
+    "export": {
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ], 
+        "include": null
+    }, 
+    "authors": [
+        {
+            "maintainer": false, 
+            "name": "Mark Stanley", 
+            "url": null, 
+            "email": null
+        }, 
+        {
+            "maintainer": false, 
+            "name": "Alexander Brevig", 
+            "url": null, 
+            "email": null
+        }
+    ], 
+    "keywords": [
+        "device", 
+        "control"
+    ], 
+    "id": 165, 
+    "name": "Keypad", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "version": "3.1.1", 
+    "homepage": "http://playground.arduino.cc/Code/Keypad"
+}
