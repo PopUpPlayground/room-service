@@ -2,6 +2,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 
+#define MAX_CODE_LENGTH 16
+
 Keypad InitKeypad();
 
 // 0x27 - I2C bus address
@@ -27,22 +29,50 @@ void setup() {
     lcd.print("Stay... FOREVER");
 }
 
+// Can almost certainly use a proper string library for this.
+char code[MAX_CODE_LENGTH+1] = "\0";
+int code_pos = 0;
+
 void loop() {
     char key = keypad.getKey();
 
+    if (key != NO_KEY) {
+        code[code_pos++] = key;
+    }
+
     // Just some fun player interaction for now. :)
-    if (key == '*') {
+    if (code_pos >= MAX_CODE_LENGTH) {
+        lcd.clear();
+        lcd.print("Srsly?");
+        memset(code, 0, sizeof(code));
+        code_pos = 0;
+    }
+    else if (key == '*') {
         lcd.clear();
         lcd.print("Enter code:");
         lcd.setCursor(0,1);
         lcd.blink();
+        memset(code, 0, sizeof(code));
+        code_pos = 0;
     }
     else if (key == '#') {
         lcd.noBlink();
         lcd.clear();
-        lcd.print("You have been");
-        lcd.setCursor(0,1);
-        lcd.print("eaten by a grue.");
+
+        if (! strcmp(code, "1234#")) {
+            lcd.print("Safe at last!");
+            lcd.setCursor(0,1);
+            delay(1000); // NOT FOR PRODUCTION CODE!
+            lcd.print("(Shia Labeouf)");
+        }
+        else {
+            lcd.print("You have been");
+            lcd.setCursor(0,1);
+            lcd.print("eaten by a grue.");
+        }
+
+        memset(code, 0, sizeof(code));
+        code_pos = 0;
     }
     else if (key != NO_KEY) {
         lcd.print(key);
