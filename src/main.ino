@@ -49,6 +49,9 @@ void setup() {
     tlc.setPWM(46,4095);
     tlc.setPWM(47,4095);
     tlc.write();
+
+    // Serial setup
+    Serial.begin(9600);
 }
 
 // Can almost certainly use a proper string library for this.
@@ -56,10 +59,28 @@ char code[MAX_CODE_LENGTH+1] = "\0";
 int code_pos = 0;
 
 void loop() {
+
+    // Demonstration that we can read serial,
+    // as well as write it. <3
+    if (Serial.available() > 0) {
+        int byte = Serial.read();
+
+        if (byte == '1') {
+            tlc.setPWM(0,4095);
+        }
+        else {
+            tlc.setPWM(0,0);
+        }
+
+        tlc.write();
+    }
+
     char key = keypad.getKey();
 
     if (key != NO_KEY) {
         code[code_pos++] = key;
+        Serial.print("Got key: ");
+        Serial.println(key);
     }
 
     // Just some fun player interaction for now. :)
