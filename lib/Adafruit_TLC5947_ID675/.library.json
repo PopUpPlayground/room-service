@@ -1,0 +1,46 @@
+{
+    "description": "Adafruit's Arduino driver for the TLC5947 PWM LED Driver Breakout.", 
+    "repository": {
+        "url": "https://github.com/adafruit/Adafruit_TLC5947", 
+        "type": "git"
+    }, 
+    "platforms": [
+        "atmelavr", 
+        "atmelsam", 
+        "espressif8266", 
+        "intel_arc32", 
+        "microchippic32", 
+        "nordicnrf51", 
+        "teensy", 
+        "timsp430"
+    ], 
+    "export": {
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ], 
+        "include": null
+    }, 
+    "authors": [
+        {
+            "maintainer": true, 
+            "name": "Adafruit", 
+            "url": null, 
+            "email": "info@adafruit.com"
+        }
+    ], 
+    "keywords": [
+        "display"
+    ], 
+    "id": 675, 
+    "name": "Adafruit TLC5947", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "version": "1.0.2", 
+    "homepage": null
+}
