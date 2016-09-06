@@ -30,8 +30,21 @@ void setup() {
 void loop() {
     char key = keypad.getKey();
 
-    if (key != NO_KEY) {
-        lcd.home();
+    // Just some fun player interaction for now. :)
+    if (key == '*') {
+        lcd.clear();
+        lcd.print("Enter code:");
+        lcd.setCursor(0,1);
+        lcd.blink();
+    }
+    else if (key == '#') {
+        lcd.noBlink();
+        lcd.clear();
+        lcd.print("You have been");
+        lcd.setCursor(0,1);
+        lcd.print("eaten by a grue.");
+    }
+    else if (key != NO_KEY) {
         lcd.print(key);
     }
 }
