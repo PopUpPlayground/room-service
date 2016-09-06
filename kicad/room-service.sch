@@ -104,4 +104,22 @@ Text Notes 7900 3200 0    60   ~ 0
 Pull-ups, apparently\nwe need these. :)
 Text Notes 8250 3900 0    60   ~ 0
 Also uses\n+5V, GND\n(not shown)\n
+Text Notes 6700 4400 0    60   ~ 0
+Latch
+Text Notes 6700 4250 0    60   ~ 0
+Clock
+Text Notes 6700 4100 0    60   ~ 0
+Data
+Text Notes 7100 4250 0    60   ~ 0
+TLC5947 pins
+Text Notes 4100 4050 0    60   ~ 0
+Pins 6-11\nTo Keypad\n
+Wire Wire Line
+	4700 3500 4250 3500
+Wire Wire Line
+	4250 3500 4250 3800
+Wire Wire Line
+	4700 4250 4250 4250
+Wire Wire Line
+	4250 4250 4250 4100
 $EndSCHEMATC
