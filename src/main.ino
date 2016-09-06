@@ -1,8 +1,11 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
+#include <Adafruit_TLC5947.h>
 
 #define MAX_CODE_LENGTH 16
+
+// Keypad Init
 
 Keypad InitKeypad();
 
@@ -12,6 +15,15 @@ LiquidCrystal_I2C   lcd(0x27,2,1,0,4,5,6,7);
 Keypad keypad = InitKeypad();
 
 const int Pwr_Led = 13;
+
+// TLC5947 init
+
+// Number, clock, data, latch
+const int qty = 2;
+const int clock = 14;
+const int data = 15;
+const int latch = 13;
+Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
 
 void setup() {
     // Turn on the power LED, to show we're running.
@@ -27,6 +39,16 @@ void setup() {
     lcd.print("Stay A While"); 
     lcd.setCursor (0,1);        // go to start of 2nd line
     lcd.print("Stay... FOREVER");
+
+    // Init TLC
+    tlc.begin();
+
+    // Light up first and last two LEDs.
+    tlc.setPWM(0,4095);
+    tlc.setPWM(1,4095);
+    tlc.setPWM(46,4095);
+    tlc.setPWM(47,4095);
+    tlc.write();
 }
 
 // Can almost certainly use a proper string library for this.
@@ -62,8 +84,22 @@ void loop() {
         if (! strcmp(code, "1234#")) {
             lcd.print("Safe at last!");
             lcd.setCursor(0,1);
+
+            // Turn off the danger lights.
+            tlc.setPWM(0,0);
+            tlc.setPWM(1,0);
+            tlc.setPWM(46,0);
+            tlc.setPWM(47,0);
+            tlc.write();
             delay(1000); // NOT FOR PRODUCTION CODE!
             lcd.print("(Shia Labeouf)");
+
+            // Danger lights!
+            tlc.setPWM(0,4095);
+            tlc.setPWM(1,4095);
+            tlc.setPWM(46,4095);
+            tlc.setPWM(47,4095);
+            tlc.write();
         }
         else {
             lcd.print("You have been");
