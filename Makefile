@@ -1,8 +1,13 @@
 all:
-	platformio run
+	platformio run -e teensylc
 
 install:
-	platformio run --target upload
+	platformio run -e teensylc --target upload
 
 clean:
 	rm -rf .pioenvs
+
+test:	always
+	platformio test -e local
+
+always:
