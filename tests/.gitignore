@@ -1,0 +1,7 @@
+a.out
+gtest/CMakeCache.txt
+gtest/CMakeFiles/
+gtest/Makefile
+gtest/cmake_install.cmake
+gtest/libgtest.a
+gtest/libgtest_main.a
