@@ -4,7 +4,7 @@
 #include "Event.h"
 #include <string>
 
-class MsgEvent : Event {
+class MsgEvent : public Event {
     private:
         std::string msg;
 

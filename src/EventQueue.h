@@ -9,7 +9,7 @@
 #include "Event.h"
 #include "types.h"
 
-typedef std::multimap<millis_t, Event> events_t;
+typedef std::multimap<millis_t, Event *> events_t;
 
 class EventQueue {
     private:
@@ -17,6 +17,7 @@ class EventQueue {
 
     public:
         void runEvents(print_f stream, millis_t time);
+        void scheduleEvent(millis_t time, Event *event);
 };
 
 #endif

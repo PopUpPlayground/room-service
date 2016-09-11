@@ -11,6 +11,9 @@ class Event {
         // This event gets called when it's time to handle something.
         // The string gets displayed to the game runner.
         virtual std::string processEvent() { return NULL; };
+
+        // This is how we let child classes manage deletion, yes?
+        virtual ~Event() { }
 };
 
 #endif

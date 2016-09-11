@@ -12,16 +12,25 @@ void EventQueue::runEvents(print_f stream, millis_t time) {
     ) {
         // Process the event, and send its output to the stream (which goes
         // to the game runner, or our test framework)
-        (*stream)( i->second.processEvent().c_str() );
+        (*stream)( i->second->processEvent().c_str() );
 
+        // The event has fired! Now we deconstruct it.
+        delete i->second;
 
-        // And now let's delete the element. This would be easy if we were
-        // using C++11, but apparently gcc doesn't support that, so I'm going
-        // to cry into this code instead. (Thanks, Stackoverflow....)
+        // And now let's delete the element in the multimap itself. This would
+        // be easy if we were using C++11, but apparently gcc doesn't support
+        // that, so I'm going to cry into this code instead. (Thanks,
+        // Stackoverflow....)
 
         events_t::iterator save = i;
         ++save;
         events.erase(i);
         i = save;
     }
+}
+
+// Schedules an event for the future (or the past, which will fire
+// next time runEvents is called).
+void EventQueue::scheduleEvent(millis_t time, Event *event) {
+    events.insert( std::pair<millis_t, Event *>( time, event) );
 }

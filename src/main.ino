@@ -4,8 +4,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 #include <Adafruit_TLC5947.h>
-
 #include "EventQueue.h"
+#include "MsgEvent.h"
 
 #define MAX_CODE_LENGTH 16
 
@@ -60,6 +60,9 @@ void setup() {
     // Serial setup
     Serial.begin(9600);
 
+    // Schedule some future message events!
+    events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
+    events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
 }
 
 // Can almost certainly use a proper string library for this.

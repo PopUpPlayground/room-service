@@ -10,4 +10,7 @@ clean:
 test:	always
 	platformio test -e local
 
+monitor:
+	platformio device monitor
+
 always:
