@@ -5,12 +5,18 @@
 // what events should fire.
 
 #include <map>
+
 #include "Event.h"
 #include "types.h"
 
+typedef std::multimap<millis_t, Event> events_t;
+
 class EventQueue {
     private:
-        std::multimap<millis_t, Event> events;
-}
+        events_t events;
+
+    public:
+        void runEvents(print_f stream, millis_t time);
+};
 
 #endif

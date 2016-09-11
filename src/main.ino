@@ -5,6 +5,8 @@
 #include <Keypad.h>
 #include <Adafruit_TLC5947.h>
 
+#include "EventQueue.h"
+
 #define MAX_CODE_LENGTH 16
 
 // Keypad Init
@@ -26,6 +28,9 @@ const int clock = 14;
 const int data = 15;
 const int latch = 13;
 Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
+
+// Main event queue
+EventQueue events;
 
 void setup() {
     // Turn on the power LED, to show we're running.
@@ -54,13 +59,21 @@ void setup() {
 
     // Serial setup
     Serial.begin(9600);
+
 }
 
 // Can almost certainly use a proper string library for this.
 char code[MAX_CODE_LENGTH+1] = "\0";
 int code_pos = 0;
 
+void consolePrint(const char *string) {
+    Serial.print(string);
+}
+
 void loop() {
+
+    // Aww yis, let's check our event queue for what's happening!
+    events.runEvents(consolePrint, millis());
 
     // Demonstration that we can read serial,
     // as well as write it. <3

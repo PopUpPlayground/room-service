@@ -10,7 +10,7 @@ class Event {
 
         // This event gets called when it's time to handle something.
         // The string gets displayed to the game runner.
-        virtual std::string processEvent() { };
+        virtual std::string processEvent() { return NULL; };
 };
 
 #endif
