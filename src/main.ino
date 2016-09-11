@@ -1,3 +1,5 @@
+#ifndef UNIT_TEST
+
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
@@ -154,3 +156,5 @@ byte colPins[cols] = { 9, 11, 7 };
 Keypad InitKeypad() {
     return Keypad( makeKeymap(keys), rowPins, colPins, rows, cols );
 }
+
+#endif
