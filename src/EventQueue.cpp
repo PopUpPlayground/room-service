@@ -32,5 +32,5 @@ void EventQueue::runEvents(print_f stream, millis_t time) {
 // Schedules an event for the future (or the past, which will fire
 // next time runEvents is called).
 void EventQueue::scheduleEvent(millis_t time, Event *event) {
-    events.insert( std::pair<millis_t, Event *>( time, event) );
+    events.insert( std::make_pair( time, event) );
 }
