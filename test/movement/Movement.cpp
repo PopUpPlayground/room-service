@@ -29,8 +29,6 @@ void test_Movement() {
     TEST_ASSERT_EQUAL_STRING(map[1]->name,"Foyer");
 
     // TODO: Test other properties.
-    //
-    // TODO: Do we need a map.clear here to tidy up memory?
 
     // NB: Starts in room 1.
     cannibal = new Actor( "Shia LaBeouf", 100, 1, 9001, NULL, NULL );
@@ -45,7 +43,22 @@ void test_Movement() {
     );
 
     TEST_ASSERT_EQUAL(2, cannibal->room);
+
+    // This frees up all the memory we allocated and makes
+    // valgrind happy. We should probably make a proper map class
+    // and give it a custom destructor.
+    for (map_t::iterator it=map.begin(); it!=map.end();) {
+        map_t::iterator old = it;
+        ++it;
+
+        delete old->second;
+        map.erase(old);
+    }
+
+    delete cannibal;
 }
+
+
 
 int main(int argc, char **argv) {
     UNITY_BEGIN();
