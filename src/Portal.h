@@ -12,7 +12,7 @@ class Portal {
     public:
         // This needs to be filled by the derived class. For most things it
         // will just move the actor, or have them re-path if locked.
-        virtual char *trigger(const Actor) { return NULL; };
+        virtual char *trigger(const Actor, const room_t dst) { return NULL; };
 };
 
 #endif

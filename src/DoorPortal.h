@@ -2,11 +2,12 @@
 #define DOORPORTAL_H
 
 #include "Portal.h"
+#include "Room.h"
 #include "types.h"
 
 class DoorPortal : public Portal {
     public:
-        char *trigger(const Actor);
+        void trigger(print_f, Actor *, const Room *);
 };
 
 #endif
