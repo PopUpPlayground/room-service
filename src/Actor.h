@@ -18,15 +18,15 @@ class Actor {
         hunger_t hunger;
         const hunger_t hungerBreak;
 
-        // const Goals regularGoals;
-        // const Goals hungryGoals;
+        const Goals *regularGoals;
+        const Goals *hungryGoals;
 
         // TODO: Path.
         
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,
-            const hunger_t _hungerBreak
-            // const Goals _regularGoals, const Goals _hungryGoals
+            const hunger_t _hungerBreak,
+            const Goals *_regularGoals, const Goals *_hungryGoals
         )
             : name(_name)
             , speed(_speed)

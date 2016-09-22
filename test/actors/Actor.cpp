@@ -11,9 +11,9 @@ void test_Actor() {
         "Shia LaBeouf",     // Name
         100,                // Speed
         404,                // Room
-        9000               // Hunger Break
-        // NULL,               // Regular Goals
-        // NULL                // Hungry Goals
+        9000,               // Hunger Break
+        NULL,               // Regular Goals
+        NULL                // Hungry Goals
     );
 
     TEST_ASSERT_EQUAL_STRING("Shia LaBeouf", cannibal->name);

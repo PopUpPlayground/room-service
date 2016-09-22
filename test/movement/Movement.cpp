@@ -11,7 +11,7 @@ void consolePrint(const char *string) {
 }
 
 // This tests a simple three-room map. The rooms are connected in a line.
-void test_Map() {
+void test_Movement() {
     map_t map;
     DoorPortal door;
     Actor *cannibal;
@@ -33,7 +33,7 @@ void test_Map() {
     // TODO: Do we need a map.clear here to tidy up memory?
 
     // NB: Starts in room 1.
-    cannibal = new Actor( "Shia LaBeouf", 100, 1, 9001 );
+    cannibal = new Actor( "Shia LaBeouf", 100, 1, 9001, NULL, NULL );
 
     TEST_ASSERT_EQUAL(1, cannibal->room);
 
@@ -50,7 +50,7 @@ void test_Map() {
 int main(int argc, char **argv) {
     UNITY_BEGIN();
 
-    RUN_TEST(test_Map);
+    RUN_TEST(test_Movement);
 
     UNITY_END();
 
