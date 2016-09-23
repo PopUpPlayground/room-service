@@ -21,7 +21,8 @@ class Actor {
         const Goals *regularGoals;
         const Goals *hungryGoals;
 
-        // TODO: Path.
+        // Path to wherever we're going.
+        path_t *path;
         
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,
@@ -32,8 +33,8 @@ class Actor {
             , speed(_speed)
             , room(starting_room)
             , hungerBreak(_hungerBreak)
-            // , regularGoals(_regularGoals)
-            // , hungryGoals(_hungryGoals)
+            , regularGoals(_regularGoals)
+            , hungryGoals(_hungryGoals)
             { }
             
 };

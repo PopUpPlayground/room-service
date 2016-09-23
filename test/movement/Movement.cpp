@@ -13,18 +13,17 @@ void consolePrint(const char *string) {
 // This tests a simple three-room map. The rooms are connected in a line.
 void test_Movement() {
     map_t map;
-    DoorPortal door;
     Actor *cannibal;
 
     map[1] = new Room("Foyer", 1);
-    map[1]->exits[2] = door;
+    map[1]->exits[2] = new DoorPortal(11);
 
     map[2] = new Room("Lounge", 2);
-    map[2]->exits[1] = door;
-    map[2]->exits[3] = door;
+    map[2]->exits[1] = new DoorPortal(21);
+    map[2]->exits[3] = new DoorPortal(22);
 
     map[3] = new Room("Bathroom", 3);
-    map[3]->exits[2] = door;
+    map[3]->exits[2] = new DoorPortal(31);
 
     TEST_ASSERT_EQUAL_STRING(map[1]->name,"Foyer");
 
@@ -36,7 +35,7 @@ void test_Movement() {
     TEST_ASSERT_EQUAL(1, cannibal->room);
 
     // MOVE THE CANNIBAL.
-    door.trigger(
+    map[1]->exits[2]->trigger(
         consolePrint,
         cannibal,
         map[2]

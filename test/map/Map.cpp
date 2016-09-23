@@ -8,17 +8,16 @@
 // This tests a simple three-room map. The rooms are connected in a line.
 void test_Map() {
     map_t map;
-    DoorPortal door;
 
     map[1] = new Room("Start", 1);
-    map[1]->exits[2] = door;
+    map[1]->exits[2] = new DoorPortal(11);
 
     map[2] = new Room("Middle", 2);
-    map[2]->exits[1] = door;
-    map[2]->exits[3] = door;
+    map[2]->exits[1] = new DoorPortal(21);
+    map[2]->exits[3] = new DoorPortal(22);
 
     map[3] = new Room("End", 3);
-    map[3]->exits[2] = door;
+    map[3]->exits[2] = new DoorPortal(31);
 
     TEST_ASSERT_EQUAL_STRING(map[1]->name,"Start");
 
