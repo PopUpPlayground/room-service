@@ -22,4 +22,7 @@ typedef unsigned int hunger_t;
 // System load type.
 typedef unsigned char load_t;
 
+// Weightings for the goals table.
+typedef unsigned int weight_t;
+
 #endif
