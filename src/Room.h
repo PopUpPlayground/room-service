@@ -9,11 +9,13 @@ typedef std::map<room_t, Portal *> exits_t;
 
 class Room {
     public:
-        const char *name;
-        const room_t number;
-        exits_t exits;
+        const char *name;       // Human readable name
+        const char *code;       // Player code. Can be null
+        const room_t number;    // Internal room number
+        exits_t exits;          // Exits to other rooms.
 
-        Room(const char *_name, const room_t _number) :name(_name), number(_number) { } ;
+        Room(const char *_name, const room_t _number, const char *_code = NULL)
+            :name(_name), code(_code), number(_number) { } ;
 
         ~Room() {
             // Clears all door memory.

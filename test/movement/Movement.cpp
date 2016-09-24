@@ -19,8 +19,8 @@ void test_Movement() {
     map.newRoom("Lounge",2,1);
     map.newRoom("Bathroom",3,1);
 
-    map.newBiDoor(1,2,11);
-    map.newBiDoor(2,3,31);
+    map.newBiDoor(1,2);
+    map.newBiDoor(2,3);
 
     TEST_ASSERT_EQUAL_STRING(map.map[1]->name,"Foyer");
 

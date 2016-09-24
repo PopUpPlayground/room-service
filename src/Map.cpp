@@ -27,12 +27,12 @@ void Map::releasePaths(paths_t *paths) {
 }
 
 // Map creation
-void Map::newRoom(const char *name, const room_t number, const floor_t floor) {
+void Map::newRoom(const char *name, const room_t number, const floor_t floor, const char *code){
     assert(name != NULL);
 
     // We're just trusting you not to add a room twice, okay?
 
-    Room *room = new Room(name, number);
+    Room *room = new Room(name, number, code);
     map[number] = room;
     floorRooms.insert(std::make_pair(floor,room));
 }
@@ -47,12 +47,12 @@ void Map::newStair(const room_t r1, const room_t r2) {
 // Bi-directional door creation. Rooms must exist first.
 // TODO: Add to door/floor table
 // TODO: Doors which don't have lockable doodads
-void Map::newBiDoor(const room_t r1, const room_t r2, const ident_t id) {
+void Map::newBiDoor(const room_t r1, const room_t r2, const char *code) {
     
     // The doors are different objects in memory, but share the same ID,
     // and hence the same locks.
-    map[r1]->exits[r2] = new DoorPortal(id);
-    map[r2]->exits[r1] = new DoorPortal(id);
+    map[r1]->exits[r2] = new DoorPortal(code);
+    map[r2]->exits[r1] = new DoorPortal(code);
 }
 
 // Finds a path from src to dst, and returns a pointer to it.

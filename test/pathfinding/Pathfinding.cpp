@@ -25,12 +25,12 @@ void test_Pathfinding() {
     map.newRoom("Garden",5,1);
     map.newRoom("Passage",6,1);
 
-    map.newBiDoor(1,2,11);
-    map.newBiDoor(2,4,42);
-    map.newBiDoor(2,3,32);
-    map.newBiDoor(5,3,35);
-    map.newBiDoor(4,6,46);
-    map.newBiDoor(6,3,63);
+    map.newBiDoor(1,2);
+    map.newBiDoor(2,4);
+    map.newBiDoor(2,3);
+    map.newBiDoor(5,3);
+    map.newBiDoor(4,6);
+    map.newBiDoor(6,3);
 
     // Simple path
     path_t *path = map.findPath(1,2,NULL);

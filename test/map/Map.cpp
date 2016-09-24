@@ -7,23 +7,18 @@
 
 // This tests a simple three-room map. The rooms are connected in a line.
 void test_Map() {
-    map_t map;
+    Map map;
 
-    map[1] = new Room("Start", 1);
-    map[1]->exits[2] = new DoorPortal(11);
+    map.newRoom("Start", 1, 1);
+    map.newRoom("Middle", 2, 1);
+    map.newRoom("End", 3, 1);
 
-    map[2] = new Room("Middle", 2);
-    map[2]->exits[1] = new DoorPortal(21);
-    map[2]->exits[3] = new DoorPortal(22);
+    map.newBiDoor(1,2);
+    map.newBiDoor(2,3);
 
-    map[3] = new Room("End", 3);
-    map[3]->exits[2] = new DoorPortal(31);
-
-    TEST_ASSERT_EQUAL_STRING(map[1]->name,"Start");
+    TEST_ASSERT_EQUAL_STRING(map.map[1]->name,"Start");
 
     // TODO: Test other properties.
-    //
-    // TODO: Do we need a map.clear here to tidy up memory?
 }
 
 int main(int argc, char **argv) {

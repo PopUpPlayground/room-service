@@ -24,10 +24,13 @@ typedef unsigned int weight_t;
 // Identifiers as used by the players and map.
 // These are room numbers, floor numbers, door numbers, etc.
 
-typedef unsigned int ident_t;
+typedef int ident_t;
 typedef ident_t floor_t;
 typedef ident_t room_t;
 typedef ident_t door_t;
+
+// Value used when a thing cannot be locked.
+#define NOLOCK -1
 
 // A path is a vector of rooms.
 typedef std::vector<room_t> path_t;

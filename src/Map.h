@@ -22,8 +22,8 @@ class Map {
     public:
         map_t map;
         path_t *findPath(const room_t src, const room_t dst, const path_t *baseRoute);
-        void newRoom(const char *name, const room_t number, const floor_t floor);
-        void newBiDoor(const room_t r1, const room_t r2, const ident_t id);
+        void newRoom(const char *name, const room_t number, const floor_t floor, const char *code = NULL);
+        void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL);
         void newStair(const room_t r1, const room_t r2);
 
         ~Map() {

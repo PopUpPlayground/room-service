@@ -6,10 +6,10 @@
 
 class DoorPortal : public Portal {
     public:
-        ident_t number; // Should be const, but crying at compile errors right now.
+        const char *code;   // Code used by players. Can be null.
         void trigger(print_f, Actor *, const Room *);
 
-        DoorPortal(ident_t _number) :number(_number) { };
+        DoorPortal(const char *_code) :code(_code) { };
 };
 
 #endif
