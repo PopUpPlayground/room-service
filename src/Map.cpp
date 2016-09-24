@@ -3,6 +3,8 @@
 #include <set>
 #include <algorithm>
 #include <limits.h>
+#include "StairPortal.h"
+#include "DoorPortal.h"
 
 // DEBUGGING
 #include <iostream>
@@ -33,6 +35,13 @@ void Map::newRoom(const char *name, const room_t number, const floor_t floor) {
     Room *room = new Room(name, number);
     map[number] = room;
     floorRooms.insert(std::make_pair(floor,room));
+}
+
+// Stairs don't have identifiers, and can't be locked or manipulated
+// by the players.
+void Map::newStair(const room_t r1, const room_t r2) {
+    map[r1]->exits[r2] = new StairPortal();
+    map[r2]->exits[r1] = new StairPortal();
 }
 
 // Bi-directional door creation. Rooms must exist first.

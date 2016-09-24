@@ -24,6 +24,7 @@ class Map {
         path_t *findPath(const room_t src, const room_t dst, const path_t *baseRoute);
         void newRoom(const char *name, const room_t number, const floor_t floor);
         void newBiDoor(const room_t r1, const room_t r2, const ident_t id);
+        void newStair(const room_t r1, const room_t r2);
 
         ~Map() {
             for (map_t::iterator i = map.begin(); i != map.end(); ++i) {
