@@ -1,8 +1,8 @@
 all:
-	platformio run -e teensylc
+	platformio run -e teensy32
 
 install:
-	platformio run -e teensylc --target upload
+	platformio run -e teensy32 --target upload
 
 clean:
 	rm -rf .pioenvs
