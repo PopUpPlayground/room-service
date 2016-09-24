@@ -7,6 +7,9 @@
 #include <algorithm>
 #include <limits.h>
 
+// DEBUGGING
+#include <iostream>
+
 // The map is just an association between room numbers and rooms.
 typedef std::map<room_t, Room *> map_t;
 typedef std::vector<path_t *> paths_t;
@@ -15,23 +18,21 @@ typedef std::vector<path_t *> paths_t;
 
 class Map {
     private:
+
+        // Debugging
+        void dumpVector(path_t *vector) {
+            std::cerr << "*** Returning route: ";
+            for (path_t::const_iterator i = vector->begin(); i != vector->end(); i++) {
+                std::cerr << *i << " ";
+            }
+            std::cerr << "*** \n\n\n";
+        }
+
+        // Walks through all our candidates and deletes them. Isn't memory
+        // management great?
         void releasePaths(paths_t *paths) {
-            for (paths_t::iterator i = paths->begin(); i != paths->end();) {
-                if (*i == NULL) {
-                    ++i;
-                    continue;
-                }
-
-                // Magic to let us delete a thing using an iterator, but
-                // not one we're currently iterating over.
-                paths_t::iterator save = i;
-                ++save;
+            for (paths_t::iterator i = paths->begin(); i != paths->end(); ++i) {
                 delete *i;
-
-                // Do we really need to erase this? The caller is going
-                // to drop the entire vector when we're done.
-                paths->erase(i);
-                i = save;
             }
         }
 
@@ -52,44 +53,77 @@ class Map {
             // Yup, it's a breadth first search. We do this every time,
             // because we have lots of CPU. If it becomes slow we can
             // use Dijkstra's algorithm and cache it.
+
+            path_t newRoute;
+            
+            // Copy our base route over, if we had one.
+            if (baseRoute != NULL) {
+                newRoute = *baseRoute;
+            }
+            else {
+                std::cerr << "\n+++ Starting new pathfinder to " << dst << " +++\n";
+            }
             
             // First of all, if we have a direct path, just use that.
             // TODO: Check if not locked.
             if (exits.find(dst) != exits.end()) {
-                return new path_t (dst);
+                std::cerr << "Simple route found to " << dst << "\n";
+
+                path_t *returnRoute = new path_t (newRoute);
+                returnRoute->push_back(src);
+                returnRoute->push_back(dst);
+                dumpVector(returnRoute);
+                return returnRoute;
             }
+
+            std::cerr << "No simple route exists to " << dst << ", looking harder.\n";
 
             // Otherwise, we'll walk through all the possible routes and
             // pick the shortest.
 
             paths_t candidates;
 
-            // Copy our base route, as we're going to add ourselves to it.
-            path_t newRoute (*baseRoute);
             newRoute.push_back(src);
 
+            std::cerr << "Considering options.\n";
+
             for (exits_t::const_iterator i = exits.begin(); i != exits.end(); ++i) {
+
+                std::cerr << "Conteplating moving to " << i->first << "\n";
 
                 // If we've already got this room on our route, then don't
                 // consider entering it.
                 // NOTE: This is O(N^2). Sorry.
-                if (std::find(baseRoute->begin(), baseRoute->end(), i->first) != baseRoute->end()) {
+                if (baseRoute != NULL && std::find(baseRoute->begin(), baseRoute->end(), i->first) != baseRoute->end()) {
+                    std::cerr << "...but already moved there.\n";
                     continue;
                 }
 
                 // Otherwise, find a route to our destination using this path.
-                candidates.push_back(
-                    findPath( i->first, dst, &newRoute)
-                );
+                std::cerr << "...could work, investigating.\n";
+
+                path_t *possibleRoute = findPath( i->first, dst, &newRoute);
+
+                if (possibleRoute != NULL) {
+                    std::cerr << "...route found, adding to candidates.\n";
+                    candidates.push_back(possibleRoute);
+                }
+                else {
+                    std::cerr << "...no luck down that path\n";
+                }
             }
+
+            if (candidates.size() == 0) {
+                std::cerr << "No route exist!\n";
+                return NULL;
+            }
+
+            std::cerr << "Investigating options for best fit\n";
 
             // We now have a list of candidates, pick the shortest.
             unsigned int shortestLength = INT_MAX;
             path_t *shortestPath;
             for (paths_t::const_iterator i = candidates.begin(); i != candidates.end(); ++i) {
-
-                // Skip null elements
-                if (*i == NULL) continue;
 
                 if ((*i)->size() < shortestLength) {
                     shortestLength = (*i)->size();
@@ -97,22 +131,24 @@ class Map {
                 }
             }
 
-            // There is no way to get to there from here.
-            if (shortestPath == NULL) {
-                releasePaths(&candidates);
-                return NULL;
-            }
-
-            // Hooray! We have a winner! Return it for great justice!
-            
             // Copy the path into a non-volatile object.
+            std::cerr << "Route found of length " << shortestLength << ", saving it.\n";
+            dumpVector(shortestPath);
             path_t *returnPath = new path_t (*shortestPath);
 
             // Clean all the memory we were using.
+            std::cerr << "Releasing memory\n";
             releasePaths(&candidates);
 
             // Rejoice and return
+            std::cerr << "Returning route\n";
             return returnPath;
+        }
+
+        ~Map() {
+            for (map_t::iterator i = map.begin(); i != map.end(); ++i) {
+                delete i->second;
+            }
         }
 
 };

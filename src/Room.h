@@ -18,6 +18,14 @@ class Room {
         exits_t exits;
 
         Room(const char *_name, const room_t _number) :name(_name), number(_number) { } ;
+
+        ~Room() {
+            // Clears all door memory.
+            
+            for (exits_t::iterator i = exits.begin(); i != exits.end(); ++i) {
+                delete i->second;
+            }
+        }
 };
 
 #endif
