@@ -15,6 +15,10 @@ class Portal {
         // This needs to be filled by the derived class. For most things it
         // will just move the actor, or have them re-path if locked.
         virtual void trigger(print_f print, Actor *actor, const Room *dst) = 0;
+        virtual ~Portal() { };
+
+    protected:
+        void moveActor(print_f print, Actor *actor, const Room *dst);
 };
 
 #endif

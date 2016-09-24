@@ -8,11 +8,5 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst) {
     // TODO: Take locks into account. We probably want to pass a GameState
     // object that makes them accessible.
     
-    // When a door is triggered, we move the actor! :D
-    actor->room = dst->number;
-
-    print(actor->name);
-    print(" moves to ");
-    print(dst->name);
-    print("\n");
+    moveActor(print, actor, dst);
 }

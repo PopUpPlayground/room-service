@@ -36,6 +36,8 @@ void Map::newRoom(const char *name, const room_t number, const floor_t floor) {
 }
 
 // Bi-directional door creation. Rooms must exist first.
+// TODO: Add to door/floor table
+// TODO: Doors which don't have lockable doodads
 void Map::newBiDoor(const room_t r1, const room_t r2, const ident_t id) {
     
     // The doors are different objects in memory, but share the same ID,
