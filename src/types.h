@@ -12,9 +12,6 @@ typedef unsigned long wait_t;
 // A function prototype that's used for printing messages to the game runner.
 typedef void (*print_f)(const char *);
 
-// Room numbers.
-typedef unsigned int room_t;
-
 // Hunger
 typedef unsigned int hunger_t;
 
@@ -24,12 +21,15 @@ typedef unsigned char load_t;
 // Weightings for the goals table.
 typedef unsigned int weight_t;
 
-// A path is a vector of rooms.
-typedef std::vector<room_t> path_t;
-
 // Identifiers as used by the players and map.
 // These are room numbers, floor numbers, door numbers, etc.
 
 typedef unsigned int ident_t;
+typedef ident_t floor_t;
+typedef ident_t room_t;
+typedef ident_t door_t;
+
+// A path is a vector of rooms.
+typedef std::vector<room_t> path_t;
 
 #endif
