@@ -15,9 +15,9 @@ void test_Movement() {
     Map map;
     Actor *cannibal;
 
-    map.newRoom("Foyer",1);
-    map.newRoom("Lounge",2);
-    map.newRoom("Bathroom",3);
+    map.newRoom("Foyer",1,1);
+    map.newRoom("Lounge",2,1);
+    map.newRoom("Bathroom",3,1);
 
     map.newBiDoor(1,2,11);
     map.newBiDoor(2,3,31);

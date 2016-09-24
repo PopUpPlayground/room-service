@@ -25,11 +25,14 @@ void Map::releasePaths(paths_t *paths) {
 }
 
 // Map creation
-void Map::newRoom(const char *name, const room_t number) {
+void Map::newRoom(const char *name, const room_t number, const floor_t floor) {
     assert(name != NULL);
 
     // We're just trusting you not to add a room twice, okay?
-    map[number] = new Room(name, number);
+
+    Room *room = new Room(name, number);
+    map[number] = room;
+    floorRooms.insert(std::make_pair(floor,room));
 }
 
 // Bi-directional door creation. Rooms must exist first.

@@ -18,12 +18,12 @@ void test_Pathfinding() {
     //     |   |
     //     4---6
 
-    map.newRoom("Foyer", 1);
-    map.newRoom("Hub", 2);
-    map.newRoom("Porch", 3);
-    map.newRoom("SideRoom",4);
-    map.newRoom("Garden",5);
-    map.newRoom("Passage",6);
+    map.newRoom("Foyer", 1,1);
+    map.newRoom("Hub", 2,1);
+    map.newRoom("Porch", 3,1);
+    map.newRoom("SideRoom",4,1);
+    map.newRoom("Garden",5,1);
+    map.newRoom("Passage",6,1);
 
     map.newBiDoor(1,2,11);
     map.newBiDoor(2,4,42);
