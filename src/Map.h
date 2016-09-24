@@ -17,10 +17,9 @@ class Map {
     public:
         map_t map;
 
-        // Yah, there should be heaps of helper functions here to build
-        // your map. There isn't yet.
-
         path_t *findPath(const room_t src, const room_t dst, const path_t *baseRoute);
+        void newRoom(const char *name, const room_t number);
+        void newBiDoor(const room_t r1, const room_t r2, const ident_t id);
 
         ~Map() {
             for (map_t::iterator i = map.begin(); i != map.end(); ++i) {

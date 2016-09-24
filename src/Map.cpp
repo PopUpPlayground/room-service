@@ -24,6 +24,23 @@ void Map::releasePaths(paths_t *paths) {
     }
 }
 
+// Map creation
+void Map::newRoom(const char *name, const room_t number) {
+    assert(name != NULL);
+
+    // We're just trusting you not to add a room twice, okay?
+    map[number] = new Room(name, number);
+}
+
+// Bi-directional door creation. Rooms must exist first.
+void Map::newBiDoor(const room_t r1, const room_t r2, const ident_t id) {
+    
+    // The doors are different objects in memory, but share the same ID,
+    // and hence the same locks.
+    map[r1]->exits[r2] = new DoorPortal(id);
+    map[r2]->exits[r1] = new DoorPortal(id);
+}
+
 // Finds a path from src to dst, and returns a pointer to it.
 // It's the responsibility of the caller to clean that up when done.
 path_t *Map::findPath(const room_t src, const room_t dst, const path_t *baseRoute) {

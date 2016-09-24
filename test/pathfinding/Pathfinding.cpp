@@ -18,23 +18,16 @@ void test_Pathfinding() {
     //     |
     //     4
 
-    map.map[1] = new Room("Foyer", 1);
-    map.map[1]->exits[2] = new DoorPortal(11);
+    map.newRoom("Foyer", 1);
+    map.newRoom("Hub", 2);
+    map.newRoom("Porch", 3);
+    map.newRoom("SideRoom",4);
+    map.newRoom("Garden",5);
 
-    map.map[2] = new Room("Hub", 2);
-    map.map[2]->exits[1] = new DoorPortal(21);
-    map.map[2]->exits[3] = new DoorPortal(23);
-    map.map[2]->exits[4] = new DoorPortal(24);
-
-    map.map[3] = new Room("Porch", 3);
-    map.map[3]->exits[2] = new DoorPortal(32);
-    map.map[3]->exits[5] = new DoorPortal(35);
-
-    map.map[4] = new Room("SideRoom",4);
-    map.map[4]->exits[2] = new DoorPortal(42);
-
-    map.map[5] = new Room("Garden",5);
-    map.map[5]->exits[4] = new DoorPortal(54);
+    map.newBiDoor(1,2,11);
+    map.newBiDoor(2,4,42);
+    map.newBiDoor(2,3,32);
+    map.newBiDoor(5,3,35);
 
     // Simple path
     path_t *path = map.findPath(1,2,NULL);
