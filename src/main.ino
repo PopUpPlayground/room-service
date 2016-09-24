@@ -4,7 +4,17 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 #include <Adafruit_TLC5947.h>
-#include "EventQueue.h"
+
+#include "Game.h"
+
+#ifdef ROOMSERVICE
+// Only loaded for production game
+#include "RoomService.h"
+typedef RoomService game_t;
+#else
+typedef Game game_t;
+#endif
+
 #include "MsgEvent.h"
 
 #define MAX_CODE_LENGTH 16
@@ -29,8 +39,7 @@ const int data = 15;
 const int latch = 13;
 Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
 
-// Main event queue
-EventQueue events;
+game_t game;
 
 void setup() {
     // Turn on the power LED, to show we're running.
@@ -61,8 +70,8 @@ void setup() {
     Serial.begin(9600);
 
     // Schedule some future message events!
-    events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
-    events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
+    game.events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
+    game.events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
 }
 
 // Can almost certainly use a proper string library for this.
@@ -76,7 +85,7 @@ void consolePrint(const char *string) {
 void loop() {
 
     // Aww yis, let's check our event queue for what's happening!
-    events.runEvents(consolePrint, millis());
+    game.events.runEvents(consolePrint, millis());
 
     // Demonstration that we can read serial,
     // as well as write it. <3

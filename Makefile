@@ -1,8 +1,11 @@
 all:
 	platformio run -e teensy32
 
+game:
+	platformio run -e roomservice
+
 install:
-	platformio run -e teensy32 --target upload
+	platformio run -e roomservice --target upload
 
 clean:
 	rm -rf .pioenvs
