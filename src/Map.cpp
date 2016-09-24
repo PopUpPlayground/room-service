@@ -133,8 +133,11 @@ path_t *Map::findPath(const room_t src, const room_t dst, const path_t *baseRout
     std::cerr << "Investigating options for best fit\n";
 
     // We now have a list of candidates, pick the shortest.
-    unsigned int shortestLength = INT_MAX;
-    path_t *shortestPath;
+    // We can just use the first element in our candidates list as
+    // the shortest thus far.
+    unsigned int shortestLength = (*(candidates.begin()))->size();
+    path_t *shortestPath = *(candidates.begin());
+
     for (paths_t::const_iterator i = candidates.begin(); i != candidates.end(); ++i) {
 
         if ((*i)->size() < shortestLength) {
