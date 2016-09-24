@@ -19,7 +19,7 @@ class Destination {
             const weight_t _weight,
             const wait_t _wait,
             const wait_t _sigma
-        ) : weight(_weight), room(_room), wait(_wait), sigma(_sigma) { };
+        ) : room(_room), weight(_weight), wait(_wait), sigma(_sigma) { };
 };
 
 typedef std::vector<Destination *> Destinations;
@@ -54,7 +54,7 @@ class Goals {
             const Destination* nextRoom;
 
             // This just keeps rolling until we get a room that isn't ours.
-            while (nextRoom = pickRoom()) {
+            while ((nextRoom = pickRoom())) {
                 if (nextRoom->room != currentRoom) {
                     return nextRoom;
                 }
