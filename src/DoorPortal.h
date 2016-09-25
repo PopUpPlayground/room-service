@@ -6,7 +6,11 @@
 
 class DoorPortal : public Portal {
     public:
+
         const char *code;   // Code used by players. Can be null.
+
+        // Doors are only lockable if they have a code.
+        bool isLocked(LockTable *);
         void trigger(print_f, Actor *, const Room *);
 
         DoorPortal(const char *_code) :code(_code) { };

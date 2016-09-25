@@ -2,6 +2,7 @@
 #define MAP_H
 
 #include "Room.h"
+#include "LockTable.h"
 
 // The map is just an association between room numbers and rooms.
 typedef std::map<room_t, Room *> map_t;
@@ -16,12 +17,17 @@ class Map {
         std::multimap<floor_t, Room *> floorRooms;
         std::multimap<floor_t, DoorPortal *> floorDoors;
 
+        // The map needs to know what's locked.
+        LockTable locks;
+
         void dumpVector(path_t *vector);
         void releasePaths(paths_t *paths);
 
     public:
         map_t map;
         path_t *findPath(const room_t src, const room_t dst);
+        bool isLocked(const room_t src, const room_t dst);
+        void lockDoor(const code_t code, const puzzle_t puzzle);
         void newRoom(const char *name, const room_t number, const floor_t floor, const char *code = NULL);
         void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL);
         void newStair(const room_t r1, const room_t r2);

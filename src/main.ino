@@ -41,7 +41,6 @@ Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
 
 void consolePrint(const char *string) {
     Serial.print(string);
-    delay(100);
 }
 
 game_t game;

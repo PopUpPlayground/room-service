@@ -27,7 +27,7 @@ void test_Pathfinding() {
 
     map.newBiDoor(1,2);
     map.newBiDoor(2,4);
-    map.newBiDoor(2,3);
+    map.newBiDoor(2,3,"023");    // Lockable
     map.newBiDoor(5,3);
     map.newBiDoor(4,6);
     map.newBiDoor(6,3);
@@ -62,6 +62,33 @@ void test_Pathfinding() {
 
     delete path;
 
+    std::cerr << "\n--- Testing door lock ---\n";
+
+    // Make sure our door isn't locked (yet)
+    TEST_ASSERT(! map.isLocked(2,3));
+
+    std::cerr << "\n--- Locking door ---\n";
+
+    // Now let's lock a door, and see if we work around it.
+    map.lockDoor("023","1234");
+
+    std::cerr << "\n--- Testing door lock (again) ---\n";
+
+    // Make sure our door is now locked.
+    TEST_ASSERT(map.isLocked(2,3));
+
+    // Plot new path!
+    
+    std::cerr << "\n--- Plotting route: 1-5 (locked door) ---\n\n";
+    
+    path = map.findPath(1,5);
+    TEST_ASSERT_EQUAL(2,path->at(0));
+    TEST_ASSERT_EQUAL(4,path->at(1));
+    TEST_ASSERT_EQUAL(6,path->at(2));
+    TEST_ASSERT_EQUAL(3,path->at(3));
+    TEST_ASSERT_EQUAL(5,path->at(4));
+
+    delete path;
 }
 
 int main(int argc, char **argv) {

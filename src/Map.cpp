@@ -56,6 +56,24 @@ void Map::newBiDoor(const room_t r1, const room_t r2, const char *code) {
     map[r2]->exits[r1] = new DoorPortal(code);
 }
 
+bool Map::isLocked(const room_t src, const room_t dst) {
+    Portal *portal = map[src]->exits[dst];
+
+    // We should never see a null portal, but if we do, then
+    // hey, that path is *definitely* locked.
+    if (portal == NULL) {
+        Debug("Null portal in Map::isLocked\n");
+        return true;
+    }
+
+    return portal->isLocked(&locks);
+}
+
+// Doesn't really care if it's a valid code or not, we just use it. :)
+void Map::lockDoor(const code_t code, const puzzle_t puzzle) {
+    locks.addLock(code, puzzle);
+}
+
 // Finds a path from src to dst, and returns a pointer to it.
 // It's the responsibility of the caller to clean that up when done.
 path_t *Map::findPath(const room_t src, const room_t dst) {
@@ -132,8 +150,12 @@ path_t *Map::findPath(const room_t src, const room_t dst) {
             Debug(adjRoom);
             Debug("\n");
 
-            // If we haven't already been there.
-            if (std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end()) {
+            // If it's not locked, and we haven't already been there.
+            if (
+                    ( ! isLocked(room, adjRoom) )
+                    &&
+                    std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end()
+            ) {
 
                 // Create a new breadcrumbs trail. We've already added ourselves above.
                 Debug("Creating new path from ");

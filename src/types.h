@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define MAX_CODE_LENGTH 16
+
 #include <vector>
 
 // As returned by the millis() function.
@@ -21,16 +23,17 @@ typedef unsigned char load_t;
 // Weightings for the goals table.
 typedef unsigned int weight_t;
 
-// Identifiers as used by the players and map.
-// These are room numbers, floor numbers, door numbers, etc.
-
+// Identifiers as used internally by the game.
 typedef int ident_t;
 typedef ident_t floor_t;
 typedef ident_t room_t;
 typedef ident_t door_t;
 
-// Value used when a thing cannot be locked.
-#define NOLOCK -1
+// Codes as used by players, both for objects (doors, floors, etc)
+typedef char *code_t;
+
+// Puzzle codes entered by players.
+typedef char *puzzle_t;
 
 // A path is a vector of rooms.
 typedef std::vector<room_t> path_t;
