@@ -1,4 +1,5 @@
 #include "MoveEvent.h"
+#include "GoalEvent.h"
 #include "Game.h"
 #include "types.h"
 #include "Actor.h"
@@ -50,13 +51,13 @@ void MoveEvent::processEvent(print_f print, Game *game) {
     if (room->number == actor->destination->room) {
         print(actor->name);
         print(" has arrived at their final destination!\n");
-        // TODO: Wait / Reschedule goal
+
+        // Schedule next goal.
+        // TODO: Use sigmas
+        game->scheduleOffsetEvent( actor->destination->wait, new GoalEvent(actor) );
     }
     else {
         // Schedule next move.
-        game->events.scheduleEvent(
-            game->time + actor->speed,
-            new MoveEvent(actor)
-        );
+        game->scheduleOffsetEvent( actor->speed, new MoveEvent(actor) );
     }
 }

@@ -24,3 +24,7 @@ void Game::tick(print_f print, millis_t _time) {
     time = _time;
     events.runEvents(print, time, this);
 }
+
+void Game::scheduleOffsetEvent(millis_t offset, Event *event) {
+    events.scheduleEvent(time + offset, event);
+}
