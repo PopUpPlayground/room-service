@@ -3,6 +3,8 @@
 
 #include "types.h"
 #include "Goals.h"
+#include "Map.h"
+#include <string>
 
 typedef unsigned int speed_t;
 
@@ -18,16 +20,18 @@ class Actor {
         hunger_t hunger;
         const hunger_t hungerBreak;
 
-        const Goals *regularGoals;
-        const Goals *hungryGoals;
+        Goals *regularGoals;
+        Goals *hungryGoals;
 
         // Path to wherever we're going.
         path_t *path;
+
+        std::string recomputeGoal(Map *);
         
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,
             const hunger_t _hungerBreak,
-            const Goals *_regularGoals, const Goals *_hungryGoals
+            Goals *_regularGoals, Goals *_hungryGoals
         )
             : name(_name)
             , speed(_speed)

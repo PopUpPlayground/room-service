@@ -2,13 +2,13 @@
 #define PORTAL_H
 
 #include "types.h"
-#include "Actor.h"
 #include <stdio.h>
 
 // These are things baddies can move through. They're doorways, windows, etc.
 // They don't have sources or destinations, since the rooms have this.
 
 class Room; // Forward declaration
+class Actor;
 
 class Portal {
     public:

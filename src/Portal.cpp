@@ -1,4 +1,5 @@
 #include "Portal.h"
+#include "Actor.h"
 #include "Room.h"
 
 // Moes the actor to the given room, without checking for locks or anything
