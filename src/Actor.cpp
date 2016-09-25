@@ -2,7 +2,7 @@
 #include "Game.h"
 #include <string>
 #include "GoalEvent.h"
-#include "MsgEvent.h"
+#include "MoveEvent.h"
 
 Event *Actor::recomputeGoal(Map *map) {
     assert(map != NULL);
@@ -17,17 +17,17 @@ Event *Actor::recomputeGoal(Map *map) {
     }
     
     // Find a place to go.
-    const Destination *dst = regularGoals->findGoal(room);
+    destination = regularGoals->findGoal(room);
 
     // Find out how to get there.
-    path = map->findPath(room, dst->room);
+    path = map->findPath(room, destination->room);
 
     if (path == NULL) {
         // Can't get there, schedule next event to be a recompute.
-        return new GoalEvent(this, map);
+        destination = NULL;
+        return new GoalEvent(this);
     }
 
-    // Otherwise, schedule a move to that room.
-    // XXX - Not a message event; this is a stub
-    return new MsgEvent("XXX FILL ME IN");
+    // Aww yis, we're heading somewhere. Schedule a move.
+    return new MoveEvent(this);
 }

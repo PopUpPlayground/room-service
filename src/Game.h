@@ -17,7 +17,7 @@ class Game {
         actors_t actors;
         millis_t time;              // Current time (ms)
 
-        void start(print_f print);  // Starts the game
+        void start(print_f print, millis_t _time);  // Starts the game
 };
 
 #endif

@@ -28,6 +28,7 @@ class Actor {
 
         // Path to wherever we're going.
         path_t *path;
+        const Destination *destination;
 
         Event *recomputeGoal(Map *);
         

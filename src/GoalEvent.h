@@ -12,10 +12,9 @@ class Actor;
 class GoalEvent : public Event {
     private:
         Actor *actor;
-        Map *map;
 
     public:
-        GoalEvent(Actor *_actor, Map *_map) : actor(_actor), map(_map) { };
+        GoalEvent(Actor *_actor) : actor(_actor) { };
         void processEvent(print_f print, Game *);
 };
 
