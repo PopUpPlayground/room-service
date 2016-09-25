@@ -11,7 +11,7 @@ class MsgEvent : public Event {
 
     public:
         MsgEvent(const char *str) : msg(str) { };
-        std::string processEvent(Game *);
+        void processEvent(print_f print, Game *);
 };
 
 #endif

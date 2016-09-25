@@ -1,7 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <string>
+#include "types.h"
 
 // Forward declare
 class Game;
@@ -13,7 +13,7 @@ class Event {
 
         // This event gets called when it's time to handle something.
         // The string gets displayed to the game runner.
-        virtual std::string processEvent(Game *) = 0;
+        virtual void processEvent(print_f print, Game *) = 0;
 
         // This is how we let child classes manage deletion, yes?
         virtual ~Event() { }

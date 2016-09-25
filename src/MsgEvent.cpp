@@ -2,8 +2,8 @@
 #include <string>
 #include <assert.h>
 
-// Our event is a simple one, we return the string passed
+// Our event is a simple one, we display the string passed
 // at creation!
-std::string MsgEvent::processEvent(Game *queue) {
-    return msg;
+void MsgEvent::processEvent(print_f print, Game *queue) {
+    (*print)(msg.c_str());
 }

@@ -6,14 +6,20 @@
 
 #ifdef UNIT_TEST
 
+const char *expected;
+void helper_test_expect(const char *input) {
+    TEST_ASSERT_EQUAL_STRING(expected,input);
+}
+
 void test_MsgEvent() {
     const char *foo = "foo";
 
     MsgEvent e (foo);
     Game game;
 
-    TEST_ASSERT_EQUAL_STRING( "foo", e.processEvent(&game).c_str() );
-    TEST_ASSERT( strcmp( "bar", e.processEvent(&game).c_str() ) );
+    expected = foo;
+
+    e.processEvent(&helper_test_expect, &game);
 }
 
 // This would be better done with a closure and a variable we can

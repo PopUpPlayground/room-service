@@ -2,7 +2,7 @@
 #define GOALEVENT_H
 
 #include "Event.h"
-#include <string>
+#include "types.h"
 
 class Map;
 class Game;
@@ -16,7 +16,7 @@ class GoalEvent : public Event {
 
     public:
         GoalEvent(Actor *_actor, Map *_map) : actor(_actor), map(_map) { };
-        std::string processEvent(Game *);
+        void processEvent(print_f print, Game *);
 };
 
 #endif
