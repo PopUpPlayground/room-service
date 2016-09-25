@@ -39,3 +39,23 @@ Event *Actor::recomputeGoal(print_f print, Map *map) {
     print("...path found, scheduling move.\n");
     return new MoveEvent(this);
 }
+
+void Actor::showPath(print_f print) {
+    print("Path for ");
+    print(name);
+
+    if (path == NULL) {
+        print(": No path defined\n");
+        return;
+    }
+
+    print(" ");
+
+    char buf[10];
+    for (path_t::const_iterator i = path->begin(); i != path->end(); i++) {
+        snprintf(buf,10,"%d ",*i);
+        print(buf);
+    }
+
+    print("\n");
+}

@@ -58,7 +58,7 @@ void Map::newBiDoor(const room_t r1, const room_t r2, const char *code) {
 
 // Finds a path from src to dst, and returns a pointer to it.
 // It's the responsibility of the caller to clean that up when done.
-path_t *Map::findPath(const room_t src, const room_t dst, const path_t *baseRoute) {
+path_t *Map::findPath(const room_t src, const room_t dst) {
     assert(src != dst);
 
     // Our algorithm goes like this:
@@ -73,8 +73,16 @@ path_t *Map::findPath(const room_t src, const room_t dst, const path_t *baseRout
     std::queue<pathRoomPair_t> queue;
 
     // Initial seeding of queue
-    for (exits_t::const_iterator i = map[src]->exits.begin(); i != map[src]->exits.end(); ++i) {
-        queue.push(std::make_pair(new path_t(src), i->first));
+    const exits_t *exits = &(map[src]->exits);
+    for (exits_t::const_iterator i = exits->begin(); i != exits->end(); ++i) {
+
+        // We create a need breadcrumb seed for each possible route.
+        // Don't worry, we clean these up later on.
+        path_t *seed = new path_t;
+        seed->push_back(src);
+
+        // Add to our queue the seeded path and our new exit.
+        queue.push(std::make_pair(seed, i->first));
     }
 
     // Main search
@@ -128,8 +136,10 @@ path_t *Map::findPath(const room_t src, const room_t dst, const path_t *baseRout
             if (std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end()) {
 
                 // Create a new breadcrumbs trail. We've already added ourselves above.
-                Debug("Creating new path\n");
+                Debug("Creating new path from ");
+                dumpVector(breadcrumbs);
                 path_t *path = new path_t(*breadcrumbs);
+                Debug("New path is ");
                 dumpVector(path);
                 
                 // Add onto the queue

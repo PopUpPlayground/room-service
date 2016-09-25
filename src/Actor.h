@@ -31,6 +31,7 @@ class Actor {
         const Destination *destination;
 
         Event *recomputeGoal(print_f, Map *);
+        void showPath(print_f);
         
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,

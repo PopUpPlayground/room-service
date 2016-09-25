@@ -7,11 +7,18 @@ void MoveEvent::processEvent(print_f print, Game *game) {
 
     print("Move event triggered for ");
     print(actor->name);
-    print("\n");
+    print(" in room: ");
+
+    const Room *currentRoom = game->map.map[actor->room];
+
+    print(currentRoom->name);
     
     // Pop the first element off the route.
     room_t next = *(actor->path->begin());
     actor->path->erase( actor->path->begin() );
+
+    // Debug: Show path.
+    actor->showPath(print);
 
     Portal *door = game->map.map[actor->room]->exits[next];
     Room *room = game->map.map[next];
