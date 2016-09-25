@@ -6,6 +6,9 @@
 #include "Map.h"
 #include <string>
 
+class Game;
+class Event;
+
 typedef unsigned int speed_t;
 
 // Usually baddies, but could be anything. :)
@@ -26,7 +29,7 @@ class Actor {
         // Path to wherever we're going.
         path_t *path;
 
-        std::string recomputeGoal(Map *);
+        Event *recomputeGoal(Map *);
         
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,

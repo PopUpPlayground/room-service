@@ -10,5 +10,4 @@ void Portal::moveActor(print_f print, Actor *actor, const Room *dst) {
     print(" moves to ");
     print(dst->name);
     print("\n");
-
 }

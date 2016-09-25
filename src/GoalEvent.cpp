@@ -4,5 +4,7 @@
 #include <string>
 
 std::string GoalEvent::processEvent(Game *queue) {
-    return actor->recomputeGoal(map);
+    // XXX STUB
+    return "STUB!!!";
+    // return actor->recomputeGoal(map);
 }
