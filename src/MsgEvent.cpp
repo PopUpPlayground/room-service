@@ -4,6 +4,6 @@
 
 // Our event is a simple one, we return the string passed
 // at creation!
-std::string MsgEvent::processEvent() {
+std::string MsgEvent::processEvent(Game *queue) {
     return msg;
 }

@@ -1,6 +1,6 @@
 #include "EventQueue.h"
 
-void EventQueue::runEvents(print_f stream, millis_t time) {
+void EventQueue::runEvents(print_f stream, millis_t time, Game *game) {
 
     // Walk through all our events, but only until we reach the end, or we reach an
     // event where we haven't reached the time for it to trigger yet, *erasing* as
@@ -12,7 +12,7 @@ void EventQueue::runEvents(print_f stream, millis_t time) {
     ) {
         // Process the event, and send its output to the stream (which goes
         // to the game runner, or our test framework)
-        (*stream)( i->second->processEvent().c_str() );
+        (*stream)( i->second->processEvent(game).c_str() );
 
         // The event has fired! Now we deconstruct it.
         delete i->second;

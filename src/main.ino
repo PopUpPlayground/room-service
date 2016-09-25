@@ -69,6 +69,8 @@ void setup() {
     // Serial setup
     Serial.begin(9600);
 
+    Serial.print("Starting game");
+
     // Schedule some future message events!
     game.events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
     game.events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
@@ -85,8 +87,10 @@ void consolePrint(const char *string) {
 void loop() {
 
     // Aww yis, let's check our event queue for what's happening!
-    game.events.runEvents(consolePrint, millis());
+    game.events.runEvents(consolePrint, millis(), &game);
 
+
+    /*
     // Demonstration that we can read serial,
     // as well as write it. <3
     if (Serial.available() > 0) {
@@ -161,6 +165,8 @@ void loop() {
     else if (key != NO_KEY) {
         lcd.print(key);
     }
+
+    */
 }
 
 // Keypad

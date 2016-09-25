@@ -2,6 +2,7 @@
 #define MSGEVENT_H
 
 #include "Event.h"
+#include "Game.h"
 #include <string>
 
 class MsgEvent : public Event {
@@ -10,7 +11,7 @@ class MsgEvent : public Event {
 
     public:
         MsgEvent(const char *str) : msg(str) { };
-        std::string processEvent();
+        std::string processEvent(Game *);
 };
 
 #endif
