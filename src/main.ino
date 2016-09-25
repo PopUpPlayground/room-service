@@ -39,12 +39,21 @@ const int data = 15;
 const int latch = 13;
 Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
 
+void consolePrint(const char *string) {
+    Serial.print(string);
+}
+
 game_t game;
 
 void setup() {
     // Turn on the power LED, to show we're running.
     pinMode(Pwr_Led, OUTPUT);
     digitalWrite(Pwr_Led, HIGH);
+
+    // Serial setup
+    Serial.begin(9600);
+
+    /*
 
     // activate LCD module
     lcd.begin (16,2); // for 16 x 2 LCD module
@@ -66,29 +75,35 @@ void setup() {
     tlc.setPWM(47,4095);
     tlc.write();
 
-    // Serial setup
-    Serial.begin(9600);
+    */
 
-    Serial.print("Starting game");
+    Serial.print("Starting game soon");
+
+    for (int i = 0; i < 5; i++) {
+        digitalWrite(Pwr_Led, LOW);
+        delay(1000);
+        digitalWrite(Pwr_Led, HIGH);
+        delay(1000);
+        Serial.print(".");
+    }
+
+    Serial.print("\nStarting game....\n");
 
     // Schedule some future message events!
     game.events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
     game.events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
+
+    game.start(consolePrint, millis());
 }
 
 // Can almost certainly use a proper string library for this.
 char code[MAX_CODE_LENGTH+1] = "\0";
 int code_pos = 0;
 
-void consolePrint(const char *string) {
-    Serial.print(string);
-}
-
 void loop() {
 
     // Aww yis, let's check our event queue for what's happening!
     game.events.runEvents(consolePrint, millis(), &game);
-
 
     /*
     // Demonstration that we can read serial,
