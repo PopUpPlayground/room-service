@@ -12,13 +12,13 @@ void EventQueue::runEvents(print_f print, millis_t time, Game *game) {
     ) {
 
         // Process the event
-#ifndef UNIT_TEST
+#ifdef DEBUG
         print("Firing event...\n");
 #endif
         i->second->processEvent(print, game);
 
         // The event has fired! Now we deconstruct it.
-#ifndef UNIT_TEST
+#ifdef DEBUG
         print("Clearing event memory\n");
 #endif
         delete i->second;
