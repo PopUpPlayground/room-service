@@ -3,6 +3,9 @@
 #include "types.h"
 #include "Actor.h"
 
+// TODO: This is a big, ugly function, and I think a lot
+// of it probably shold be on Actor, rather than here.
+
 void MoveEvent::processEvent(print_f print, Game *game) {
 
     print("Move event triggered for ");
@@ -42,4 +45,18 @@ void MoveEvent::processEvent(print_f print, Game *game) {
     print("...The door was no match for ");
     print(actor->name);
     print("!!\n");
+
+    // Trigger NEXT movement event!
+    if (room->number == actor->destination->room) {
+        print(actor->name);
+        print(" has arrived at their final destination!\n");
+        // TODO: Wait / Reschedule goal
+    }
+    else {
+        // Schedule next move.
+        game->events.scheduleEvent(
+            game->time + actor->speed,
+            new MoveEvent(actor)
+        );
+    }
 }
