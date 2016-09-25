@@ -35,8 +35,7 @@ void test_Pathfinding() {
     // Simple path
     path_t *path = map.findPath(1,2,NULL);
 
-    TEST_ASSERT_EQUAL(1,path->at(0));
-    TEST_ASSERT_EQUAL(2,path->at(1));
+    TEST_ASSERT_EQUAL(2,path->at(0));
 
     std::cerr << "Tested assertion\n";
 
@@ -49,19 +48,17 @@ void test_Pathfinding() {
     
     std::cerr << "New path found\n";
 
-    TEST_ASSERT_EQUAL(1,path->at(0));
-    TEST_ASSERT_EQUAL(2,path->at(1));
-    TEST_ASSERT_EQUAL(3,path->at(2));
-    TEST_ASSERT_EQUAL(5,path->at(3));
+    TEST_ASSERT_EQUAL(2,path->at(0));
+    TEST_ASSERT_EQUAL(3,path->at(1));
+    TEST_ASSERT_EQUAL(5,path->at(2));
 
     delete path;
 
     std::cerr << "\n--- Plotting route: 1-4 ---\n\n";
     path = map.findPath(1,4, NULL);
 
-    TEST_ASSERT_EQUAL(1,path->at(0));
-    TEST_ASSERT_EQUAL(2,path->at(1));
-    TEST_ASSERT_EQUAL(4,path->at(2));
+    TEST_ASSERT_EQUAL(2,path->at(0));
+    TEST_ASSERT_EQUAL(4,path->at(1));
 
     delete path;
 

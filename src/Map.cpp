@@ -3,19 +3,21 @@
 #include <set>
 #include <algorithm>
 #include <limits.h>
+#include <queue>
 #include "StairPortal.h"
 #include "DoorPortal.h"
 
 // DEBUGGING
 #include <iostream>
+#include "Debug.h"
 
 // Debugging
 void Map::dumpVector(path_t *vector) {
-    std::cerr << "*** Returning route: ";
     for (path_t::const_iterator i = vector->begin(); i != vector->end(); i++) {
-        std::cerr << *i << " ";
+        Debug(*i);
+        Debug(" ");
     }
-    std::cerr << "*** \n\n\n";
+    Debug("\n");
 }
 
 // Walks through all our candidates and deletes them. Isn't memory
@@ -46,7 +48,6 @@ void Map::newStair(const room_t r1, const room_t r2) {
 
 // Bi-directional door creation. Rooms must exist first.
 // TODO: Add to door/floor table
-// TODO: Doors which don't have lockable doodads
 void Map::newBiDoor(const room_t r1, const room_t r2, const char *code) {
     
     // The doors are different objects in memory, but share the same ID,
@@ -60,102 +61,90 @@ void Map::newBiDoor(const room_t r1, const room_t r2, const char *code) {
 path_t *Map::findPath(const room_t src, const room_t dst, const path_t *baseRoute) {
     assert(src != dst);
 
-    exits_t exits = map[src]->exits;
+    // Our algorithm goes like this:
+    // - Push all adjacent rooms with ourselves as the breadcrumb trail onto the queue
+    // - While we can pull things off the queue
+    // - - Add ourselves to the breadcrumbs of what we just pulled off
+    // - - If we're at our destination, stop and return the breadcrumbs
+    // - - Otherwise, add all adjacent rooms not in the breadcrumbs to the queue
+    // - If we run out of places to search, the destination is unreachable.
 
-    // Yup, it's a breadth first search. We do this every time,
-    // because we have lots of CPU. If it becomes slow we can
-    // use Dijkstra's algorithm and cache it.
+    typedef std::pair<path_t *, room_t> pathRoomPair_t;
+    std::queue<pathRoomPair_t> queue;
 
-    path_t newRoute;
-    
-    // Copy our base route over, if we had one.
-    if (baseRoute != NULL) {
-        newRoute = *baseRoute;
-    }
-    else {
-        std::cerr << "\n+++ Starting new pathfinder to " << dst << " +++\n";
-    }
-    
-    // First of all, if we have a direct path, just use that.
-    // TODO: Check if not locked.
-    if (exits.find(dst) != exits.end()) {
-        std::cerr << "Simple route found to " << dst << "\n";
-
-        path_t *returnRoute = new path_t (newRoute);
-        returnRoute->push_back(src);
-        returnRoute->push_back(dst);
-        dumpVector(returnRoute);
-        return returnRoute;
+    // Initial seeding of queue
+    for (exits_t::const_iterator i = map[src]->exits.begin(); i != map[src]->exits.end(); ++i) {
+        queue.push(std::make_pair(new path_t(src), i->first));
     }
 
-    std::cerr << "No simple route exists to " << dst << ", looking harder.\n";
+    // Main search
+    while (! queue.empty() ) {
+        pathRoomPair_t candidate = queue.front();
+        queue.pop();
 
-    // Otherwise, we'll walk through all the possible routes and
-    // pick the shortest.
+        path_t *breadcrumbs = candidate.first;
+        const room_t room = candidate.second;
 
-    paths_t candidates;
+        // Add ourselves to the breadcrumbs.
+        breadcrumbs->push_back(room);
 
-    newRoute.push_back(src);
+        // If we've found our destination.
+        if (room == dst) {
 
-    std::cerr << "Considering options.\n";
+            Debug("Route found to ");
+            Debug(dst);
+            Debug("\n");
 
-    for (exits_t::const_iterator i = exits.begin(); i != exits.end(); ++i) {
+            // Remove the starting room from breadcrumbs. It's there to stop us
+            // backtracking, and is not part of the route.
+            breadcrumbs->erase(breadcrumbs->begin());
 
-        std::cerr << "Conteplating moving to " << i->first << "\n";
+            dumpVector(breadcrumbs);
 
-        // If we've already got this room on our route, then don't
-        // consider entering it.
-        // NOTE: This is O(N^2). Sorry.
-        if (baseRoute != NULL && std::find(baseRoute->begin(), baseRoute->end(), i->first) != baseRoute->end()) {
-            std::cerr << "...but already moved there.\n";
-            continue;
+            Debug("Cleaning memory\n");
+
+            // Clean up all memory in the queue that we allocated.
+            while (! queue.empty() ) {
+                delete queue.front().first;
+                queue.pop();
+            }
+
+            Debug("Returning route\n");
+
+            // Return our path!
+            return breadcrumbs;
         }
 
-        // Otherwise, find a route to our destination using this path.
-        std::cerr << "...could work, investigating.\n";
+        // Find all the exits from here, ignored ones we've already seen.
+        for (exits_t::const_iterator i = map[room]->exits.begin(); i != map[room]->exits.end(); ++i) {
 
-        path_t *possibleRoute = findPath( i->first, dst, &newRoute);
+            const room_t adjRoom = i->first;
 
-        if (possibleRoute != NULL) {
-            std::cerr << "...route found, adding to candidates.\n";
-            candidates.push_back(possibleRoute);
+            Debug("Contemplating new room :");
+            Debug(adjRoom);
+            Debug("\n");
+
+            // If we haven't already been there.
+            if (std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end()) {
+
+                // Create a new breadcrumbs trail. We've already added ourselves above.
+                Debug("Creating new path\n");
+                path_t *path = new path_t(*breadcrumbs);
+                dumpVector(path);
+                
+                // Add onto the queue
+                Debug("Pushing room\n");
+                queue.push(std::make_pair(path, adjRoom));
+            }
         }
-        else {
-            std::cerr << "...no luck down that path\n";
-        }
+
+        // Clean up the breadcrumbs for the room we've just popped
+        Debug("Deleting breadcrumbs\n");
+        delete breadcrumbs;
     }
 
-    if (candidates.size() == 0) {
-        std::cerr << "No route exist!\n";
-        return NULL;
-    }
+    // If we're here, then the queue is empty. No memory clean-up required, but we can't
+    // find a route either.
 
-    std::cerr << "Investigating options for best fit\n";
-
-    // We now have a list of candidates, pick the shortest.
-    // We can just use the first element in our candidates list as
-    // the shortest thus far.
-    unsigned int shortestLength = (*(candidates.begin()))->size();
-    path_t *shortestPath = *(candidates.begin());
-
-    for (paths_t::const_iterator i = candidates.begin(); i != candidates.end(); ++i) {
-
-        if ((*i)->size() < shortestLength) {
-            shortestLength = (*i)->size();
-            shortestPath = *i;
-        }
-    }
-
-    // Copy the path into a non-volatile object.
-    std::cerr << "Route found of length " << shortestLength << ", saving it.\n";
-    dumpVector(shortestPath);
-    path_t *returnPath = new path_t (*shortestPath);
-
-    // Clean all the memory we were using.
-    std::cerr << "Releasing memory\n";
-    releasePaths(&candidates);
-
-    // Rejoice and return
-    std::cerr << "Returning route\n";
-    return returnPath;
+    return NULL;
 }
