@@ -84,7 +84,7 @@ path_t *Map::findPath(const room_t src, const room_t dst) {
     assert(src != dst);
 
     // Our algorithm goes like this:
-    // - Push all adjacent rooms with ourselves as the breadcrumb trail onto the queue
+    // - Push all adjacent unlocked rooms with ourselves as the breadcrumb trail onto the queue
     // - While we can pull things off the queue
     // - - Add ourselves to the breadcrumbs of what we just pulled off
     // - - If we're at our destination, stop and return the breadcrumbs
@@ -98,13 +98,16 @@ path_t *Map::findPath(const room_t src, const room_t dst) {
     const exits_t *exits = &(map[src]->exits);
     for (exits_t::const_iterator i = exits->begin(); i != exits->end(); ++i) {
 
-        // We create a need breadcrumb seed for each possible route.
-        // Don't worry, we clean these up later on.
-        path_t *seed = new path_t;
-        seed->push_back(src);
+        // Only add *unlocked* paths to our initial seeds.
+        if ( ! isLocked(src, i->first) ) {
+            // We create a need breadcrumb seed for each possible route.
+            // Don't worry, we clean these up later on.
+            path_t *seed = new path_t;
+            seed->push_back(src);
 
-        // Add to our queue the seeded path and our new exit.
-        queue.push(std::make_pair(seed, i->first));
+            // Add to our queue the seeded path and our new exit.
+            queue.push(std::make_pair(seed, i->first));
+        }
     }
 
     // Main search
