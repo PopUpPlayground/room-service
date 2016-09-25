@@ -41,6 +41,7 @@ Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
 
 void consolePrint(const char *string) {
     Serial.print(string);
+    delay(100);
 }
 
 game_t game;
@@ -89,9 +90,11 @@ void setup() {
 
     Serial.print("\nStarting game....\n");
 
+    delay(1000);
+
     // Schedule some future message events!
-    game.events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
-    game.events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
+    // game.events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
+    // game.events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
 
     game.start(consolePrint, millis());
 }

@@ -7,17 +7,15 @@ void Game::start(print_f print, millis_t _time) {
     print("Activating actors...\n");
     for (actors_t::iterator i = actors.begin(); i != actors.end(); ++i) {
 
-        print("Finding goals for ");
-        print((*i)->name);
-        print("...");
+        Event *event = (*i)->recomputeGoal(print, &map);
 
-        Event *event = (*i)->recomputeGoal(&map);
+        if (event != NULL) {
+            print("Scheduling goal...");
+            
+            // Each actor takes at least their speed to get started.
+            events.scheduleEvent(time + (*i)->speed, event);
 
-        print("scheduling...");
-        
-        // Each actor takes at least their speed to get started.
-        events.scheduleEvent(time + (*i)->speed, event);
-
-        print("DONE!\n");
+            print("DONE!\n");
+        }
     }
 }

@@ -27,10 +27,10 @@ class Actor {
         Goals *hungryGoals;
 
         // Path to wherever we're going.
-        path_t *path;
+        path_t *path = NULL;
         const Destination *destination;
 
-        Event *recomputeGoal(Map *);
+        Event *recomputeGoal(print_f, Map *);
         
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,
