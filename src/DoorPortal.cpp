@@ -44,7 +44,7 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
         else {
             // Schedule next move.
             print(actor->name);
-            print(" is in transit, scheduling next move.");
+            print(" is in transit, scheduling next move.\n");
             game->scheduleOffsetEvent( actor->speed, new MoveEvent(actor) );
         }
     }
