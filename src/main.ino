@@ -80,7 +80,7 @@ void setup() {
 
     Serial.print("Starting game soon");
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 2; i++) {
         digitalWrite(Pwr_Led, LOW);
         delay(1000);
         digitalWrite(Pwr_Led, HIGH);
@@ -92,11 +92,10 @@ void setup() {
 
     delay(1000);
 
-    // Schedule some future message events!
-    // game.events.scheduleEvent(millis() + 5000, new MsgEvent ("Hello World\n"));
-    // game.events.scheduleEvent(millis() + 9999, new MsgEvent ("OVER NINE THOUSAND\n"));
-
     game.start(consolePrint, millis());
+
+    // Schedule some future message events!
+    game.events.scheduleEvent(millis() + 9999, new MsgEvent ("Our timer is OVER NINE THOUSAND!\n"));
 }
 
 // Can almost certainly use a proper string library for this.
@@ -105,8 +104,8 @@ int code_pos = 0;
 
 void loop() {
 
-    // Aww yis, let's check our event queue for what's happening!
-    game.events.runEvents(consolePrint, millis(), &game);
+    // Aww yis, running a game!
+    game.tick(consolePrint, millis());
 
     /*
     // Demonstration that we can read serial,

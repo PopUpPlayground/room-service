@@ -4,6 +4,10 @@
 #include "Actor.h"
 
 void MoveEvent::processEvent(print_f print, Game *game) {
+
+    print("Move event triggered for ");
+    print(actor->name);
+    print("\n");
     
     // Pop the first element off the route.
     room_t next = *(actor->path->begin());
@@ -11,6 +15,22 @@ void MoveEvent::processEvent(print_f print, Game *game) {
 
     Portal *door = game->map.map[actor->room]->exits[next];
     Room *room = game->map.map[next];
-        
+
+    if (room == NULL) {
+        print("...THEY FALL THROUGH A SPACE-TIME RIFT TO A VOID ROOM\n");
+        return;
+    }
+
+    print("...Trying the door to ");
+    print(room->name);
+
+    if (door == NULL) {
+        print("...BUT THE DOOR, LIKE THE CAKE, IS A LIE!\n");
+        return;
+    }
+    
     door->trigger(print, actor, room);
+    print("...The door was no match for ");
+    print(actor->name);
+    print("\n");
 }

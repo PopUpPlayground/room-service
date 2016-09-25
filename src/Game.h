@@ -18,6 +18,7 @@ class Game {
         millis_t time;              // Current time (ms)
 
         void start(print_f print, millis_t _time);  // Starts the game
+        void tick(print_f print, millis_t time);    // Runs one tick of game time.
 };
 
 #endif

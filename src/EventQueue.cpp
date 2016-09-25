@@ -10,10 +10,17 @@ void EventQueue::runEvents(print_f print, millis_t time, Game *game) {
         i != events.end() && i->first <= time;
         // Increment happens in the main loop.
     ) {
+
         // Process the event
+#ifndef UNIT_TEST
+        print("Firing event...\n");
+#endif
         i->second->processEvent(print, game);
 
         // The event has fired! Now we deconstruct it.
+#ifndef UNIT_TEST
+        print("Clearing event memory\n");
+#endif
         delete i->second;
 
         // And now let's delete the element in the multimap itself. This would

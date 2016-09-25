@@ -19,3 +19,8 @@ void Game::start(print_f print, millis_t _time) {
         }
     }
 }
+
+void Game::tick(print_f print, millis_t _time) {
+    time = _time;
+    events.runEvents(print, time, this);
+}
