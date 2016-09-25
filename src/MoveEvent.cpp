@@ -12,6 +12,7 @@ void MoveEvent::processEvent(print_f print, Game *game) {
     const Room *currentRoom = game->map.map[actor->room];
 
     print(currentRoom->name);
+    print("\n");
     
     // Pop the first element off the route.
     room_t next = *(actor->path->begin());
@@ -30,6 +31,7 @@ void MoveEvent::processEvent(print_f print, Game *game) {
 
     print("...Trying the door to ");
     print(room->name);
+    print("\n");
 
     if (door == NULL) {
         print("...BUT THE DOOR, LIKE THE CAKE, IS A LIE!\n");
@@ -39,5 +41,5 @@ void MoveEvent::processEvent(print_f print, Game *game) {
     door->trigger(print, actor, room);
     print("...The door was no match for ");
     print(actor->name);
-    print("\n");
+    print("!!\n");
 }
