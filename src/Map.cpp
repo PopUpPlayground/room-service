@@ -69,6 +69,10 @@ bool Map::isLocked(const room_t src, const room_t dst) {
     return portal->isLocked(&locks);
 }
 
+bool Map::isLocked(const room_t src, const Room *dst) {
+    return isLocked(src, dst->number);
+}
+
 // Doesn't really care if it's a valid code or not, we just use it. :)
 void Map::lockDoor(const code_t code, const puzzle_t puzzle) {
     locks.addLock(code, puzzle);

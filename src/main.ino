@@ -6,6 +6,7 @@
 #include <Adafruit_TLC5947.h>
 
 #include "Game.h"
+#include "LockEvent.h"
 
 #ifdef ROOMSERVICE
 // Only loaded for production game
@@ -95,6 +96,9 @@ void setup() {
 
     // Schedule some future message events!
     game.events.scheduleEvent(millis() + 9999, new MsgEvent ("Our timer is OVER NINE THOUSAND!\n"));
+
+    // This locks a door so Shia can't get through it.
+    game.events.scheduleEvent(millis() + 5000, new LockEvent ("0702","12345"));
 }
 
 // Can almost certainly use a proper string library for this.

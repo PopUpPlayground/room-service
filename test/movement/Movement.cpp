@@ -5,6 +5,7 @@
 #include "Actor.h"
 #include "Game.h"
 #include <stdio.h>
+#include <iostream>
 
 #ifdef UNIT_TEST
 
@@ -14,17 +15,19 @@ void consolePrint(const char *string) {
 
 // This tests a simple three-room map. The rooms are connected in a line.
 void test_Movement() {
-    Map map;
+    Game game;
     Actor *cannibal;
 
-    map.newRoom("Foyer",1,1);
-    map.newRoom("Lounge",2,1);
-    map.newRoom("Bathroom",3,1);
+    std::cerr << "First test...\n";
 
-    map.newBiDoor(1,2);
-    map.newBiDoor(2,3);
+    game.map.newRoom("Foyer",1,1);
+    game.map.newRoom("Lounge",2,1);
+    game.map.newRoom("Bathroom",3,1);
 
-    TEST_ASSERT_EQUAL_STRING(map.map[1]->name,"Foyer");
+    game.map.newBiDoor(1,2);
+    game.map.newBiDoor(2,3);
+
+    TEST_ASSERT_EQUAL_STRING(game.map.map[1]->name,"Foyer");
 
     // TODO: Test other properties.
 
@@ -33,14 +36,21 @@ void test_Movement() {
 
     TEST_ASSERT_EQUAL(1, cannibal->room);
 
+    std::cerr << "Moving actor...\n";
+
     // MOVE THE CANNIBAL.
-    map.map[1]->exits[2]->trigger(
+    game.map.map[1]->exits[2]->trigger(
         consolePrint,
         cannibal,
-        map.map[2]
+        game.map.map[2],
+        &game
     );
 
+    std::cerr << "Moved\n";
+
     TEST_ASSERT_EQUAL(2, cannibal->room);
+
+    std::cerr << "First test complete\n";
 
     delete cannibal;
 }

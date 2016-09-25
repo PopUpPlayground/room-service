@@ -2,15 +2,52 @@
 #include "Room.h"
 #include <string.h>
 #include "Debug.h"
+#include "Game.h"
+#include "Actor.h"
+#include "GoalEvent.h"
+#include "MoveEvent.h"
 
-// TODO: Moves an actor, or causes them to recalculate their
-// route if the door is locked.
-void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst) {
+// Moves an actor, or causes them to recalculate their
+void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *game) {
 
-    // TODO: Take locks into account. We probably want to pass a GameState
-    // object that makes them accessible.
-    
-    moveActor(print, actor, dst);
+    assert(dst != NULL);
+    assert(game != NULL);
+
+    if (game->map.isLocked(actor->room, dst)) {
+        print("...but the door is locked! ");
+        print(actor->name);
+        print(" reconsiders their life choices.\n");
+
+        // Zero delay here means we'll kick off next tick.
+        game->scheduleOffsetEvent(0, new GoalEvent(actor));
+    }
+    else {
+        // Not locked, let's go!
+        moveActor(print, actor, dst);
+
+        print("...The door was no match for ");
+        print(actor->name);
+        print("!!\n");
+
+        if (actor->destination == NULL) {
+            print(actor->name);
+            print(" has no fixed destination! This is **A BUG** unless we're unit testing.\n");
+        }
+        else if (actor->destination->room == dst->number) {
+            print(actor->name);
+            print(" has arrived at their final destination!\n");
+
+            // Schedule next goal.
+            // TODO: Use sigmas
+            game->scheduleOffsetEvent( actor->destination->wait, new GoalEvent(actor) );
+        }
+        else {
+            // Schedule next move.
+            print(actor->name);
+            print(" is in transit, scheduling next move.");
+            game->scheduleOffsetEvent( actor->speed, new MoveEvent(actor) );
+        }
+    }
 }
 
 bool DoorPortal::isLocked(LockTable *table) {

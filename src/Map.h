@@ -27,6 +27,7 @@ class Map {
         map_t map;
         path_t *findPath(const room_t src, const room_t dst);
         bool isLocked(const room_t src, const room_t dst);
+        bool isLocked(const room_t src, const Room *dst);
         void lockDoor(const code_t code, const puzzle_t puzzle);
         void newRoom(const char *name, const room_t number, const floor_t floor, const char *code = NULL);
         void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL);

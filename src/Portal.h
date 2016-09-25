@@ -10,12 +10,13 @@
 
 class Room; // Forward declaration
 class Actor;
+class Game;
 
 class Portal {
     public:
         // This needs to be filled by the derived class. For most things it
         // will just move the actor, or have them re-path if locked.
-        virtual void trigger(print_f print, Actor *actor, const Room *dst) = 0;
+        virtual void trigger(print_f print, Actor *actor, const Room *dst, Game *) = 0;
 
         // Only some doors can be locked. By default they're not.
         virtual bool isLocked(LockTable *) { return false; } 

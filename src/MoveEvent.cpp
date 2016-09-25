@@ -42,22 +42,8 @@ void MoveEvent::processEvent(print_f print, Game *game) {
         return;
     }
     
-    door->trigger(print, actor, room);
-    print("...The door was no match for ");
-    print(actor->name);
-    print("!!\n");
-
-    // Trigger NEXT movement event!
-    if (room->number == actor->destination->room) {
-        print(actor->name);
-        print(" has arrived at their final destination!\n");
-
-        // Schedule next goal.
-        // TODO: Use sigmas
-        game->scheduleOffsetEvent( actor->destination->wait, new GoalEvent(actor) );
-    }
-    else {
-        // Schedule next move.
-        game->scheduleOffsetEvent( actor->speed, new MoveEvent(actor) );
-    }
+    // The door trigger schedules the next move, a wait, or
+    // reconsideration of life choices. I think we could have
+    // better architecture here.
+    door->trigger(print, actor, room, game);
 }
