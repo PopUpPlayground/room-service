@@ -4,6 +4,9 @@
 void Game::start(print_f print, millis_t _time) {
     time = _time;   // Record game start time. :)
 
+    // Make sure the initial game state will be shown to players.
+    dirty = true;
+
     print("Activating actors...\n");
     for (actors_t::iterator i = actors.begin(); i != actors.end(); ++i) {
 

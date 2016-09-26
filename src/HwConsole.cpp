@@ -35,18 +35,31 @@ void HwConsole::powerLed(uint8_t val) {
     digitalWrite(pwrLed, val);
 }
 
-void HwConsole::clearLights() {
+void HwConsole::resetLights() {
     int lights = tlcQty * 24;       // 24 lights per board
 
     for (int i = 0; i < lights; i++) {
         tlc.setPWM(i,0);
     }
+}
+
+void HwConsole::clearLights() {
+    resetLights();
     tlc.write();
 }
 
 void HwConsole::updateLeds(Game *game) {
-    clearLights();
 
+    // Only update if something has changed.
+
+    if (game->dirty == false) {
+        return;
+    }
+
+    // Reset our light state...
+    resetLights();
+
+    // Display our actor locations.
     for (actors_t::iterator i = game->actors.begin(); i != game->actors.end(); ++i) {
         led_t led = game->map.map[ (*i)->room ]->led;
 
@@ -54,6 +67,12 @@ void HwConsole::updateLeds(Game *game) {
             tlc.setPWM(led,4095);
         }
     }
+
+    // TODO: Display door locks
+    
     tlc.write();
+
+    // Game state has now been displayed to user and is no longer dirty.
+    game->dirty = false;
 }
 

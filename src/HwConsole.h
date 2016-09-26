@@ -38,6 +38,7 @@ class HwConsole {
             clearLights();
         }
 
+        void resetLights();
         void clearLights();
         void powerLed(uint8_t);
         void updateLeds(Game *game);
