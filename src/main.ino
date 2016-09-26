@@ -1,14 +1,13 @@
 #ifndef UNIT_TEST
 
 #include <Wire.h>
-#include <LiquidCrystal_I2C.h>
-#include <Keypad.h>
-#include <Adafruit_TLC5947.h>
 
 #include "Game.h"
 #include "Actor.h"
 #include "Map.h"
 #include "LockEvent.h"
+
+#include "HwConsole.h"
 
 #ifdef ROOMSERVICE
 // Only loaded for production game
@@ -22,46 +21,18 @@ typedef Game game_t;
 
 #define MAX_CODE_LENGTH 16
 
-// Keypad Init
-
-Keypad InitKeypad();
-
-// 0x27 - I2C bus address
-
-LiquidCrystal_I2C   lcd(0x27,2,1,0,4,5,6,7);
-Keypad keypad = InitKeypad();
-
-const int Pwr_Led = 13;
-
-// TLC5947 init
-
-// Number, clock, data, latch
-const int qty = 2;
-const int latch = 14;
-const int clock = 15;
-const int data = 16;
-Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
-
 void consolePrint(const char *string) {
     Serial.print(string);
 }
 
 game_t game;
-
-void clearLights() {
-    const int lights = 47;
-
-    for (int i = 0; i <= lights; i++) {
-        tlc.setPWM(i,0);
-    }
-    tlc.write();
-}
+HwConsole hw;
 
 void testLights() {
     Serial.print("LED testing mode activated.\n");
     Serial.print("Press 1 to light a new LED, 2 to reset, 9 to start game.\n");
 
-    // clearLights();
+    hw.clearLights();
 
     int led = 0;
 
@@ -73,12 +44,12 @@ void testLights() {
                 Serial.print("Lighting light ");
                 Serial.print(led);
                 Serial.print("\n");
-                tlc.setPWM(led,4095);
+                hw.tlc.setPWM(led,4095);
                 led++;
-                tlc.write();
+                hw.tlc.write();
             }
             else if (byte == '2') {
-                clearLights();
+                hw.clearLights();
                 led = 1;
             }
             else if (byte == '9') {
@@ -89,21 +60,9 @@ void testLights() {
 }
 
 void setup() {
-    // Turn on the power LED, to show we're running.
-    pinMode(Pwr_Led, OUTPUT);
-    digitalWrite(Pwr_Led, HIGH);
+    // Our hw object has already done most init for us. :)
 
-    // Serial setup
-    Serial.begin(9600);
-
-    // Init TLC
-    Serial.print("Initialising TLC\n");
-    tlc.begin();
-
-    Serial.print("Waiting for human\n");
-    delay(2000);
-
-    testLights();
+    // testLights();
 
     /*
 
@@ -119,14 +78,12 @@ void setup() {
 
     */
 
-    clearLights();
-
     Serial.print("Starting game soon");
 
     for (int i = 0; i < 2; i++) {
-        digitalWrite(Pwr_Led, LOW);
+        hw.powerLed(LOW);
         delay(1000);
-        digitalWrite(Pwr_Led, HIGH);
+        hw.powerLed(HIGH);
         delay(1000);
         Serial.print(".");
     }
@@ -145,20 +102,6 @@ void setup() {
 char code[MAX_CODE_LENGTH+1] = "\0";
 int code_pos = 0;
 
-void updateLeds(Game *game) {
-    clearLights();
-    
-    for (actors_t::iterator i = game->actors.begin(); i != game->actors.end(); ++i) {
-        led_t led = game->map.map[ (*i)->room ]->led;
-
-        if (led >= 0) {
-            tlc.setPWM(led,4095);
-        }
-    }
-    tlc.write();
-
-}
-
 void loop() {
 
     // Aww yis, running a game!
@@ -170,11 +113,11 @@ void loop() {
     // - For each lock, find the door it corresponds to, and set LED to high.
     // - Write the LEDs to the hardware.
 
-    updateLeds(&game);
+    // hw.updateLeds(&game);
 
     // Keypad
 
-    char key = keypad.getKey();
+    char key = hw.keypad.getKey();
 
     if (key != NO_KEY) {
         // code[code_pos++] = key;
@@ -237,25 +180,6 @@ void loop() {
     }
 
     */
-}
-
-// Keypad
-
-const byte rows = 4;
-const byte cols = 3;
-
-char keys[rows][cols] = {
-    {'1','2','3'},
-    {'4','5','6'},
-    {'7','8','9'},
-    {'*','0','#'}
-};
-
-byte rowPins[rows] = { 10, 5, 6, 8 };
-byte colPins[cols] = { 9, 11, 7 };
-
-Keypad InitKeypad() {
-    return Keypad( makeKeymap(keys), rowPins, colPins, rows, cols );
 }
 
 #endif
