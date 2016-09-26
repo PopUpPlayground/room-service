@@ -1,3 +1,5 @@
+#ifndef UNIT_TEST
+
 #include "HwConsole.h"
 #include "Game.h"
 #include "Actor.h"
@@ -98,3 +100,5 @@ void HwConsole::updateKeypad() {
     Serial.println(playerInput.c_str());
 
 }
+
+#endif // UNIT_TEST

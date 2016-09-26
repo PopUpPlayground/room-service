@@ -1,6 +1,8 @@
 #ifndef HWCONSOLE_H
 #define HWCONSOLE_H
 
+#ifndef UNIT_TEST
+
 #include <Wire.h>
 #include <Keypad.h>
 #include <LiquidCrystal_I2C.h>
@@ -47,5 +49,7 @@ class HwConsole {
         void updateLeds(Game *game);
         void updateKeypad();
 };
+
+#endif  // UNIT_TEST
 
 #endif
