@@ -30,6 +30,7 @@ LIBS:contrib
 LIBS:valves
 LIBS:teensy_3.1
 LIBS:freetronics_schematic
+LIBS:room-service-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
@@ -60,7 +61,7 @@ SDA
 Text Notes 6850 3500 0    60   ~ 0
 SCL\n
 $Comp
-L R 2K6
+L R R?
 U 1 1 57CD75BC
 P 7400 3150
 F 0 "R?" V 7480 3150 50  0000 C CNN
@@ -104,11 +105,11 @@ Text Notes 7900 3200 0    60   ~ 0
 Pull-ups, apparently\nwe need these. :)
 Text Notes 8250 3900 0    60   ~ 0
 Also uses\n+5V, GND\n(not shown)\n
-Text Notes 6700 4400 0    60   ~ 0
+Text Notes 6750 4300 0    60   ~ 0
 Latch
-Text Notes 6700 4250 0    60   ~ 0
+Text Notes 6750 4150 0    60   ~ 0
 Clock
-Text Notes 6700 4100 0    60   ~ 0
+Text Notes 6750 4000 0    60   ~ 0
 Data
 Text Notes 7100 4250 0    60   ~ 0
 TLC5947 pins
