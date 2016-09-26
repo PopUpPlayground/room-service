@@ -5,6 +5,7 @@
 #include <Keypad.h>
 #include <LiquidCrystal_I2C.h>
 #include <Adafruit_TLC5947.h>
+#include <string>
 
 class Game;
 
@@ -19,6 +20,8 @@ class HwConsole {
 
         const byte lcdAddr = 0x27;
 
+        std::string playerInput;
+
         Keypad InitKeypad();
         Adafruit_TLC5947 InitTLC5947();
         LiquidCrystal_I2C InitLCD();
@@ -29,7 +32,7 @@ class HwConsole {
         LiquidCrystal_I2C lcd;
 
         HwConsole()
-            :keypad(InitKeypad()), tlc(InitTLC5947()), lcd(InitLCD()) 
+            :playerInput(""), keypad(InitKeypad()), tlc(InitTLC5947()), lcd(InitLCD())
         {
             Serial.begin(9600);
             pinMode(pwrLed, OUTPUT);
@@ -42,6 +45,7 @@ class HwConsole {
         void clearLights();
         void powerLed(uint8_t);
         void updateLeds(Game *game);
+        void updateKeypad();
 };
 
 #endif

@@ -76,3 +76,25 @@ void HwConsole::updateLeds(Game *game) {
     game->dirty = false;
 }
 
+void HwConsole::updateKeypad() {
+    char key = keypad.getKey();
+
+    if (key == NO_KEY) {
+        return;
+    }
+
+    if (key == '*') {
+        // Reset key
+        playerInput = "";
+    }
+    else if (key == '#') {
+        // TODO: Process key string
+    }
+    else {
+        playerInput += key;
+    }
+
+    Serial.print("Player input is: ");
+    Serial.println(playerInput.c_str());
+
+}

@@ -98,10 +98,6 @@ void setup() {
     game.events.scheduleEvent(millis() + 5000, new LockEvent ("0702","12345"));
 }
 
-// Can almost certainly use a proper string library for this.
-char code[MAX_CODE_LENGTH+1] = "\0";
-int code_pos = 0;
-
 void loop() {
 
     // Aww yis, running a game!
@@ -113,17 +109,11 @@ void loop() {
     // - For each lock, find the door it corresponds to, and set LED to high.
     // - Write the LEDs to the hardware.
 
-    // hw.updateLeds(&game);
+    hw.updateLeds(&game);
 
     // Keypad
 
-    char key = hw.keypad.getKey();
-
-    if (key != NO_KEY) {
-        // code[code_pos++] = key;
-        Serial.print("Got key: ");
-        Serial.println(key);
-    }
+    hw.updateKeypad();
 
     /*
 
