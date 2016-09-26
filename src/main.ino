@@ -6,6 +6,8 @@
 #include <Adafruit_TLC5947.h>
 
 #include "Game.h"
+#include "Actor.h"
+#include "Map.h"
 #include "LockEvent.h"
 
 #ifdef ROOMSERVICE
@@ -35,9 +37,9 @@ const int Pwr_Led = 13;
 
 // Number, clock, data, latch
 const int qty = 2;
-const int clock = 14;
-const int data = 15;
-const int latch = 13;
+const int latch = 14;
+const int clock = 15;
+const int data = 16;
 Adafruit_TLC5947 tlc = Adafruit_TLC5947(qty, clock, data, latch);
 
 void consolePrint(const char *string) {
@@ -46,6 +48,46 @@ void consolePrint(const char *string) {
 
 game_t game;
 
+void clearLights() {
+    const int lights = 47;
+
+    for (int i = 0; i <= lights; i++) {
+        tlc.setPWM(i,0);
+    }
+    tlc.write();
+}
+
+void testLights() {
+    Serial.print("LED testing mode activated.\n");
+    Serial.print("Press 1 to light a new LED, 2 to reset, 9 to start game.\n");
+
+    // clearLights();
+
+    int led = 0;
+
+    while (true) {
+        if (Serial.available() > 0) {
+            int byte = Serial.read();
+
+            if (byte == '1') {
+                Serial.print("Lighting light ");
+                Serial.print(led);
+                Serial.print("\n");
+                tlc.setPWM(led,4095);
+                led++;
+                tlc.write();
+            }
+            else if (byte == '2') {
+                clearLights();
+                led = 1;
+            }
+            else if (byte == '9') {
+                return;
+            }
+        }
+    }
+}
+
 void setup() {
     // Turn on the power LED, to show we're running.
     pinMode(Pwr_Led, OUTPUT);
@@ -53,6 +95,15 @@ void setup() {
 
     // Serial setup
     Serial.begin(9600);
+
+    // Init TLC
+    Serial.print("Initialising TLC\n");
+    tlc.begin();
+
+    Serial.print("Waiting for human\n");
+    delay(2000);
+
+    testLights();
 
     /*
 
@@ -66,17 +117,9 @@ void setup() {
     lcd.setCursor (0,1);        // go to start of 2nd line
     lcd.print("Stay... FOREVER");
 
-    // Init TLC
-    tlc.begin();
-
-    // Light up first and last two LEDs.
-    tlc.setPWM(0,4095);
-    tlc.setPWM(1,4095);
-    tlc.setPWM(46,4095);
-    tlc.setPWM(47,4095);
-    tlc.write();
-
     */
+
+    clearLights();
 
     Serial.print("Starting game soon");
 
@@ -94,9 +137,6 @@ void setup() {
 
     game.start(consolePrint, millis());
 
-    // Schedule some future message events!
-    game.events.scheduleEvent(millis() + 9999, new MsgEvent ("Our timer is OVER NINE THOUSAND!\n"));
-
     // This locks a door so Shia can't get through it.
     game.events.scheduleEvent(millis() + 5000, new LockEvent ("0702","12345"));
 }
@@ -105,34 +145,44 @@ void setup() {
 char code[MAX_CODE_LENGTH+1] = "\0";
 int code_pos = 0;
 
+void updateLeds(Game *game) {
+    clearLights();
+    
+    for (actors_t::iterator i = game->actors.begin(); i != game->actors.end(); ++i) {
+        led_t led = game->map.map[ (*i)->room ]->led;
+
+        if (led >= 0) {
+            tlc.setPWM(led,4095);
+        }
+    }
+    tlc.write();
+
+}
+
 void loop() {
 
     // Aww yis, running a game!
     game.tick(consolePrint, millis());
 
-    /*
-    // Demonstration that we can read serial,
-    // as well as write it. <3
-    if (Serial.available() > 0) {
-        int byte = Serial.read();
+    // Running LEDs algorithm:
+    // - Clear the entire array of LEDs.
+    // - For each actor, find the room they're in, and set that LED to high.
+    // - For each lock, find the door it corresponds to, and set LED to high.
+    // - Write the LEDs to the hardware.
 
-        if (byte == '1') {
-            tlc.setPWM(0,4095);
-        }
-        else {
-            tlc.setPWM(0,0);
-        }
+    updateLeds(&game);
 
-        tlc.write();
-    }
+    // Keypad
 
     char key = keypad.getKey();
 
     if (key != NO_KEY) {
-        code[code_pos++] = key;
+        // code[code_pos++] = key;
         Serial.print("Got key: ");
         Serial.println(key);
     }
+
+    /*
 
     // Just some fun player interaction for now. :)
     if (code_pos >= MAX_CODE_LENGTH) {
