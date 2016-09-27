@@ -62,7 +62,7 @@ void testLights() {
 void setup() {
     // Our hw object has already done most init for us. :)
 
-    // testLights();
+    testLights();
 
     /*
 
