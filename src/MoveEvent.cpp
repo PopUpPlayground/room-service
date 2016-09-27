@@ -9,6 +9,10 @@
 
 void MoveEvent::processEvent(print_f print, Game *game) {
 
+    // It's lazy setting this here, since they might not move, but it's
+    // sure easy. :)
+    game->dirty = true;
+
     print("Move event triggered for ");
     print(actor->name);
     print(" in room: ");

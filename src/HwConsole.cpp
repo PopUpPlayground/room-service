@@ -50,6 +50,14 @@ void HwConsole::clearLights() {
     tlc.write();
 }
 
+void HwConsole::disableLights() {
+    digitalWrite(tlcOE,HIGH);
+}
+
+void HwConsole::enableLights() {
+    digitalWrite(tlcOE,LOW);
+}
+
 void HwConsole::updateLeds(Game *game) {
 
     // Only update if something has changed.

@@ -30,8 +30,9 @@ HwConsole hw;
 
 void testLights() {
     Serial.print("LED testing mode activated.\n");
-    Serial.print("Press 1 to light a new LED, 2 to reset, 9 to start game.\n");
+    Serial.print("Press 1 to light a new LED, 2 to reset, 3 to stress, 4 to clear, 9 to start game.\n");
 
+    hw.tlc.begin();
     hw.clearLights();
 
     int led = 0;
@@ -45,6 +46,11 @@ void testLights() {
                 Serial.print(led);
                 Serial.print("\n");
                 hw.tlc.setPWM(led,4095);
+
+                if (led >= 1) {
+                    hw.tlc.setPWM(led-1,0);
+                }
+
                 led++;
                 hw.tlc.write();
             }
@@ -52,7 +58,20 @@ void testLights() {
                 hw.clearLights();
                 led = 0;
             }
+            else if (byte == '3') {
+                for (int i = 0; i < 5*24; i++) {
+                    hw.tlc.setPWM(i,4095);
+                }
+                hw.tlc.write();
+            }
+            else if (byte == '4') {
+                for (int i = 0; i < 5*24; i++) {
+                    hw.tlc.setPWM(i,0);
+                }
+                hw.tlc.write();
+            }
             else if (byte == '9') {
+                hw.clearLights();
                 return;
             }
         }

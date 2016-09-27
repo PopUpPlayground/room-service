@@ -17,8 +17,9 @@ class HwConsole {
 
         const byte pwrLed   = 13;
         const byte tlcLatch = 14;
-        const byte tlcClock = 15;
-        const byte tlcData  = 16;
+        const byte tlcOE    = 15;   // Output enable
+        const byte tlcClock = 16;
+        const byte tlcData  = 17;
 
         const byte lcdAddr = 0x27;
 
@@ -42,11 +43,16 @@ class HwConsole {
             Serial.begin(9600);
             tlc.begin();
             pinMode(pwrLed, OUTPUT);
+            pinMode(tlcOE, OUTPUT);
             powerLed(HIGH);
 
+            disableLights();
             clearLights();
+            enableLights();
         }
 
+        void enableLights();
+        void disableLights();
         void resetLights();
         void clearLights();
         void powerLed(uint8_t);
