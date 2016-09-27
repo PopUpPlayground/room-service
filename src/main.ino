@@ -50,7 +50,7 @@ void testLights() {
             }
             else if (byte == '2') {
                 hw.clearLights();
-                led = 1;
+                led = 0;
             }
             else if (byte == '9') {
                 return;

@@ -13,7 +13,7 @@ class Game;
 
 class HwConsole {
     private:
-        const byte tlcQty = 4;
+        const byte tlcQty = 5;
 
         const byte pwrLed   = 13;
         const byte tlcLatch = 14;
@@ -34,9 +34,13 @@ class HwConsole {
         LiquidCrystal_I2C lcd;
 
         HwConsole()
-            :playerInput(""), keypad(InitKeypad()), tlc(InitTLC5947()), lcd(InitLCD())
+            : playerInput("")
+            , keypad(InitKeypad())
+            , tlc(Adafruit_TLC5947(tlcQty, tlcClock, tlcData, tlcLatch))
+            , lcd(InitLCD())
         {
             Serial.begin(9600);
+            tlc.begin();
             pinMode(pwrLed, OUTPUT);
             powerLed(HIGH);
 
