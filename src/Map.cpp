@@ -30,13 +30,13 @@ void Map::releasePaths(paths_t *paths) {
 }
 
 // Map creation
-void Map::newRoom(const char *name, const room_t number, const floor_t floor, const char *code){
+void Map::newRoom(const char *name, const room_t number, const floor_t floor, const char *code, const led_t led) {
     assert(name != NULL);
 
     // We're just trusting you not to add a room twice, okay?
     // TODO: Don't trust the developer.
 
-    Room *room = new Room(name, number, code);
+    Room *room = new Room(name, number, code, led);
 
     // Add the room to our map.
     map[number] = room;
@@ -60,12 +60,12 @@ void Map::newStair(const room_t r1, const room_t r2) {
 
 // Bi-directional door creation. Rooms must exist first.
 // TODO: Add to door/floor table
-void Map::newBiDoor(const room_t r1, const room_t r2, const char *code) {
+void Map::newBiDoor(const room_t r1, const room_t r2, const char *code, const led_t led) {
     
     // The doors are different objects in memory, but share the same ID,
     // and hence the same locks.
-    map[r1]->exits[r2] = new DoorPortal(code);
-    map[r2]->exits[r1] = new DoorPortal(code);
+    map[r1]->exits[r2] = new DoorPortal(code,led);
+    map[r2]->exits[r1] = new DoorPortal(code,led);
 
     if (code != NULL) {
         // TODO: Ugh, strdup. Can we replace code_t with a string please?
