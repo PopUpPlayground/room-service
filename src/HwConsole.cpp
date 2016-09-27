@@ -78,11 +78,11 @@ void HwConsole::updateLeds(Game *game) {
     game->dirty = false;
 }
 
-void HwConsole::updateKeypad() {
+std::string *HwConsole::updateKeypad() {
     char key = keypad.getKey();
 
     if (key == NO_KEY) {
-        return;
+        return NULL;
     }
 
     if (key == '*') {
@@ -90,7 +90,9 @@ void HwConsole::updateKeypad() {
         playerInput = "";
     }
     else if (key == '#') {
-        // TODO: Process key string
+        std::string *returnStr = new std::string (playerInput);
+        playerInput = "";
+        return returnStr;
     }
     else {
         playerInput += key;
@@ -99,6 +101,7 @@ void HwConsole::updateKeypad() {
     Serial.print("Player input is: ");
     Serial.println(playerInput.c_str());
 
+    return NULL;
 }
 
 #endif // UNIT_TEST

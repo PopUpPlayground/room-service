@@ -47,7 +47,7 @@ class HwConsole {
         void clearLights();
         void powerLed(uint8_t);
         void updateLeds(Game *game);
-        void updateKeypad();
+        std::string *updateKeypad();
 };
 
 #endif  // UNIT_TEST

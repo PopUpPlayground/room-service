@@ -113,7 +113,14 @@ void loop() {
 
     // Keypad
 
-    hw.updateKeypad();
+    std::string *input = hw.updateKeypad();
+
+    // Process player input.
+    if (input != NULL) {
+        Serial.print("Processing: ");
+        Serial.print(input->c_str());
+        delete input;
+    }
 
     /*
 
