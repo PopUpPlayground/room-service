@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <limits.h>
 #include <queue>
+#include <string.h>
 #include "StairPortal.h"
 #include "DoorPortal.h"
 
@@ -33,10 +34,21 @@ void Map::newRoom(const char *name, const room_t number, const floor_t floor, co
     assert(name != NULL);
 
     // We're just trusting you not to add a room twice, okay?
+    // TODO: Don't trust the developer.
 
     Room *room = new Room(name, number, code);
+
+    // Add the room to our map.
     map[number] = room;
+
+    // Add it to the floor index.
     floorRooms.insert(std::make_pair(floor,room));
+
+    // Add it to our code list, if we have one.
+    if (code != NULL) {
+        // TODO: Ugh, strdup. Can we replace code_t with a string please?
+        roomCodes[strdup(code)] = room;
+    }
 }
 
 // Stairs don't have identifiers, and can't be locked or manipulated
@@ -54,6 +66,11 @@ void Map::newBiDoor(const room_t r1, const room_t r2, const char *code) {
     // and hence the same locks.
     map[r1]->exits[r2] = new DoorPortal(code);
     map[r2]->exits[r1] = new DoorPortal(code);
+
+    if (code != NULL) {
+        // TODO: Ugh, strdup. Can we replace code_t with a string please?
+        portalCodes[strdup(code)] = map[r1]->exits[r2];
+    }
 }
 
 bool Map::isLocked(const room_t src, const room_t dst) {

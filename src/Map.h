@@ -3,10 +3,19 @@
 
 #include "Room.h"
 #include "LockTable.h"
+#include <map>
+#include <vector>
 
 // The map is just an association between room numbers and rooms.
 typedef std::map<room_t, Room *> map_t;
+
+// Paths are used by the pathfinder.
 typedef std::vector<path_t *> paths_t;
+
+// It would be great if we had a single map for this, but hey
+// deadlines, so we get tech debt instead. Sorry future me.
+typedef std::map<const code_t, Room *> roomCodes_t;
+typedef std::map<const code_t, Portal *> portalCodes_t;
 
 // The map of the hotel, or whatever space we're putting the players in. :)
 
@@ -14,8 +23,13 @@ class Map {
     private:
 
         // We keep track of which rooms and doors are on each floor.
+        // TODO: Actually implement these.
         std::multimap<floor_t, Room *> floorRooms;
         std::multimap<floor_t, DoorPortal *> floorDoors;
+
+        // TODO: Deallocate the memory we strdup'ed these with.
+        roomCodes_t roomCodes;
+        portalCodes_t portalCodes;
 
         // The map needs to know what's locked.
         LockTable locks;
@@ -37,6 +51,7 @@ class Map {
             for (map_t::iterator i = map.begin(); i != map.end(); ++i) {
                 delete i->second;
             }
+            // TODO: Delete floorRooms and floorDoors 
         }
 
 };
