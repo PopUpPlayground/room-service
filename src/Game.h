@@ -13,6 +13,9 @@ typedef std::vector<Actor *> actors_t ;
 // but with no hardware dependence so we can test it in the cloud.
 
 class Game {
+    private:
+        puzzle_t puzzle;        // Last puzzle code players entered.
+
     public:
         EventQueue events;
         Map map;
@@ -28,6 +31,7 @@ class Game {
         void start(print_f print, millis_t _time);          // Starts the game
         void tick(print_f print, millis_t time);            // Runs one tick of game time.
         void scheduleOffsetEvent(millis_t offset, Event *); // Schedules event, offset from now.
+        void runEvent(Event *);                             // Schedules to run immediately.
         bool isLocked(const room_t src, const room_t dst);  // Is that door locked?
 
         void processInput(const std::string *);

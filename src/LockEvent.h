@@ -10,6 +10,7 @@ class LockEvent : public Event {
         const puzzle_t puzzle;
     public:
         LockEvent(const code_t _code, const puzzle_t _puzzle) :code(_code), puzzle(_puzzle)  { };
+        LockEvent(const std::string *str, const puzzle_t _puzzle) :code(str->c_str()), puzzle(_puzzle) {};
         void processEvent(print_f print, Game *);
 };
 

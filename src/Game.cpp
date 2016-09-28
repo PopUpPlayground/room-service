@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Actor.h"
+#include "LockEvent.h"
 
 void Game::start(print_f print, millis_t _time) {
     time = _time;   // Record game start time. :)
@@ -32,17 +33,25 @@ void Game::scheduleOffsetEvent(millis_t offset, Event *event) {
     events.scheduleEvent(time + offset, event);
 }
 
+// This just schedules it to run immediately.
+void Game::runEvent(Event *event) {
+    events.scheduleEvent(time, event);
+}
+
 void Game::processInput(const std::string *input) {
     
     // Whatever we do, it's probably going to dirty things up. :)
     dirty = true;
 
     if (state == WAIT_PUZZLE) {
-        // TODO: Copy code.
+        // TODO: Check puzzle is valid.
+        puzzle = *input;
         state = WAIT_CODE;
     }
     else if (state == WAIT_CODE) {
-        // TODO: Process pair!
+        // TODO: Check door code is valid!
+        runEvent(new LockEvent(input, puzzle));
+        puzzle = "";
         state = WAIT_PUZZLE;
     }
 
