@@ -1,12 +1,17 @@
 #include "Game.h"
 #include "Actor.h"
 #include "LockEvent.h"
+#include "HungerEvent.h"
 
-void Game::start(print_f print, millis_t _time) {
+void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     time = _time;   // Record game start time. :)
+    globalHunger = startingHunger;
 
     // Make sure the initial game state will be shown to players.
     dirty = true;
+
+    print("Scheduling hunger...\n");
+    events.scheduleEvent(0, new HungerEvent);
 
     print("Activating actors...\n");
     for (actors_t::iterator i = actors.begin(); i != actors.end(); ++i) {
