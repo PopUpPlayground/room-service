@@ -2,6 +2,7 @@
 #define HWCONSOLE_H
 
 #ifndef UNIT_TEST
+#ifndef NATIVE
 
 #include <Wire.h>
 #include <Keypad.h>
@@ -32,7 +33,7 @@ class HwConsole {
         void updateLeds(Game *game);
         void updateLCDs(Game *game);
 
-        void displayLcdCode(const char *);
+        void displayLcdCode(const char *, byte target = 0);
 
     public:
         Keypad keypad;
@@ -84,8 +85,10 @@ class HwConsole {
         void displayLcd(const std::string line1, const std::string line2, byte target = 0);
         void displayLcd(const char *line1, const char *line2 = NULL, byte target = 0);
         void displayLcd(strpair_t, byte target = 0);
+        void clearLcdLine(byte line, byte target = 0);
 };
 
+#endif  // NATIVE
 #endif  // UNIT_TEST
 
 #endif
