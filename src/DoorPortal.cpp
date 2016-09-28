@@ -14,9 +14,11 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
     assert(game != NULL);
 
     if (game->map.isLocked(actor->room, dst)) {
-        print("...but the door is locked! ");
-        print(actor->name);
-        print(" reconsiders their life choices.\n");
+        print("(LOCKED!!)\n");
+
+        // print("...but the door is locked! ");
+        // print(actor->name);
+        // print(" reconsiders their life choices.\n");
 
         // Zero delay here means we'll kick off next tick.
         game->scheduleOffsetEvent(0, new GoalEvent(actor));
@@ -25,17 +27,19 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
         // Not locked, let's go!
         moveActor(print, actor, dst);
 
-        print("...The door was no match for ");
-        print(actor->name);
-        print("!!\n");
+        // print("...The door was no match for ");
+        // print(actor->name);
+        // print("!!\n");
 
         if (actor->destination == NULL) {
             print(actor->name);
             print(" has no fixed destination! This is **A BUG** unless we're unit testing.\n");
         }
         else if (actor->destination->room == dst->number) {
-            print(actor->name);
-            print(" has arrived at their final destination!\n");
+            // print(actor->name);
+            // print(" has arrived at their final destination!\n");
+            
+            print(" (now resting)\n");
 
             // Schedule next goal.
             // TODO: Use sigmas
@@ -43,8 +47,11 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
         }
         else {
             // Schedule next move.
-            print(actor->name);
-            print(" is in transit, scheduling next move.\n");
+            // print(actor->name);
+            // print(" is in transit, scheduling next move.\n");
+
+            print("\n");    // No extra info to provide.
+
             game->scheduleOffsetEvent( actor->speed, new MoveEvent(actor) );
         }
     }
