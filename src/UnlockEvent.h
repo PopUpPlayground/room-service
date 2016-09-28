@@ -4,13 +4,15 @@
 #include "Event.h"
 #include "types.h"
 
+class Puzzle;
+
 class UnlockEvent : public Event {
     private:
         const code_t code;
-        const puzzle_t puzzle;
+        Puzzle *puzzle;
 
     public:
-        UnlockEvent(const code_t _code, const puzzle_t _puzzle) :code(_code), puzzle(_puzzle) { };
+        UnlockEvent(const code_t _code, Puzzle *_puzzle) :code(_code), puzzle(_puzzle) { };
         void processEvent(print_f print, Game *);
 };
 

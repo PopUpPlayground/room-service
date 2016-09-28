@@ -1,5 +1,6 @@
 #include "Map.h"
 #include "unity.h"
+#include "Puzzle.h"
 #include <iostream>
 
 void dumpVector(path_t *vector) {
@@ -72,7 +73,7 @@ void test_Pathfinding() {
     std::cerr << "\n--- Locking door ---\n";
 
     // Now let's lock a door, and see if we work around it.
-    map.lockDoor("023","1234");
+    map.lockDoor("023",new Puzzle(DOOR));
 
     std::cerr << "\n--- Testing door lock (again) ---\n";
 

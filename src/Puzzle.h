@@ -23,7 +23,7 @@ class Puzzle {
         // Has this code been used already?
         bool used;
 
-        Puzzle(lock_type_t _type, millis_t _duration = 6 * 1000) 
+        Puzzle(lock_type_t _type, millis_t _duration = 60 * 1000) 
             : type(_type)
             , duration(_duration)
             , used(false)

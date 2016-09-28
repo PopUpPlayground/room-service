@@ -17,7 +17,7 @@ typedef std::map<puzzle_t, Puzzle *> puzzlesMap_t;
 
 class Game {
     private:
-        puzzle_t puzzle;        // Last puzzle code players entered.
+        Puzzle *puzzle;        // Last puzzle code players entered.
 
     public:
         hunger_t globalHunger;
@@ -39,7 +39,7 @@ class Game {
         void runEvent(Event *);                             // Schedules to run immediately.
         bool isLocked(const room_t src, const room_t dst);  // Is that door locked?
 
-        void processInput(const std::string *);
+        void processInput(print_f, const std::string *);
 };
 
 #endif

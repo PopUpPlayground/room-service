@@ -1,8 +1,8 @@
 #include "Game.h"
 #include "Actor.h"
-#include "LockEvent.h"
 #include "HungerEvent.h"
 #include "GoalEvent.h"
+#include "UnlockEvent.h"
 
 void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     time = _time;   // Record game start time. :)
@@ -37,21 +37,47 @@ void Game::runEvent(Event *event) {
     events.scheduleEvent(time, event);
 }
 
-void Game::processInput(const std::string *input) {
+void Game::processInput(print_f print, const std::string *input) {
     
     // Whatever we do, it's probably going to dirty things up. :)
     dirty = true;
 
     if (state == WAIT_PUZZLE) {
-        // TODO: Check puzzle is valid.
-        puzzle = *input;
-        state = WAIT_CODE;
+        puzzlesMap_t::iterator it = puzzlesMap.find(*input);
+        if (it != puzzlesMap.end()) {
+
+            if (it->second->used) {
+                print("Code already used\n");
+                // TODO: Display used message.
+            }
+            else {
+                puzzle = it->second;
+                state = WAIT_CODE;
+            }
+        }
+        else {
+            print("Invalid code entered\n");
+            // TODO: Display invalid code.
+        }
     }
     else if (state == WAIT_CODE) {
-        // TODO: Check door code is valid!
-        runEvent(new LockEvent(input, puzzle));
-        puzzle = "";
+
+        if (puzzle->type == DOOR) {
+            if ( map.lockDoor(*input,puzzle) ) {
+                // Successful lock! Schedule unlock
+                print("Locking door\n");
+                scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*input,puzzle));
+            }
+            else {
+                print("Door lock unsuccessful\n");
+                // Unsuccessful.
+            }
+        }
+        
+        puzzle = NULL;
         state = WAIT_PUZZLE;
     }
+
+    // You gave us a code when we weren't expecting it? Hah.
 
 }

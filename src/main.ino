@@ -5,7 +5,6 @@
 #include "Game.h"
 #include "Actor.h"
 #include "Map.h"
-#include "LockEvent.h"
 
 #include "HwConsole.h"
 
@@ -126,7 +125,7 @@ void loop() {
 
     // Process player input.
     if (! input.empty()) {
-        game.processInput(&input);
+        game.processInput(consolePrint, &input);
     }
 }
 

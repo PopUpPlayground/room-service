@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 
+class Puzzle;
+
 // The map is just an association between room numbers and rooms.
 typedef std::map<room_t, Room *> map_t;
 
@@ -28,15 +30,15 @@ class Map {
         std::multimap<floor_t, Room *> floorRooms;
         std::multimap<floor_t, DoorPortal *> floorDoors;
 
-        roomCodes_t roomCodes;
-        portalCodes_t portalCodes;
-
         // The map needs to know what's locked.
 
         void dumpVector(path_t *vector);
         void releasePaths(paths_t *paths);
 
     public:
+        roomCodes_t roomCodes;
+        portalCodes_t portalCodes;
+
         // Probably better private
         LockTable locks;
 
@@ -48,8 +50,9 @@ class Map {
         bool isLocked(const room_t src, const room_t dst);
         bool isLocked(const room_t src, const Room *dst);
 
-        bool lockDoor(const code_t code, const puzzle_t puzzle);
-        void unlockDoor(const code_t code, const puzzle_t puzzle);
+        bool lockDoor(const code_t code, Puzzle *puzzle);
+
+        void unlockDoor(const code_t code, Puzzle *puzzle);
 
         void newRoom(const char *name, const room_t number, const floor_t floor, const char *code = NULL, const led_t led = -1);
         void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL, const led_t led = -1);

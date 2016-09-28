@@ -1,14 +1,15 @@
 #include "LockTable.h"
+#include "Puzzle.h"
 #include <string>
 
-void LockTable::addLock(const code_t code, const puzzle_t puzzle) {
-    locks.insert(std::make_pair(std::string (code), std::string (puzzle)));
+void LockTable::addLock(const code_t code, Puzzle *puzzle) {
+    locks.insert(std::make_pair(std::string (code), puzzle));
 }
 
 // Wow C++, could you make this any more tricky?
 // Surely there's a better way?
 
-void LockTable::rmLock(const code_t code, const puzzle_t puzzle) {
+void LockTable::rmLock(const code_t code, Puzzle *puzzle) {
     std::pair<locks_t::iterator,locks_t::iterator> range = locks.equal_range(code);
 
     locks_t::iterator it = range.first;

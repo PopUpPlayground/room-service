@@ -7,6 +7,7 @@
 #include <string.h>
 #include "StairPortal.h"
 #include "DoorPortal.h"
+#include "Puzzle.h"
 
 // DEBUGGING
 #include <iostream>
@@ -123,17 +124,18 @@ bool Map::isLocked(const room_t src, const Room *dst) {
 }
 
 // Returns true if request was valid, false otherwise.
-bool Map::lockDoor(const code_t code, const puzzle_t puzzle) {
+bool Map::lockDoor(const code_t code, Puzzle *puzzle) {
 
     if (portalCodes.find(code) == portalCodes.end()) {
         return false;
     }
 
     locks.addLock(code, puzzle);
+    puzzle->used = true;
     return true;
 }
 
-void Map::unlockDoor(const code_t code, const puzzle_t puzzle) {
+void Map::unlockDoor(const code_t code, Puzzle *puzzle) {
     locks.rmLock(code,puzzle);
 }
 

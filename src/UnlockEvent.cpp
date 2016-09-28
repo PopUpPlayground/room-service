@@ -8,8 +8,6 @@ void UnlockEvent::processEvent(print_f print, Game *game) {
 
     print("Expiring lock on ");
     print(code.c_str());
-    print(" using puzzle code ");
-    print(puzzle.c_str());
     print("\n");
 
     game->map.unlockDoor(code, puzzle);
