@@ -90,9 +90,15 @@ bool Map::isLocked(const room_t src, const Room *dst) {
     return isLocked(src, dst->number);
 }
 
-// Doesn't really care if it's a valid code or not, we just use it. :)
-void Map::lockDoor(const code_t code, const puzzle_t puzzle) {
+// Returns true if request was valid, false otherwise.
+bool Map::lockDoor(const code_t code, const puzzle_t puzzle) {
+
+    if (portalCodes.find(code) == portalCodes.end()) {
+        return false;
+    }
+
     locks.addLock(code, puzzle);
+    return true;
 }
 
 void Map::unlockDoor(const code_t code, const puzzle_t puzzle) {
@@ -101,6 +107,11 @@ void Map::unlockDoor(const code_t code, const puzzle_t puzzle) {
 
 // Returns the LED number, but only if we're given a door.
 led_t Map::getPortalLed(std::string code) {
+
+    if (portalCodes.find(code) == portalCodes.end()) {
+        return NO_LED;
+    }
+
     return portalCodes.at(code)->led;
 }
 

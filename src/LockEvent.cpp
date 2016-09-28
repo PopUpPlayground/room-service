@@ -17,8 +17,15 @@ void LockEvent::processEvent(print_f print, Game *game) {
     print(puzzle.c_str());
     print("\n");
 
-    game->map.lockDoor(code, puzzle);
+    bool lock = game->map.lockDoor(code, puzzle);
 
-    // Schedule an unlock
-    game->scheduleOffsetEvent(lockTime, new UnlockEvent(code, puzzle));
+    if (lock) {
+        print("The lock is valid.\n");
+
+        // Schedule an unlock
+        game->scheduleOffsetEvent(lockTime, new UnlockEvent(code, puzzle));
+    }
+    else {
+        print("The lock is invalid.\n");
+    }
 }

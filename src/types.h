@@ -1,10 +1,10 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define MAX_CODE_LENGTH 16
-
 #include <vector>
 #include <string>
+
+#define NO_LED -1
 
 // As returned by the millis() function.
 typedef unsigned long millis_t;
