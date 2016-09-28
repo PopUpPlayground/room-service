@@ -17,6 +17,7 @@ class Game {
         puzzle_t puzzle;        // Last puzzle code players entered.
 
     public:
+        hunger_t globalHunger;
         EventQueue events;
         Map map;
         actors_t actors;

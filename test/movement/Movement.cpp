@@ -65,7 +65,9 @@ void test_MovementAdvanced() {
     game.map.newBiDoor(1,2);
     game.map.newBiDoor(2,3);
 
-    Goals *shiaGoals = new Goals();
+    std::cerr << "Making Shia goals\n";
+
+    Goals *shiaGoals = new Goals(&game.map);
     shiaGoals->add(3,10,2000,0);       // Foyer
     shiaGoals->add(1,10,2000,0);       // Bathroom
 
@@ -78,11 +80,13 @@ void test_MovementAdvanced() {
         shiaGoals           // Hungry goals
     );
 
-    Event *event = cannibal->recomputeGoal(consolePrint, &(game.map));
+    std::cerr << "Recomputing goals\n";
 
-    consolePrint("About to process move event.\n");
+    Event *event = cannibal->recomputeGoal(consolePrint, &(game.map),0);
+
+    std::cerr << "About to process move event.\n";
     event->processEvent(consolePrint,&game);
-    consolePrint("Move event processed.\n");
+    std::cerr << "Move event processed.\n";
 
     TEST_ASSERT_EQUAL(2, cannibal->room);
 }

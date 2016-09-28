@@ -23,6 +23,7 @@ typedef Game game_t;
 
 void consolePrint(const char *string) {
     Serial.print(string);
+    delay(10);
 }
 
 game_t game;

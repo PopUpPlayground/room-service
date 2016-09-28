@@ -3,7 +3,12 @@
 
 void test_Goal_simple() {
 
-    Goals goals;
+    Map map;
+    map.newRoom("Meh",1,1);
+    map.newRoom("Moop",2,1);
+    map.newRoom("Mork",3,1);
+
+    Goals goals(&map);
 
     // Add goals of reaching rooms 1 and 3, with equal weighting (50),
     // and lingering a second with 100ms sigma.

@@ -4,7 +4,7 @@
 #include "GoalEvent.h"
 #include "MoveEvent.h"
 
-Event *Actor::recomputeGoal(print_f print, Map *map) {
+Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
 
     print("Finding goal for ");
     print(name);
@@ -12,20 +12,31 @@ Event *Actor::recomputeGoal(print_f print, Map *map) {
 
     assert(map != NULL);
 
-    // TODO: Hungry check!
+    // The +1 here is so we never divide by zero!
+    hunger_t hungerRoll = (rand() % (hunger+1));
+
+    Goals *goalTable = regularGoals;
+
+    if (hungerRoll > hungerBreak) {
+        print("...THEY ARE HUNGRY!\n");
+        goalTable = hungryGoals;
+    }
+    else {
+        print("They are not hungry...\n");
+    }
     
     // Release previous path if exists
     if (path != NULL) {
-        print("...Releasing previous goal.\n");
+        // print("...Releasing previous goal.\n");
         delete path;
     }
     
     // Find a place to go.
-    print("...looking for some place to go.\n");
-    destination = regularGoals->findGoal(room);
+    // print("...looking for some place to go.\n");
+    destination = goalTable->findGoal(room);
 
     // Find out how to get there.
-    print("...looking for a way to get there.\n");
+    // print("...looking for a way to get there.\n");
     path = map->findPath(room, destination->room);
 
     if (path == NULL) {

@@ -20,7 +20,6 @@ class Actor {
         room_t room;
 
         // Hungry hungry!
-        hunger_t hunger;
         const hunger_t hungerBreak;
 
         Goals *regularGoals;
@@ -30,7 +29,7 @@ class Actor {
         path_t *path;
         const Destination *destination;
 
-        Event *recomputeGoal(print_f, Map *);
+        Event *recomputeGoal(print_f, Map *, const hunger_t);
         void showPath(print_f);
         
         Actor(

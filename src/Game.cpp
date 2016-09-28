@@ -11,7 +11,7 @@ void Game::start(print_f print, millis_t _time) {
     print("Activating actors...\n");
     for (actors_t::iterator i = actors.begin(); i != actors.end(); ++i) {
 
-        Event *event = (*i)->recomputeGoal(print, &map);
+        Event *event = (*i)->recomputeGoal(print, &map, globalHunger);
 
         if (event != NULL) {
             print("Scheduling goal...");
