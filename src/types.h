@@ -6,6 +6,10 @@
 
 #define NO_LED -1
 
+// Pathfinding and other things can chew a lot of memory. We can
+// limit that to an extent here.
+#define MAX_PATH_LENGTH 20
+
 // As returned by the millis() function.
 typedef unsigned long millis_t;
 

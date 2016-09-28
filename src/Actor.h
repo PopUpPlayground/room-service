@@ -45,7 +45,10 @@ class Actor {
             , hungerBreak(_hungerBreak)
             , regularGoals(_regularGoals)
             , hungryGoals(_hungryGoals)
-            { }
+            { 
+                // Reserving up front might help prevent memory fragmentation
+                path.reserve(MAX_PATH_LENGTH);
+            }
             
 };
 

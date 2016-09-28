@@ -13,9 +13,6 @@
 #include <iostream>
 #include "Debug.h"
 
-// Pathfinding can blow our memory. This limits how far we'll look for goals.
-#define MAX_PATH_LENGTH 20
-
 // Debugging
 void Map::dumpVector(path_t *vector) {
     for (path_t::const_iterator i = vector->begin(); i != vector->end(); i++) {
