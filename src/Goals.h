@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "types.h"
 #include <assert.h>
+#include "Map.h"
 
 // Struct that defines each goal.
 class Destination {
@@ -28,12 +29,13 @@ typedef std::vector<Destination *> Destinations;
 // they'd like to move.
 
 class Goals {
+    private:
+        Map *map;
+
     public:
 
         // Default constructor
-        Goals() {
-            totalWeightings = 0;
-        };
+        Goals(Map *_map) :map(_map), totalWeightings(0)  { };
 
         // Destructor
         ~Goals() {

@@ -32,6 +32,8 @@ void test_Pathfinding() {
     map.newBiDoor(4,6);
     map.newBiDoor(6,3);
 
+    std::cerr << map.errors;
+
     // Simple path
     path_t *path = map.findPath(1,2);
 

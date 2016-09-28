@@ -73,6 +73,27 @@ void Map::newStair(const room_t r1, const room_t r2) {
 // Bi-directional door creation. Rooms must exist first.
 // TODO: Add to door/floor table
 void Map::newBiDoor(const room_t r1, const room_t r2, const char *code, const led_t led) {
+
+    if (map.find(r1) == map.end()) {
+        errors += "Attempt to make BiDoor from void room ";
+        errors += r1;
+        errors += "\n";
+        return;
+    }
+
+    if (map.find(r2) == map.end())  {
+        errors += "Attempt to make BiDoor to void room ";
+        errors += r2;
+        errors += "\n";
+        return;
+    }
+
+    if (code != NULL && portalCodes.find(code) != portalCodes.end()) {
+        errors += "Attempt to re-use portal code ";
+        errors += code;
+        errors += "\n";
+        return;
+    }
     
     // The doors are different objects in memory, but share the same ID,
     // and hence the same locks.
@@ -80,8 +101,7 @@ void Map::newBiDoor(const room_t r1, const room_t r2, const char *code, const le
     map[r2]->exits[r1] = new DoorPortal(code,led);
 
     if (code != NULL) {
-        // TODO: Ugh, strdup. Can we replace code_t with a string please?
-        portalCodes[strdup(code)] = map[r1]->exits[r2];
+        portalCodes[code] = map[r1]->exits[r2];
     }
 }
 
@@ -125,6 +145,17 @@ led_t Map::getPortalLed(std::string code) {
     }
 
     return portalCodes.at(code)->led;
+}
+
+bool Map::validRoom(const room_t room) {
+    if (map.find(room) == map.end()) {
+        return false;
+    }
+    return true;
+}
+
+void Map::addError(const char *msg) {
+    errors += msg;
 }
 
 // Finds a path from src to dst, and returns a pointer to it.

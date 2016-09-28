@@ -2,6 +2,12 @@
 
 // Add a goal
 void Goals::add(const room_t room, const weight_t weight, const wait_t wait, const wait_t sigma) {
+
+    if (! map->validRoom(room)) {
+        map->addError("Invalid goal room!\n");
+        return;
+    }
+
     destinations.push_back(
         new Destination(room, weight, wait, sigma)
     );

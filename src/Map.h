@@ -56,6 +56,9 @@ class Map {
         void newStair(const room_t r1, const room_t r2);
         led_t getPortalLed(std::string code);
 
+        bool validRoom(const room_t room);
+        void addError(const char *);
+
         ~Map() {
             for (map_t::iterator i = map.begin(); i != map.end(); ++i) {
                 delete i->second;
