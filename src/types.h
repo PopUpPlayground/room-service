@@ -4,6 +4,7 @@
 #define MAX_CODE_LENGTH 16
 
 #include <vector>
+#include <string>
 
 // As returned by the millis() function.
 typedef unsigned long millis_t;
@@ -30,10 +31,10 @@ typedef ident_t room_t;
 typedef ident_t door_t;
 
 // Codes as used by players, both for objects (doors, floors, etc)
-typedef char *code_t;
+typedef std::string code_t;
 
 // Puzzle codes entered by players.
-typedef char *puzzle_t;
+typedef std::string puzzle_t;
 
 // A path is a vector of rooms.
 typedef std::vector<room_t> path_t;

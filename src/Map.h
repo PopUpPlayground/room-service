@@ -32,12 +32,14 @@ class Map {
         portalCodes_t portalCodes;
 
         // The map needs to know what's locked.
-        LockTable locks;
 
         void dumpVector(path_t *vector);
         void releasePaths(paths_t *paths);
 
     public:
+        // Probably better private
+        LockTable locks;
+
         map_t map;
         path_t *findPath(const room_t src, const room_t dst);
         bool isLocked(const room_t src, const room_t dst);
@@ -46,6 +48,7 @@ class Map {
         void newRoom(const char *name, const room_t number, const floor_t floor, const char *code = NULL, const led_t led = -1);
         void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL, const led_t led = -1);
         void newStair(const room_t r1, const room_t r2);
+        led_t getPortalLed(std::string code);
 
         ~Map() {
             for (map_t::iterator i = map.begin(); i != map.end(); ++i) {

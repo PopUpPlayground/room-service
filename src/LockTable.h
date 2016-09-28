@@ -15,9 +15,11 @@ typedef std::multimap<std::string, std::string> locks_t;
 
 class LockTable {
     private:
-        locks_t locks;
 
     public:
+        // Probably better private
+        locks_t locks;
+
         void addLock(const code_t code, const puzzle_t puzzle);
         bool checkLock(const char *code);
 };

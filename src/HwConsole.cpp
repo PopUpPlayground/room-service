@@ -79,6 +79,16 @@ void HwConsole::updateLeds(Game *game) {
     }
 
     // TODO: Display door locks
+    for (
+        locks_t::iterator i = game->map.locks.locks.begin();
+        i != game->map.locks.locks.end();
+        ++i
+    ) {
+        led_t led = game->map.getPortalLed(i->first);
+        if (led >= 0) {
+            tlc.setPWM(led,4095);
+        }
+    }
     
     tlc.write();
 

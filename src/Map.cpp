@@ -95,6 +95,11 @@ void Map::lockDoor(const code_t code, const puzzle_t puzzle) {
     locks.addLock(code, puzzle);
 }
 
+// Returns the LED number, but only if we're given a door.
+led_t Map::getPortalLed(std::string code) {
+    return portalCodes.at(code)->led;
+}
+
 // Finds a path from src to dst, and returns a pointer to it.
 // It's the responsibility of the caller to clean that up when done.
 path_t *Map::findPath(const room_t src, const room_t dst) {

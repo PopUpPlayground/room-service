@@ -8,9 +8,9 @@ void LockEvent::processEvent(print_f print, Game *game) {
     game->dirty = true;
 
     print("Applying lock to ");
-    print(code);
+    print(code.c_str());
     print(" using puzzle code ");
-    print(puzzle);
+    print(puzzle.c_str());
     print("\n");
 
     game->map.lockDoor(code, puzzle);
