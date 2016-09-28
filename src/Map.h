@@ -5,6 +5,7 @@
 #include "LockTable.h"
 #include <map>
 #include <vector>
+#include <string>
 
 // The map is just an association between room numbers and rooms.
 typedef std::map<room_t, Room *> map_t;
@@ -27,7 +28,6 @@ class Map {
         std::multimap<floor_t, Room *> floorRooms;
         std::multimap<floor_t, DoorPortal *> floorDoors;
 
-        // TODO: Deallocate the memory we strdup'ed these with.
         roomCodes_t roomCodes;
         portalCodes_t portalCodes;
 
@@ -39,6 +39,9 @@ class Map {
     public:
         // Probably better private
         LockTable locks;
+
+        // Errors from map creation.
+        std::string errors;
 
         map_t map;
         path_t *findPath(const room_t src, const room_t dst);

@@ -98,8 +98,9 @@ void setup() {
     }
 
     Serial.print("\nStarting game....\n");
+    Serial.print(game.map.errors.c_str());
 
-    delay(1000);
+    delay(2000);
 
     game.start(consolePrint, millis());
 

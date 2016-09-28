@@ -33,8 +33,21 @@ void Map::releasePaths(paths_t *paths) {
 void Map::newRoom(const char *name, const room_t number, const floor_t floor, const char *code, const led_t led) {
     assert(name != NULL);
 
-    // We're just trusting you not to add a room twice, okay?
-    // TODO: Don't trust the developer.
+    if (map.find(number) != map.end()) {
+        // OMG, they're adding a room that already exists! Bail out now.
+        errors += "Attempt to double-add room number ";
+        errors += number;
+        errors += "\n";
+        return;
+    }
+
+    if (code != NULL && roomCodes.find(code) != roomCodes.end()) {
+        // They've given us a code that's already been used. Nope.
+        errors += "Attempt to double-add room code ";
+        errors += code;
+        errors += "\n";
+        return;
+    }
 
     Room *room = new Room(name, number, code, led);
 
@@ -46,8 +59,7 @@ void Map::newRoom(const char *name, const room_t number, const floor_t floor, co
 
     // Add it to our code list, if we have one.
     if (code != NULL) {
-        // TODO: Ugh, strdup. Can we replace code_t with a string please?
-        roomCodes[strdup(code)] = room;
+        roomCodes[code] = room;
     }
 }
 
