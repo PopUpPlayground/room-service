@@ -3,6 +3,7 @@
 #include "HungerEvent.h"
 #include "GoalEvent.h"
 #include "UnlockEvent.h"
+#include "UnlockConsoleEvent.h"
 
 void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     time = _time;   // Record game start time. :)
@@ -48,16 +49,19 @@ void Game::processInput(print_f print, const std::string *input) {
 
             if (it->second->used) {
                 print("Code already used\n");
-                // TODO: Display used message.
+                lockConsole("Code already", "used...");
+                return;
             }
             else {
                 puzzle = it->second;
                 state = WAIT_CODE;
+                return;
             }
         }
         else {
-            print("Invalid code entered\n");
-            // TODO: Display invalid code.
+            print("Invalid code\n");
+            lockConsole("Invalid code");
+            return;
         }
     }
     else if (state == WAIT_CODE) {
@@ -80,4 +84,10 @@ void Game::processInput(print_f print, const std::string *input) {
 
     // You gave us a code when we weren't expecting it? Hah.
 
+}
+
+void Game::lockConsole(std::string line1, std::string line2, millis_t time) {
+    state = DISPLAY_MSG;
+    displayMsg = std::make_pair(line1,line2);
+    scheduleOffsetEvent(time, new UnlockConsoleEvent);
 }

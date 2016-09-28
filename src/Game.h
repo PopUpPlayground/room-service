@@ -8,7 +8,6 @@
 #include "types.h"
 #include <vector>
 
-
 typedef std::vector<Actor *> actors_t ;
 typedef std::map<puzzle_t, Puzzle *> puzzlesMap_t;
 
@@ -38,6 +37,8 @@ class Game {
         void scheduleOffsetEvent(millis_t offset, Event *); // Schedules event, offset from now.
         void runEvent(Event *);                             // Schedules to run immediately.
         bool isLocked(const room_t src, const room_t dst);  // Is that door locked?
+
+        void lockConsole(std::string line1, std::string line2 = "", millis_t time = 2000);
 
         void processInput(print_f, const std::string *);
 };
