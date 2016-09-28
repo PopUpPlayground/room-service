@@ -8,7 +8,6 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
 
     print("Finding goal for ");
     print(name);
-    print("\n");
 
     assert(map != NULL);
 
@@ -18,12 +17,10 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
     Goals *goalTable = regularGoals;
 
     if (hungerRoll > hungerBreak) {
-        print("...THEY ARE HUNGRY!\n");
+        print(" (HUNGRY!)");
         goalTable = hungryGoals;
     }
-    else {
-        print("They are not hungry...\n");
-    }
+    print("\n");
     
     // Release previous path if exists
     if (path != NULL) {
@@ -41,13 +38,13 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
 
     if (path == NULL) {
         // Can't get there, schedule next event to be a recompute.
-        print("...no path found; sleeping instead.\n");
+        // print("...no path found; sleeping instead.\n");
         destination = NULL;
         return new GoalEvent(this);
     }
 
     // Aww yis, we're heading somewhere. Schedule a move.
-    print("...path found, scheduling move.\n");
+    // print("...path found, scheduling move.\n");
     return new MoveEvent(this);
 }
 
