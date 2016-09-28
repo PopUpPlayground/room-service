@@ -31,3 +31,19 @@ void Game::tick(print_f print, millis_t _time) {
 void Game::scheduleOffsetEvent(millis_t offset, Event *event) {
     events.scheduleEvent(time + offset, event);
 }
+
+void Game::processInput(const std::string *input) {
+    
+    // Whatever we do, it's probably going to dirty things up. :)
+    dirty = true;
+
+    if (state == WAIT_PUZZLE) {
+        // TODO: Copy code.
+        state = WAIT_CODE;
+    }
+    else if (state == WAIT_CODE) {
+        // TODO: Process pair!
+        state = WAIT_PUZZLE;
+    }
+
+}

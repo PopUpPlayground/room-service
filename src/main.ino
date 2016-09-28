@@ -126,8 +126,7 @@ void loop() {
 
     // Process player input.
     if (input != NULL) {
-        Serial.print("Processing: ");
-        Serial.print(input->c_str());
+        game.processInput(input);
         delete input;
     }
 }
