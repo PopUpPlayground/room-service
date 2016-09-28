@@ -95,6 +95,10 @@ void Map::lockDoor(const code_t code, const puzzle_t puzzle) {
     locks.addLock(code, puzzle);
 }
 
+void Map::unlockDoor(const code_t code, const puzzle_t puzzle) {
+    locks.rmLock(code,puzzle);
+}
+
 // Returns the LED number, but only if we're given a door.
 led_t Map::getPortalLed(std::string code) {
     return portalCodes.at(code)->led;

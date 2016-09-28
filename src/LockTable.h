@@ -21,6 +21,7 @@ class LockTable {
         locks_t locks;
 
         void addLock(const code_t code, const puzzle_t puzzle);
+        void rmLock(const code_t code, const puzzle_t puzzle);
         bool checkLock(const char *code);
 };
 
