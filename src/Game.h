@@ -4,10 +4,13 @@
 #include "EventQueue.h"
 #include "Map.h"
 #include "LockTable.h"
+#include "Puzzle.h"
 #include "types.h"
 #include <vector>
 
+
 typedef std::vector<Actor *> actors_t ;
+typedef std::map<puzzle_t, Puzzle *> puzzlesMap_t;
 
 // This is a top level game class. It's a composite of everything one needs to run the game,
 // but with no hardware dependence so we can test it in the cloud.
@@ -24,6 +27,7 @@ class Game {
         millis_t time;              // Current time (ms)
         game_state_t state;
         strpair_t displayMsg;
+        puzzlesMap_t puzzlesMap;
 
         // Dirty is set when the game state changes (eg: actors move) and
         // cleared when the state is displayed to the player.

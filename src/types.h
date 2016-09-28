@@ -47,4 +47,7 @@ typedef std::pair<std::string, std::string> strpair_t;
 
 enum game_state_t { WAIT_PUZZLE, WAIT_CODE, DISPLAY_MSG };
 
+// Lock types for puzzles.
+enum lock_type_t { DOOR, ROOM, FLOOR, EMERGENCY };
+
 #endif
