@@ -6,6 +6,7 @@
 #include "LockTable.h"
 #include "Puzzle.h"
 #include "types.h"
+#include "Actor.h"
 #include <vector>
 
 typedef std::vector<Actor *> actors_t ;
@@ -41,6 +42,21 @@ class Game {
         void lockConsole(std::string line1, std::string line2 = "", millis_t time = 2000);
 
         void processInput(print_f, const std::string *);
+
+        // Mostly to make valgrind happy
+
+        ~Game() {
+
+            // Clean puzzles from memory.
+            for (puzzlesMap_t::iterator it = puzzlesMap.begin(); it != puzzlesMap.end(); ++it) {
+                delete it->second;
+            }
+
+            // Clean actors
+            for (actors_t::iterator it = actors.begin(); it != actors.end(); ++it) {
+                delete *it;
+            }
+        }
 };
 
 #endif
