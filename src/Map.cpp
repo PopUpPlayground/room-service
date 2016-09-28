@@ -15,11 +15,17 @@
 
 // Debugging
 void Map::dumpVector(path_t *vector) {
+
+#ifdef DEBUG
+
     for (path_t::const_iterator i = vector->begin(); i != vector->end(); i++) {
         Debug(*i);
         Debug(" ");
     }
     Debug("\n");
+
+#endif
+
 }
 
 // Walks through all our candidates and deletes them. Isn't memory
@@ -173,7 +179,7 @@ bool Map::isDeadEnd(const room_t considered, const room_t dst) {
 
 // Finds a path from src to dst, and writes it to the object provided
 // Returns false if no path found.
-bool Map::findPath(const room_t src, const room_t dst, path_t *out) {
+bool Map::findPath(const room_t src, const room_t dst, path_t *out, print_f print) {
     assert(src != dst);
 
     // Our algorithm goes like this:
@@ -181,11 +187,14 @@ bool Map::findPath(const room_t src, const room_t dst, path_t *out) {
     // - While we can pull things off the queue
     // - - Add ourselves to the breadcrumbs of what we just pulled off
     // - - If we're at our destination, stop and return the breadcrumbs
-    // - - Otherwise, add all adjacent rooms not in the breadcrumbs to the queue
+    // - - Otherwise, add all adjacent rooms not *already seen* to the queue.
     // - If we run out of places to search, the destination is unreachable.
 
     typedef std::pair<path_t *, room_t> pathRoomPair_t;
     std::queue<pathRoomPair_t> queue;
+
+    // There's got to be something faster than this, right?
+    std::vector<room_t> seen;
 
     // Initial seeding of queue
     const exits_t *exits = &(map[src]->exits);
@@ -198,21 +207,31 @@ bool Map::findPath(const room_t src, const room_t dst, path_t *out) {
             path_t *seed = new path_t;
             seed->push_back(src);
 
+            // We've seen our source room.
+            seen.push_back(src);
+
             // Add to our queue the seeded path and our new exit.
             queue.push(std::make_pair(seed, i->first));
         }
     }
 
+
     // Main search
     while (! queue.empty() ) {
+
+        // char buf[20];
+        // snprintf(buf,20,"Queue length: %d\n", (int) queue.size());
+        // print(buf);
+
         pathRoomPair_t candidate = queue.front();
         queue.pop();
 
         path_t *breadcrumbs = candidate.first;
         const room_t room = candidate.second;
 
-        // Add ourselves to the breadcrumbs.
+        // Add ourselves to the breadcrumbs and seen list.
         breadcrumbs->push_back(room);
+        seen.push_back(room);
 
         // If we've found our destination.
         if (room == dst) {
@@ -263,7 +282,7 @@ bool Map::findPath(const room_t src, const room_t dst, path_t *out) {
                     &&
                     ( ! isLocked(room, adjRoom) )
                     &&
-                    (std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end())
+                    (std::find(seen.begin(), seen.end(), adjRoom) == seen.end())
                     &&
                     breadcrumbs->size() < MAX_PATH_LENGTH
             ) {

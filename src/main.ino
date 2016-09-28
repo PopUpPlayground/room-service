@@ -18,15 +18,39 @@ typedef Game game_t;
 
 #include "MsgEvent.h"
 
-#define MAX_CODE_LENGTH 16
-
-void consolePrint(const char *string) {
-    Serial.print(string);
-    delay(10);
-}
+#define SPEED_MULTIPLY 1
 
 game_t game;
 HwConsole hw;
+
+// From https://github.com/adafruit/SD/blob/master/utility/SdFatUtil.h
+
+#define UNUSEDOK __attribute__((unused))
+
+static UNUSEDOK int freeRam(void) {
+  extern int  __bss_end;
+  extern int* __brkval;
+  int free_memory;
+  if (reinterpret_cast<int>(__brkval) == 0) {
+    // if no heap use from end of bss section
+    free_memory = reinterpret_cast<int>(&free_memory)
+                  - reinterpret_cast<int>(&__bss_end);
+  } else {
+    // use from top of stack to heap
+    free_memory = reinterpret_cast<int>(&free_memory)
+                  - reinterpret_cast<int>(__brkval);
+  }
+  return free_memory;
+}
+
+void consolePrint(const char *string) {
+    // Serial.print("[ ");
+    // Serial.print(freeRam());
+    // Serial.print(" ]");
+    Serial.print(string);
+
+    // delay(10);
+}
 
 void testLights() {
     Serial.print("testing mode activated.\n");
@@ -80,26 +104,6 @@ void testLights() {
     }
 }
 
-// From https://github.com/adafruit/SD/blob/master/utility/SdFatUtil.h
-
-#define UNUSEDOK __attribute__((unused))
-
-static UNUSEDOK int freeRam(void) {
-  extern int  __bss_end;
-  extern int* __brkval;
-  int free_memory;
-  if (reinterpret_cast<int>(__brkval) == 0) {
-    // if no heap use from end of bss section
-    free_memory = reinterpret_cast<int>(&free_memory)
-                  - reinterpret_cast<int>(&__bss_end);
-  } else {
-    // use from top of stack to heap
-    free_memory = reinterpret_cast<int>(&free_memory)
-                  - reinterpret_cast<int>(__brkval);
-  }
-  return free_memory;
-}
-
 millis_t ram_checkpoint;
 
 void setup() {
@@ -124,7 +128,7 @@ void setup() {
 
     delay(2000);
 
-    game.start(consolePrint, millis());
+    game.start(consolePrint, millis()*SPEED_MULTIPLY);
 
     ram_checkpoint = millis();
 }
@@ -133,7 +137,7 @@ void loop() {
 
     // Display RAM usage.
     
-    if (millis() - ram_checkpoint > 10000) {
+    if (millis() - ram_checkpoint > (10000/SPEED_MULTIPLY)) {
         Serial.print("Free RAM: ");
         Serial.print(freeRam());
         Serial.print("\n");
@@ -141,7 +145,7 @@ void loop() {
     }
 
     // Aww yis, running a game!
-    game.tick(consolePrint, millis());
+    game.tick(consolePrint, millis()*SPEED_MULTIPLY);
 
     // Running LEDs algorithm:
     // - Clear the entire array of LEDs.

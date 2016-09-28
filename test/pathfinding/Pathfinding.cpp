@@ -11,6 +11,8 @@ void dumpVector(path_t *vector) {
     std::cerr << "\n";
 }
 
+void print(const char *) { }
+
 void test_Pathfinding() {
 
     Map map;
@@ -37,7 +39,7 @@ void test_Pathfinding() {
 
     // Simple path
     path_t path;
-    map.findPath(1,2,&path);
+    map.findPath(1,2,&path,print);
 
     TEST_ASSERT_EQUAL(2,path.at(0));
 
@@ -46,7 +48,7 @@ void test_Pathfinding() {
     std::cerr << "Path freed\n";
 
     std::cerr << "\n--- Plotting route: 1-5 ---\n\n";
-    map.findPath(1,5,&path);
+    map.findPath(1,5,&path,print);
     
     std::cerr << "New path found\n";
 
@@ -55,7 +57,7 @@ void test_Pathfinding() {
     TEST_ASSERT_EQUAL(5,path.at(2));
 
     std::cerr << "\n--- Plotting route: 1-4 ---\n\n";
-    map.findPath(1,4,&path);
+    map.findPath(1,4,&path,print);
 
     TEST_ASSERT_EQUAL(2,path.at(0));
     TEST_ASSERT_EQUAL(4,path.at(1));
@@ -79,7 +81,7 @@ void test_Pathfinding() {
     
     std::cerr << "\n--- Plotting route: 1-5 (locked door) ---\n\n";
     
-    map.findPath(1,5,&path);
+    map.findPath(1,5,&path,print);
     TEST_ASSERT_EQUAL(2,path.at(0));
     TEST_ASSERT_EQUAL(4,path.at(1));
     TEST_ASSERT_EQUAL(6,path.at(2));

@@ -31,7 +31,9 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
 
     // Find out how to get there.
     // print("...looking for a way to get there.\n");
-    bool pathFound = map->findPath(room, destination->room, &path);
+    // print("Starting pathfinder...\n");
+    bool pathFound = map->findPath(room, destination->room, &path, print);
+    // print("...done\n");
 
     if (!pathFound) {
         // Can't get there, schedule next event to be a recompute.
