@@ -4,6 +4,9 @@ all:
 game:
 	platformio run -e roomservice
 
+native:
+	platformio run -e native
+
 install:
 	platformio run -e roomservice --target upload
 
