@@ -29,7 +29,7 @@ class Game {
         // cleared when the state is displayed to the player.
         bool dirty;
 
-        void start(print_f print, millis_t _time, hunger_t hunger = 0);  // Starts the game
+        virtual void start(print_f print, millis_t _time, hunger_t hunger = 0);  // Starts the game
         void tick(print_f print, millis_t time);            // Runs one tick of game time.
         void scheduleOffsetEvent(millis_t offset, Event *); // Schedules event, offset from now.
         void runEvent(Event *);                             // Schedules to run immediately.

@@ -16,6 +16,7 @@ class Actor {
     public:
         const char *name;
         const speed_t speed;
+        const millis_t activateTime;
 
         room_t room;
 
@@ -35,10 +36,11 @@ class Actor {
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,
             const hunger_t _hungerBreak,
-            Goals *_regularGoals, Goals *_hungryGoals
+            Goals *_regularGoals, Goals *_hungryGoals, const millis_t _activateTime = 0
         )
             : name(_name)
             , speed(_speed)
+            , activateTime(_activateTime)
             , room(starting_room)
             , hungerBreak(_hungerBreak)
             , regularGoals(_regularGoals)

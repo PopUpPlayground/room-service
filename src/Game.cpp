@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include "LockEvent.h"
 #include "HungerEvent.h"
+#include "GoalEvent.h"
 
 void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     time = _time;   // Record game start time. :)
@@ -13,19 +14,12 @@ void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     print("Scheduling hunger...\n");
     events.scheduleEvent(0, new HungerEvent);
 
-    print("Activating actors...\n");
+    // Actors are now activated in the child's start method, since they'll
+    // come into play based upon the game.
+
+    print("Scheduling actor wake-ups...\n");
     for (actors_t::iterator i = actors.begin(); i != actors.end(); ++i) {
-
-        Event *event = (*i)->recomputeGoal(print, &map, globalHunger);
-
-        if (event != NULL) {
-            print("Scheduling goal...");
-            
-            // Each actor takes at least their speed to get started.
-            events.scheduleEvent(time + (*i)->speed, event);
-
-            print("DONE!\n");
-        }
+        scheduleOffsetEvent((*i)->activateTime, new GoalEvent(*i));
     }
 }
 
