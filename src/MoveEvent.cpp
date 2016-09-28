@@ -7,7 +7,7 @@
 // TODO: This is a big, ugly function, and I think a lot
 // of it probably shold be on Actor, rather than here.
 
-void MoveEvent::processEvent(print_f print, Game *game) {
+bool MoveEvent::processEvent(print_f print, Game *game) {
 
     // It's lazy setting this here, since they might not move, but it's
     // sure easy. :)
@@ -33,7 +33,7 @@ void MoveEvent::processEvent(print_f print, Game *game) {
 
     if (room == NULL) {
         print("...THEY FALL THROUGH A SPACE-TIME RIFT TO A VOID ROOM\n");
-        return;
+        return false;
     }
 
     print(" -> ");
@@ -41,11 +41,14 @@ void MoveEvent::processEvent(print_f print, Game *game) {
 
     if (door == NULL) {
         print("...BUT THE DOOR, LIKE THE CAKE, IS A LIE!\n");
-        return;
+        return false;
     }
     
     // The door trigger schedules the next move, a wait, or
     // reconsideration of life choices. I think we could have
     // better architecture here.
     door->trigger(print, actor, room, game);
+
+    // MoveEvents are always statically assigned
+    return false;
 }

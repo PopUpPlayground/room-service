@@ -4,6 +4,8 @@
 #include "types.h"
 #include "Goals.h"
 #include "Map.h"
+#include "GoalEvent.h"
+#include "MoveEvent.h"
 #include <string>
 
 class Game;
@@ -14,6 +16,12 @@ typedef unsigned int speed_t;
 // Usually baddies, but could be anything. :)
 class Actor {
     public:
+
+        // Pre-allocating events means we're not constantly making
+        // and deleting them.
+        GoalEvent goalEvent;
+        MoveEvent moveEvent;
+
         const char *name;
         const speed_t speed;
         const millis_t activateTime;
@@ -38,7 +46,9 @@ class Actor {
             const hunger_t _hungerBreak,
             Goals *_regularGoals, Goals *_hungryGoals, const millis_t _activateTime = 0
         )
-            : name(_name)
+            : goalEvent(this)
+            , moveEvent(this)
+            , name(_name)
             , speed(_speed)
             , activateTime(_activateTime)
             , room(starting_room)

@@ -1,7 +1,7 @@
 #include "UnlockEvent.h"
 #include "Game.h"
 
-void UnlockEvent::processEvent(print_f print, Game *game) {
+bool UnlockEvent::processEvent(print_f print, Game *game) {
 
     // Force map refresh.
     game->dirty = true;
@@ -11,4 +11,8 @@ void UnlockEvent::processEvent(print_f print, Game *game) {
     print("\n");
 
     game->map.unlockDoor(code, puzzle);
+
+    // Unlocks are dynamically allocted, so make sure
+    // we free our memory
+    return true;
 }

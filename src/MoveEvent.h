@@ -11,7 +11,7 @@ class MoveEvent : public Event {
 
     public:
         MoveEvent(Actor *_actor) : actor(_actor) { };
-        void processEvent(print_f, Game *);
+        bool processEvent(print_f, Game *);
 };
 
 #endif

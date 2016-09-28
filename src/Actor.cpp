@@ -37,12 +37,12 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
         // Can't get there, schedule next event to be a recompute.
         // print("...no path found; sleeping instead.\n");
         destination = NULL;
-        return new GoalEvent(this);
+        return &goalEvent;
     }
 
     // Aww yis, we're heading somewhere. Schedule a move.
     // print("...path found, scheduling move.\n");
-    return new MoveEvent(this);
+    return &moveEvent;
 }
 
 void Actor::showPath(print_f print) {

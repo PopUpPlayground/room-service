@@ -1,7 +1,10 @@
 #include "UnlockConsoleEvent.h"
 #include "Game.h"
 
-void UnlockConsoleEvent::processEvent(print_f print, Game *game) {
+bool UnlockConsoleEvent::processEvent(print_f print, Game *game) {
     game->state = WAIT_PUZZLE;
     game->dirty = true;
+
+    // There is only one unlock event, we just re-use it.
+    return false;
 }

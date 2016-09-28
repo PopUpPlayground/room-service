@@ -13,7 +13,7 @@ class UnlockEvent : public Event {
 
     public:
         UnlockEvent(const code_t _code, Puzzle *_puzzle) :code(_code), puzzle(_puzzle) { };
-        void processEvent(print_f print, Game *);
+        bool processEvent(print_f print, Game *);
 };
 
 #endif

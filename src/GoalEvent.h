@@ -15,7 +15,7 @@ class GoalEvent : public Event {
 
     public:
         GoalEvent(Actor *_actor) : actor(_actor) { };
-        void processEvent(print_f print, Game *);
+        bool processEvent(print_f print, Game *);
 };
 
 #endif

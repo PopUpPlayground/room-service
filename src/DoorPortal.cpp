@@ -21,7 +21,7 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
         // print(" reconsiders their life choices.\n");
 
         // Zero delay here means we'll kick off next tick.
-        game->scheduleOffsetEvent(0, new GoalEvent(actor));
+        game->scheduleOffsetEvent(0, &(actor->goalEvent));
     }
     else {
         // Not locked, let's go!
@@ -43,7 +43,7 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
 
             // Schedule next goal.
             // TODO: Use sigmas
-            game->scheduleOffsetEvent( actor->destination->wait, new GoalEvent(actor) );
+            game->scheduleOffsetEvent( actor->destination->wait, &(actor->goalEvent));
         }
         else {
             // Schedule next move.
@@ -52,7 +52,7 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
 
             print("\n");    // No extra info to provide.
 
-            game->scheduleOffsetEvent( actor->speed, new MoveEvent(actor) );
+            game->scheduleOffsetEvent( actor->speed, &(actor->moveEvent) );
         }
     }
 }

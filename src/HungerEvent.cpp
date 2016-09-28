@@ -2,7 +2,7 @@
 #include "Game.h"
 #include <stdio.h>
 
-void HungerEvent::processEvent(print_f print, Game *game) {
+bool HungerEvent::processEvent(print_f print, Game *game) {
     game->globalHunger++;
 
     char buf[10];
@@ -12,5 +12,8 @@ void HungerEvent::processEvent(print_f print, Game *game) {
     print(buf);
 
     // Schedule our next tick.
-    game->scheduleOffsetEvent(tickLength, new HungerEvent(tickLength));
+    game->scheduleOffsetEvent(tickLength, this);
+
+    // Reusing event object
+    return false;
 }

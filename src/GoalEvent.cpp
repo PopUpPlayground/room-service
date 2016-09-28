@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Actor.h"
 
-void GoalEvent::processEvent(print_f print, Game *game) {
+bool GoalEvent::processEvent(print_f print, Game *game) {
     // print("GoalEvent triggered...\n");
     Event *event = actor->recomputeGoal(print, &(game->map), game->globalHunger);
 
@@ -12,4 +12,7 @@ void GoalEvent::processEvent(print_f print, Game *game) {
         // print("Scheduling new goal.\n");
         game->events.scheduleEvent(game->time + actor->speed, event);
     }
+
+    // Actors use pre-allocated events, we never delete their memory.
+    return false;
 }

@@ -8,7 +8,7 @@ class Puzzle;
 
 class UnlockConsoleEvent : public Event {
     public:
-        void processEvent(print_f print, Game *);
+        bool processEvent(print_f print, Game *);
 };
 
 #endif

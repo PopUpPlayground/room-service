@@ -15,13 +15,15 @@ void EventQueue::runEvents(print_f print, millis_t time, Game *game) {
 #ifdef DEBUG
         print("Firing event...\n");
 #endif
-        i->second->processEvent(print, game);
+        bool clearMem = i->second->processEvent(print, game);
 
-        // The event has fired! Now we deconstruct it.
+        // The event has fired! Now we deconstruct it if requested.
+        if (clearMem) {
 #ifdef DEBUG
-        print("Clearing event memory\n");
+            print("Clearing event memory\n");
 #endif
-        delete i->second;
+            delete i->second;
+        }
 
         // And now let's delete the element in the multimap itself. This would
         // be easy if we were using C++11, but apparently gcc doesn't support
