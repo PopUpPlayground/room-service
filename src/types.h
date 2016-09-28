@@ -41,7 +41,10 @@ typedef std::vector<room_t> path_t;
 
 // LEDs as addressed by our drivers. This *must* be signed, as -1 is used as
 // "no LED".
-
 typedef int led_t;
+
+typedef std::pair<std::string, std::string> strpair_t;
+
+enum game_state_t { WAIT_PUZZLE, WAIT_CODE, DISPLAY_MSG };
 
 #endif

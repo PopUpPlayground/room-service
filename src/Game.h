@@ -4,6 +4,7 @@
 #include "EventQueue.h"
 #include "Map.h"
 #include "LockTable.h"
+#include "types.h"
 #include <vector>
 
 typedef std::vector<Actor *> actors_t ;
@@ -17,6 +18,8 @@ class Game {
         Map map;
         actors_t actors;
         millis_t time;              // Current time (ms)
+        game_state_t state;
+        strpair_t displayMsg;
 
         // Dirty is set when the game state changes (eg: actors move) and
         // cleared when the state is displayed to the player.
@@ -26,6 +29,8 @@ class Game {
         void tick(print_f print, millis_t time);            // Runs one tick of game time.
         void scheduleOffsetEvent(millis_t offset, Event *); // Schedules event, offset from now.
         bool isLocked(const room_t src, const room_t dst);  // Is that door locked?
+
+        void processInput(const std::string *);
 };
 
 #endif

@@ -49,13 +49,35 @@ void HwConsole::enableLights() {
     digitalWrite(tlcOE,LOW);
 }
 
-void HwConsole::updateLeds(Game *game) {
-
-    // Only update if something has changed.
-
+void HwConsole::updateConsole(Game *game) {
     if (game->dirty == false) {
         return;
     }
+
+    updateLeds(game);
+    updateLCDs(game);
+
+    // Game state has now been displayed to user and is no longer dirty.
+    game->dirty = false;
+}
+
+void HwConsole::updateLCDs(Game *game) {
+    if (game->state == WAIT_PUZZLE) {
+        displayLcd("Enter code...");
+    } 
+    else if (game->state == WAIT_CODE) {
+        displayLcd("Enter door...");
+    } 
+    else if (game->state == DISPLAY_MSG) {
+        displayLcd(game->displayMsg);
+    }
+    else {
+        // Uh oh, something is wrong.
+        displayLcd("Someone set us","up the bomb");
+    }
+}
+
+void HwConsole::updateLeds(Game *game) {
 
     // Reset our light state...
     resetLights();
@@ -69,7 +91,6 @@ void HwConsole::updateLeds(Game *game) {
         }
     }
 
-    // TODO: Display door locks
     for (
         locks_t::iterator i = game->map.locks.locks.begin();
         i != game->map.locks.locks.end();
@@ -82,12 +103,15 @@ void HwConsole::updateLeds(Game *game) {
     }
     
     tlc.write();
-
-    // Game state has now been displayed to user and is no longer dirty.
-    game->dirty = false;
 }
 
-std::string *HwConsole::updateKeypad() {
+std::string *HwConsole::updateKeypad(game_state_t state) {
+
+    // If we're displaying a message, then disable the keypad.
+    if (state == DISPLAY_MSG) {
+        return NULL;
+    }
+
     char key = keypad.getKey();
 
     if (key == NO_KEY) {
@@ -101,11 +125,16 @@ std::string *HwConsole::updateKeypad() {
     else if (key == '#') {
         std::string *returnStr = new std::string (playerInput);
         playerInput = "";
+        displayLcdCode("");
         return returnStr;
     }
     else {
         playerInput += key;
     }
+
+    // It'd be nice to have this as a finally or something, so it's not
+    // repeated twice.
+    displayLcdCode(playerInput.c_str());
 
     Serial.print("Player input is: ");
     Serial.println(playerInput.c_str());
@@ -126,6 +155,18 @@ void HwConsole::displayLcd(const char *line1, const char *line2, byte target) {
 
 void HwConsole::displayLcd(const std::string line1, const std::string line2, byte target) {
     displayLcd(line1.c_str(), line2.c_str());
+}
+
+void HwConsole::displayLcd(strpair_t msg, byte target) {
+    displayLcd(msg.first, msg.second, target);
+}
+
+// Displays a code on the second line of the LCD, leaving the first unchanged.
+void HwConsole::displayLcdCode(const char *code) {
+    lcd.setCursor(0,1); // Second line.
+    lcd.print("               ");   // Ugly, but clears the line.
+    lcd.setCursor(0,1);
+    lcd.print(code);
 }
 
 #endif // UNIT_TEST

@@ -9,6 +9,8 @@
 #include <Adafruit_TLC5947.h>
 #include <string>
 
+#include "types.h"
+
 class Game;
 
 class HwConsole {
@@ -27,6 +29,10 @@ class HwConsole {
         std::string playerInput;
 
         Keypad InitKeypad();
+        void updateLeds(Game *game);
+        void updateLCDs(Game *game);
+
+        void displayLcdCode(const char *);
 
     public:
         Keypad keypad;
@@ -72,11 +78,12 @@ class HwConsole {
         void resetLights();
         void clearLights();
         void powerLed(uint8_t);
-        void updateLeds(Game *game);
-        std::string *updateKeypad();
+        void updateConsole(Game *);
+        std::string *updateKeypad(game_state_t);
 
         void displayLcd(const std::string line1, const std::string line2, byte target = 0);
         void displayLcd(const char *line1, const char *line2 = NULL, byte target = 0);
+        void displayLcd(strpair_t, byte target = 0);
 };
 
 #endif  // UNIT_TEST

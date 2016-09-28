@@ -83,11 +83,12 @@ void testLights() {
 void setup() {
     // Our hw object has already done most init for us. :)
 
-    testLights();
+    // testLights();
 
     Serial.print("Starting game soon");
-    hw.displayLcd("LED testing","Aww yis!");
+    hw.displayLcd("Reticulating","splines...");
 
+    // This is just giving the GM time to connect.
     for (int i = 0; i < 2; i++) {
         hw.powerLed(LOW);
         delay(1000);
@@ -97,7 +98,6 @@ void setup() {
     }
 
     Serial.print("\nStarting game....\n");
-    hw.displayLcd("Reticulating","splines...");
 
     delay(1000);
 
@@ -118,11 +118,11 @@ void loop() {
     // - For each lock, find the door it corresponds to, and set LED to high.
     // - Write the LEDs to the hardware.
 
-    hw.updateLeds(&game);
+    hw.updateConsole(&game);
 
     // Keypad
 
-    std::string *input = hw.updateKeypad();
+    std::string *input = hw.updateKeypad(game.state);
 
     // Process player input.
     if (input != NULL) {
@@ -130,62 +130,6 @@ void loop() {
         Serial.print(input->c_str());
         delete input;
     }
-
-    /*
-
-    // Just some fun player interaction for now. :)
-    if (code_pos >= MAX_CODE_LENGTH) {
-        lcd.clear();
-        lcd.print("Srsly?");
-        memset(code, 0, sizeof(code));
-        code_pos = 0;
-    }
-    else if (key == '*') {
-        lcd.clear();
-        lcd.print("Enter code:");
-        lcd.setCursor(0,1);
-        lcd.blink();
-        memset(code, 0, sizeof(code));
-        code_pos = 0;
-    }
-    else if (key == '#') {
-        lcd.noBlink();
-        lcd.clear();
-
-        if (! strcmp(code, "1234#")) {
-            lcd.print("Safe at last!");
-            lcd.setCursor(0,1);
-
-            // Turn off the danger lights.
-            tlc.setPWM(0,0);
-            tlc.setPWM(1,0);
-            tlc.setPWM(46,0);
-            tlc.setPWM(47,0);
-            tlc.write();
-            delay(1000); // NOT FOR PRODUCTION CODE!
-            lcd.print("(Shia Labeouf)");
-
-            // Danger lights!
-            tlc.setPWM(0,4095);
-            tlc.setPWM(1,4095);
-            tlc.setPWM(46,4095);
-            tlc.setPWM(47,4095);
-            tlc.write();
-        }
-        else {
-            lcd.print("You have been");
-            lcd.setCursor(0,1);
-            lcd.print("eaten by a grue.");
-        }
-
-        memset(code, 0, sizeof(code));
-        code_pos = 0;
-    }
-    else if (key != NO_KEY) {
-        lcd.print(key);
-    }
-
-    */
 }
 
 #endif
