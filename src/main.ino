@@ -29,8 +29,10 @@ game_t game;
 HwConsole hw;
 
 void testLights() {
-    Serial.print("LED testing mode activated.\n");
+    Serial.print("testing mode activated.\n");
     Serial.print("Press 1 to light a new LED, 2 to reset, 3 to stress, 4 to clear, 9 to start game.\n");
+
+    hw.displayLcd("LED testing","Aww yis!");
 
     hw.tlc.begin();
     hw.clearLights();
@@ -83,21 +85,8 @@ void setup() {
 
     testLights();
 
-    /*
-
-    // activate LCD module
-    lcd.begin (16,2); // for 16 x 2 LCD module
-    lcd.setBacklightPin(3,POSITIVE);
-    lcd.setBacklight(HIGH);
-
-    lcd.home(); // set cursor to 0,0
-    lcd.print("Stay A While"); 
-    lcd.setCursor (0,1);        // go to start of 2nd line
-    lcd.print("Stay... FOREVER");
-
-    */
-
     Serial.print("Starting game soon");
+    hw.displayLcd("LED testing","Aww yis!");
 
     for (int i = 0; i < 2; i++) {
         hw.powerLed(LOW);
@@ -108,6 +97,7 @@ void setup() {
     }
 
     Serial.print("\nStarting game....\n");
+    hw.displayLcd("Reticulating","splines...");
 
     delay(1000);
 
