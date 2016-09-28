@@ -105,17 +105,19 @@ void HwConsole::updateLeds(Game *game) {
     tlc.write();
 }
 
-std::string *HwConsole::updateKeypad(game_state_t state) {
+void HwConsole::updateKeypad(game_state_t state, std::string *out) {
+
+    assert(out != NULL);
 
     // If we're displaying a message, then disable the keypad.
     if (state == DISPLAY_MSG) {
-        return NULL;
+        return;
     }
 
     char key = keypad.getKey();
 
     if (key == NO_KEY) {
-        return NULL;
+        return;
     }
 
     if (key == '*') {
@@ -123,23 +125,19 @@ std::string *HwConsole::updateKeypad(game_state_t state) {
         playerInput = "";
     }
     else if (key == '#') {
-        std::string *returnStr = new std::string (playerInput);
+        *out = playerInput; // Return code to game
         playerInput = "";
-        displayLcdCode("");
-        return returnStr;
     }
     else {
         playerInput += key;
     }
 
-    // It'd be nice to have this as a finally or something, so it's not
-    // repeated twice.
     displayLcdCode(playerInput.c_str());
 
-    Serial.print("Player input is: ");
-    Serial.println(playerInput.c_str());
+    // Serial.print("Player input is: ");
+    // Serial.println(playerInput.c_str());
 
-    return NULL;
+    return;
 }
 
 // TODO: Actually use the target (we will have multiple LCDs)

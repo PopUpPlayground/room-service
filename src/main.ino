@@ -104,9 +104,6 @@ void setup() {
     delay(2000);
 
     game.start(consolePrint, millis());
-
-    // This locks a door so Shia can't get through it.
-    game.events.scheduleEvent(millis() + 5000, new LockEvent ("0702","12345"));
 }
 
 void loop() {
@@ -124,12 +121,12 @@ void loop() {
 
     // Keypad
 
-    std::string *input = hw.updateKeypad(game.state);
+    std::string input;
+    hw.updateKeypad(game.state, &input);
 
     // Process player input.
-    if (input != NULL) {
-        game.processInput(input);
-        delete input;
+    if (! input.empty()) {
+        game.processInput(&input);
     }
 }
 

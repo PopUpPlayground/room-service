@@ -79,7 +79,7 @@ class HwConsole {
         void clearLights();
         void powerLed(uint8_t);
         void updateConsole(Game *);
-        std::string *updateKeypad(game_state_t);
+        void updateKeypad(game_state_t, std::string *);
 
         void displayLcd(const std::string line1, const std::string line2, byte target = 0);
         void displayLcd(const char *line1, const char *line2 = NULL, byte target = 0);

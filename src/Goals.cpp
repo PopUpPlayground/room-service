@@ -60,7 +60,9 @@ const Destination* Goals::pickRoom() {
         }
     }
 
-    // You know, we're never supposed to reach here. Something's gone very wrong.
+    // You know, we're never supposed to reach here. Something's gone very wrong,
+    // so just return the first.
+
+    return *(destinations.begin());
     
-    assert(false);
 }
