@@ -160,6 +160,17 @@ void Map::addError(const char *msg) {
     errors += msg;
 }
 
+// Returns true if the room is a dead end and *not* our destination.
+bool Map::isDeadEnd(const room_t considered, const room_t dst) {
+    if (considered == dst) {
+        return false;
+    }
+
+    // I don't know how we'd get a room with less than one exit, but it's
+    // definitely a dead-end.
+    return map[considered]->exits.size() <= 1;
+}
+
 // Finds a path from src to dst, and writes it to the object provided
 // Returns false if no path found.
 bool Map::findPath(const room_t src, const room_t dst, path_t *out) {
@@ -244,9 +255,12 @@ bool Map::findPath(const room_t src, const room_t dst, path_t *out) {
             Debug(adjRoom);
             Debug("\n");
 
-            // If it's not locked, and we haven't already been there, and it doesn't look
-            // like we're heading off in a ludicrous route.
+            // If it's not a dead end, not locked,  haven't already been there,
+            // and it doesn't look like we're heading off in a ludicrous route.
+
             if (
+                    ( ! isDeadEnd(adjRoom, dst) )
+                    &&
                     ( ! isLocked(room, adjRoom) )
                     &&
                     (std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end())

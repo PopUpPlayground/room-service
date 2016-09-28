@@ -34,6 +34,7 @@ class Map {
 
         void dumpVector(path_t *vector);
         void releasePaths(paths_t *paths);
+        bool isDeadEnd(const room_t considered, const room_t dst);
 
     public:
         roomCodes_t roomCodes;
