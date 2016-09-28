@@ -23,15 +23,6 @@ Keypad HwConsole::InitKeypad() {
     return Keypad( makeKeymap(keys), rowPins, colPins, rows, cols );
 }
 
-Adafruit_TLC5947 HwConsole::InitTLC5947() {
-    return Adafruit_TLC5947(tlcQty, tlcClock, tlcData, tlcLatch);
-}
-
-LiquidCrystal_I2C HwConsole::InitLCD() {
-    // Not sure what these magic numbers mean, but they work.
-    return LiquidCrystal_I2C(lcdAddr,2,1,0,4,5,6,7);
-}
-
 // Sets the power LED.
 void HwConsole::powerLed(uint8_t val) {
     digitalWrite(pwrLed, val);
@@ -120,6 +111,21 @@ std::string *HwConsole::updateKeypad() {
     Serial.println(playerInput.c_str());
 
     return NULL;
+}
+
+// TODO: Actually use the target (we will have multiple LCDs)
+void HwConsole::displayLcd(const char *line1, const char *line2, byte target) {
+    lcd.clear();
+    lcd.home();
+    lcd.print(line1);
+    if (line2 != NULL) {
+        lcd.setCursor(0,1);
+        lcd.print(line2);
+    }
+}
+
+void HwConsole::displayLcd(const std::string line1, const std::string line2, byte target) {
+    displayLcd(line1.c_str(), line2.c_str());
 }
 
 #endif // UNIT_TEST
