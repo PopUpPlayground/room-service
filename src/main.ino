@@ -80,6 +80,28 @@ void testLights() {
     }
 }
 
+// From https://github.com/adafruit/SD/blob/master/utility/SdFatUtil.h
+
+#define UNUSEDOK __attribute__((unused))
+
+static UNUSEDOK int freeRam(void) {
+  extern int  __bss_end;
+  extern int* __brkval;
+  int free_memory;
+  if (reinterpret_cast<int>(__brkval) == 0) {
+    // if no heap use from end of bss section
+    free_memory = reinterpret_cast<int>(&free_memory)
+                  - reinterpret_cast<int>(&__bss_end);
+  } else {
+    // use from top of stack to heap
+    free_memory = reinterpret_cast<int>(&free_memory)
+                  - reinterpret_cast<int>(__brkval);
+  }
+  return free_memory;
+}
+
+millis_t ram_checkpoint;
+
 void setup() {
     // Our hw object has already done most init for us. :)
 
@@ -103,9 +125,20 @@ void setup() {
     delay(2000);
 
     game.start(consolePrint, millis());
+
+    ram_checkpoint = millis();
 }
 
 void loop() {
+
+    // Display RAM usage.
+    
+    if (millis() - ram_checkpoint > 10000) {
+        Serial.print("Free RAM: ");
+        Serial.print(freeRam());
+        Serial.print("\n");
+        ram_checkpoint = millis();
+    }
 
     // Aww yis, running a game!
     game.tick(consolePrint, millis());
