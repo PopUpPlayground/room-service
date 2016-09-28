@@ -46,7 +46,7 @@ class Map {
         std::string errors;
 
         map_t map;
-        path_t *findPath(const room_t src, const room_t dst);
+        bool findPath(const room_t src, const room_t dst, path_t *out);
         bool isLocked(const room_t src, const room_t dst);
         bool isLocked(const room_t src, const Room *dst);
 

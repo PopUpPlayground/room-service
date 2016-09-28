@@ -23,10 +23,7 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
     print("\n");
     
     // Release previous path if exists
-    if (path != NULL) {
-        // print("...Releasing previous goal.\n");
-        delete path;
-    }
+    path.clear();
     
     // Find a place to go.
     // print("...looking for some place to go.\n");
@@ -34,9 +31,9 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
 
     // Find out how to get there.
     // print("...looking for a way to get there.\n");
-    path = map->findPath(room, destination->room);
+    bool pathFound = map->findPath(room, destination->room, &path);
 
-    if (path == NULL) {
+    if (!pathFound) {
         // Can't get there, schedule next event to be a recompute.
         // print("...no path found; sleeping instead.\n");
         destination = NULL;
@@ -52,7 +49,7 @@ void Actor::showPath(print_f print) {
     print("Path for ");
     print(name);
 
-    if (path == NULL) {
+    if (path.empty()) {
         print(": No path defined\n");
         return;
     }
@@ -60,7 +57,7 @@ void Actor::showPath(print_f print) {
     print(" ");
 
     char buf[10];
-    for (path_t::const_iterator i = path->begin(); i != path->end(); i++) {
+    for (path_t::const_iterator i = path.begin(); i != path.end(); i++) {
         snprintf(buf,10,"%d ",*i);
         print(buf);
     }

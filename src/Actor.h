@@ -27,7 +27,7 @@ class Actor {
         Goals *hungryGoals;
 
         // Path to wherever we're going.
-        path_t *path;
+        path_t path;
         const Destination *destination;
 
         Event *recomputeGoal(print_f, Map *, const hunger_t);
@@ -45,7 +45,6 @@ class Actor {
             , hungerBreak(_hungerBreak)
             , regularGoals(_regularGoals)
             , hungryGoals(_hungryGoals)
-            , path(NULL)
             { }
             
 };

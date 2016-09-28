@@ -36,34 +36,29 @@ void test_Pathfinding() {
     std::cerr << map.errors;
 
     // Simple path
-    path_t *path = map.findPath(1,2);
+    path_t path;
+    map.findPath(1,2,&path);
 
-    TEST_ASSERT_EQUAL(2,path->at(0));
+    TEST_ASSERT_EQUAL(2,path.at(0));
 
     std::cerr << "Tested assertion\n";
-
-    delete path;
 
     std::cerr << "Path freed\n";
 
     std::cerr << "\n--- Plotting route: 1-5 ---\n\n";
-    path = map.findPath(1,5);
+    map.findPath(1,5,&path);
     
     std::cerr << "New path found\n";
 
-    TEST_ASSERT_EQUAL(2,path->at(0));
-    TEST_ASSERT_EQUAL(3,path->at(1));
-    TEST_ASSERT_EQUAL(5,path->at(2));
-
-    delete path;
+    TEST_ASSERT_EQUAL(2,path.at(0));
+    TEST_ASSERT_EQUAL(3,path.at(1));
+    TEST_ASSERT_EQUAL(5,path.at(2));
 
     std::cerr << "\n--- Plotting route: 1-4 ---\n\n";
-    path = map.findPath(1,4);
+    map.findPath(1,4,&path);
 
-    TEST_ASSERT_EQUAL(2,path->at(0));
-    TEST_ASSERT_EQUAL(4,path->at(1));
-
-    delete path;
+    TEST_ASSERT_EQUAL(2,path.at(0));
+    TEST_ASSERT_EQUAL(4,path.at(1));
 
     std::cerr << "\n--- Testing door lock ---\n";
 
@@ -84,14 +79,13 @@ void test_Pathfinding() {
     
     std::cerr << "\n--- Plotting route: 1-5 (locked door) ---\n\n";
     
-    path = map.findPath(1,5);
-    TEST_ASSERT_EQUAL(2,path->at(0));
-    TEST_ASSERT_EQUAL(4,path->at(1));
-    TEST_ASSERT_EQUAL(6,path->at(2));
-    TEST_ASSERT_EQUAL(3,path->at(3));
-    TEST_ASSERT_EQUAL(5,path->at(4));
+    map.findPath(1,5,&path);
+    TEST_ASSERT_EQUAL(2,path.at(0));
+    TEST_ASSERT_EQUAL(4,path.at(1));
+    TEST_ASSERT_EQUAL(6,path.at(2));
+    TEST_ASSERT_EQUAL(3,path.at(3));
+    TEST_ASSERT_EQUAL(5,path.at(4));
 
-    delete path;
 }
 
 int main(int argc, char **argv) {

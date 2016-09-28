@@ -22,8 +22,8 @@ void MoveEvent::processEvent(print_f print, Game *game) {
     print(currentRoom->name);
     
     // Pop the first element off the route.
-    room_t next = *(actor->path->begin());
-    actor->path->erase( actor->path->begin() );
+    room_t next = *(actor->path.begin());
+    actor->path.erase( actor->path.begin() );
 
     // Debug: Show path.
     // actor->showPath(print);

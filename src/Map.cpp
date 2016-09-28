@@ -13,6 +13,9 @@
 #include <iostream>
 #include "Debug.h"
 
+// Pathfinding can blow our memory. This limits how far we'll look for goals.
+#define MAX_PATH_LENGTH 20
+
 // Debugging
 void Map::dumpVector(path_t *vector) {
     for (path_t::const_iterator i = vector->begin(); i != vector->end(); i++) {
@@ -160,9 +163,9 @@ void Map::addError(const char *msg) {
     errors += msg;
 }
 
-// Finds a path from src to dst, and returns a pointer to it.
-// It's the responsibility of the caller to clean that up when done.
-path_t *Map::findPath(const room_t src, const room_t dst) {
+// Finds a path from src to dst, and writes it to the object provided
+// Returns false if no path found.
+bool Map::findPath(const room_t src, const room_t dst, path_t *out) {
     assert(src != dst);
 
     // Our algorithm goes like this:
@@ -226,8 +229,13 @@ path_t *Map::findPath(const room_t src, const room_t dst) {
 
             Debug("Returning route\n");
 
-            // Return our path!
-            return breadcrumbs;
+            // This should copy, right?
+            *out = *breadcrumbs;
+
+            // Because if not, we're in trouble. ;)
+            delete breadcrumbs;
+
+            return true;
         }
 
         // Find all the exits from here, ignored ones we've already seen.
@@ -239,11 +247,14 @@ path_t *Map::findPath(const room_t src, const room_t dst) {
             Debug(adjRoom);
             Debug("\n");
 
-            // If it's not locked, and we haven't already been there.
+            // If it's not locked, and we haven't already been there, and it doesn't look
+            // like we're heading off in a ludicrous route.
             if (
                     ( ! isLocked(room, adjRoom) )
                     &&
-                    std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end()
+                    (std::find(breadcrumbs->begin(), breadcrumbs->end(), adjRoom) == breadcrumbs->end())
+                    &&
+                    breadcrumbs->size() < MAX_PATH_LENGTH
             ) {
 
                 // Create a new breadcrumbs trail. We've already added ourselves above.
@@ -267,5 +278,5 @@ path_t *Map::findPath(const room_t src, const room_t dst) {
     // If we're here, then the queue is empty. No memory clean-up required, but we can't
     // find a route either.
 
-    return NULL;
+    return false;
 }
