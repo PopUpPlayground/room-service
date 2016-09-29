@@ -44,6 +44,12 @@ void Game::processInput(print_f print, const std::string *input) {
     dirty = true;
 
     switch (state) {
+        case DISPLAY_MSG: {
+            // Oh players, we're showing you a message, not helping
+            // you survive. :)
+
+            break;
+        }
         case WAIT_PUZZLE: {
             puzzlesMap_t::iterator it = puzzlesMap.find(*input);
             if (it != puzzlesMap.end()) {
