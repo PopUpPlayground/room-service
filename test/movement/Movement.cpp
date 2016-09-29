@@ -20,9 +20,9 @@ void test_Movement() {
 
     std::cerr << "First test...\n";
 
-    game.map.newRoom("Foyer",1,1);
-    game.map.newRoom("Lounge",2,1);
-    game.map.newRoom("Bathroom",3,1);
+    game.map.newRoom("Foyer",1,"1");
+    game.map.newRoom("Lounge",2,"1");
+    game.map.newRoom("Bathroom",3,"1");
 
     game.map.newBiDoor(1,2);
     game.map.newBiDoor(2,3);
@@ -58,9 +58,9 @@ void test_Movement() {
 void test_MovementAdvanced() {
     Game game;
 
-    game.map.newRoom("Foyer",1,1);
-    game.map.newRoom("Lounge",2,1);
-    game.map.newRoom("Bathroom",3,1);
+    game.map.newRoom("Foyer",1,"1");
+    game.map.newRoom("Lounge",2,"1");
+    game.map.newRoom("Bathroom",3,"1");
 
     game.map.newBiDoor(1,2);
     game.map.newBiDoor(2,3);

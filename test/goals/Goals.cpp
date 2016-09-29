@@ -4,9 +4,9 @@
 void test_Goal_simple() {
 
     Map map;
-    map.newRoom("Meh",1,1);
-    map.newRoom("Moop",2,1);
-    map.newRoom("Mork",3,1);
+    map.newRoom("Meh",1,"1");
+    map.newRoom("Moop",2,"1");
+    map.newRoom("Mork",3,"1");
 
     Goals goals(&map);
 

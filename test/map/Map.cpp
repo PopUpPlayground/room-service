@@ -9,9 +9,9 @@
 void test_Map() {
     Map map;
 
-    map.newRoom("Start", 1, 1);
-    map.newRoom("Middle", 2, 1);
-    map.newRoom("End", 3, 1);
+    map.newRoom("Start", 1, "1");
+    map.newRoom("Middle", 2, "1");
+    map.newRoom("End", 3, "1");
 
     map.newBiDoor(1,2);
     map.newBiDoor(2,3);

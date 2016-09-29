@@ -69,7 +69,7 @@ void Game::processInput(print_f print, const std::string *input) {
             state = WAIT_PUZZLE;
 
             switch(puzzle->type) {
-                case DOOR:
+                case DOOR: {
                     if ( map.lockDoor(*input,puzzle) ) {
                         // Successful lock! Schedule unlock
                         lockConsole("Door locked","",1000);
@@ -78,7 +78,9 @@ void Game::processInput(print_f print, const std::string *input) {
                     else {
                         lockConsole("Door code","not valid");
                     }
-                case ROOM:
+                    break;
+                }
+                case ROOM: {
                     codeVector_t codes;
                     if ( map.lockRoom(*input,puzzle,&codes) ) {
                         lockConsole("Room locked","",1000);
@@ -87,10 +89,30 @@ void Game::processInput(print_f print, const std::string *input) {
                             scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*code,puzzle));
                         }
                     }
+                    else {
+                        lockConsole("Room code","not valid");
+                    }
+                    break;
+                }
 
+                case FLOOR: {
+                    codeVector_t codes;
+                    if ( map.lockFloor(*input,puzzle,&codes) ) {
+                        lockConsole("Floor lockdown","enabled",5000);
 
-                // case FLOOR:
-                // case EMERGENCY:
+                        for(codeVector_t::iterator code = codes.begin(); code != codes.end(); ++code) {
+                            scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*code,puzzle));
+                        }
+                    }
+                    else {
+                        lockConsole("Floor code","not valid");
+                    }
+
+                    break;
+                }
+
+                case EMERGENCY:
+                    break;
             }
 
             // Regardless of locks, reset our puzle.

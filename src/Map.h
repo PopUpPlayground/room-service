@@ -19,16 +19,18 @@ typedef std::vector<path_t *> paths_t;
 // deadlines, so we get tech debt instead. Sorry future me.
 typedef std::map<const code_t, Room *> roomCodes_t;
 typedef std::map<const code_t, Portal *> portalCodes_t;
+typedef std::multimap<const code_t, Room *> floorRooms_t;
 
 // The map of the hotel, or whatever space we're putting the players in. :)
 
 class Map {
     private:
 
-        // We keep track of which rooms and doors are on each floor.
-        // TODO: Actually implement these.
-        std::multimap<floor_t, Room *> floorRooms;
-        std::multimap<floor_t, DoorPortal *> floorDoors;
+        // We keep track of which rooms are on each floor
+        floorRooms_t floorRooms;
+
+        // TODO: Remove if not needed.
+        // std::multimap<floor_t, DoorPortal *> floorDoors;
 
         // The map needs to know what's locked.
 
@@ -53,10 +55,11 @@ class Map {
 
         bool lockDoor(const code_t code, Puzzle *puzzle);
         bool lockRoom(const code_t code, Puzzle *puzzle, codeVector_t *out);
+        bool lockFloor(const code_t code, Puzzle *puzzle, codeVector_t *out);
 
         void unlockDoor(const code_t code, Puzzle *puzzle);
 
-        void newRoom(const char *name, const room_t number, const floor_t floor, const char *code = NULL, const led_t led = -1);
+        void newRoom(const char *name, const room_t number, const code_t floor, const char *code = NULL, const led_t led = -1);
         void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL, const led_t led = -1);
         void newStair(const room_t r1, const room_t r2);
         led_t getPortalLed(std::string code);

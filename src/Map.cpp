@@ -37,7 +37,7 @@ void Map::releasePaths(paths_t *paths) {
 }
 
 // Map creation
-void Map::newRoom(const char *name, const room_t number, const floor_t floor, const char *code, const led_t led) {
+void Map::newRoom(const char *name, const room_t number, const code_t floor, const char *code, const led_t led) {
     assert(name != NULL);
 
     if (map.find(number) != map.end()) {
@@ -145,6 +145,8 @@ void Map::unlockDoor(const code_t code, Puzzle *puzzle) {
     locks.rmLock(code,puzzle);
 }
 
+// Returns true if any work done, and adds a list of door codes that have been locked
+// to *out.
 bool Map::lockRoom(const code_t code, Puzzle *puzzle, codeVector_t *out) {
 
     assert(out != NULL);
@@ -174,6 +176,20 @@ bool Map::lockRoom(const code_t code, Puzzle *puzzle, codeVector_t *out) {
                 anyLocked = true;
             }
         }
+    }
+
+    return anyLocked;
+}
+
+bool Map::lockFloor(const code_t code, Puzzle *puzzle, codeVector_t *out) {
+    assert(out != NULL);
+
+    bool anyLocked = false;
+
+    std::pair<floorRooms_t::iterator, floorRooms_t::iterator> range = floorRooms.equal_range(code);
+
+    for (floorRooms_t::iterator it = range.first; it != range.second; ++it) {
+        anyLocked = lockRoom(code, puzzle, out) || anyLocked;
     }
 
     return anyLocked;
