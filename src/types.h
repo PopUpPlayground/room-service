@@ -36,6 +36,7 @@ typedef ident_t door_t;
 
 // Codes as used by players, both for objects (doors, floors, etc)
 typedef std::string code_t;
+typedef std::vector<code_t> codeVector_t;
 
 // Puzzle codes entered by players.
 typedef std::string puzzle_t;

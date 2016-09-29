@@ -57,11 +57,16 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
     }
 }
 
+// Doors are lockable if they have a code.
+bool DoorPortal::isLockable() {
+    return code != NULL;
+}
+
 bool DoorPortal::isLocked(LockTable *table) {
 
     Debug("Testing door lock\n");
 
-    if (code == NULL) {
+    if (! isLockable() ) {
         return false;
     }
 

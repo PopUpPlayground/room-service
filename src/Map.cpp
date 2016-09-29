@@ -145,6 +145,40 @@ void Map::unlockDoor(const code_t code, Puzzle *puzzle) {
     locks.rmLock(code,puzzle);
 }
 
+bool Map::lockRoom(const code_t code, Puzzle *puzzle, codeVector_t *out) {
+
+    assert(out != NULL);
+
+    // Locking a room requires walking through all the lockable exits and
+    // locking them.  We return a list of door codes locked.
+    
+    // See if this is a valid room code.
+    roomCodes_t::iterator room_it = roomCodes.find(code);
+
+    // Not found.
+    if (room_it == roomCodes.end()) {
+        return false;
+    }
+
+    // Find all the exits to that room.
+    exits_t exits = room_it->second->exits;
+
+    bool anyLocked = false;
+
+    // Walk through them, locking the lockable ones.
+    for (exits_t::iterator it = exits.begin(); it != exits.end(); ++it) {
+        if (it->second->isLockable()) {
+            code_t doorCode = it->second->getCode();
+            if (lockDoor(doorCode, puzzle)) {
+                out->push_back(doorCode);
+                anyLocked = true;
+            }
+        }
+    }
+
+    return anyLocked;
+}
+
 // Returns the LED number, but only if we're given a door.
 led_t Map::getPortalLed(std::string code) {
 

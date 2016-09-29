@@ -43,47 +43,60 @@ void Game::processInput(print_f print, const std::string *input) {
     // Whatever we do, it's probably going to dirty things up. :)
     dirty = true;
 
-    if (state == WAIT_PUZZLE) {
-        puzzlesMap_t::iterator it = puzzlesMap.find(*input);
-        if (it != puzzlesMap.end()) {
+    switch (state) {
+        case WAIT_PUZZLE: {
+            puzzlesMap_t::iterator it = puzzlesMap.find(*input);
+            if (it != puzzlesMap.end()) {
 
-            if (it->second->used) {
-                print("Code already used\n");
-                lockConsole("Code already", "used...");
-                return;
+                if (it->second->used) {
+                    lockConsole("Code already", "used...");
+                }
+                else {
+                    // Code valid, change to waiting for room.
+                    puzzle = it->second;
+                    state = WAIT_CODE;
+                }
             }
             else {
-                puzzle = it->second;
-                state = WAIT_CODE;
-                return;
+                lockConsole("Invalid code");
             }
+            break;
         }
-        else {
-            print("Invalid code\n");
-            lockConsole("Invalid code");
-            return;
+        case WAIT_CODE: {
+
+            // Switch back to waiting for puzzle input; may be overriden
+            // by lockConsole later in the switch.
+            state = WAIT_PUZZLE;
+
+            switch(puzzle->type) {
+                case DOOR:
+                    if ( map.lockDoor(*input,puzzle) ) {
+                        // Successful lock! Schedule unlock
+                        lockConsole("Door locked","",1000);
+                        scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*input,puzzle));
+                    }
+                    else {
+                        lockConsole("Door code","not valid");
+                    }
+                case ROOM:
+                    codeVector_t codes;
+                    if ( map.lockRoom(*input,puzzle,&codes) ) {
+                        lockConsole("Room locked","",1000);
+
+                        for(codeVector_t::iterator code = codes.begin(); code != codes.end(); ++code) {
+                            scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*code,puzzle));
+                        }
+                    }
+
+
+                // case FLOOR:
+                // case EMERGENCY:
+            }
+
+            // Regardless of locks, reset our puzle.
+            puzzle = NULL;
         }
     }
-    else if (state == WAIT_CODE) {
-
-        if (puzzle->type == DOOR) {
-            if ( map.lockDoor(*input,puzzle) ) {
-                // Successful lock! Schedule unlock
-                print("Locking door\n");
-                scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*input,puzzle));
-            }
-            else {
-                print("Door lock unsuccessful\n");
-                // Unsuccessful.
-            }
-        }
-        
-        puzzle = NULL;
-        state = WAIT_PUZZLE;
-    }
-
-    // You gave us a code when we weren't expecting it? Hah.
-
 }
 
 void Game::lockConsole(std::string line1, std::string line2, millis_t time) {

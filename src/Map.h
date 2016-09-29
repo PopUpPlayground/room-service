@@ -52,6 +52,7 @@ class Map {
         bool isLocked(const room_t src, const Room *dst);
 
         bool lockDoor(const code_t code, Puzzle *puzzle);
+        bool lockRoom(const code_t code, Puzzle *puzzle, codeVector_t *out);
 
         void unlockDoor(const code_t code, Puzzle *puzzle);
 

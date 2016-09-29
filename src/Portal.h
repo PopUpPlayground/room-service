@@ -24,6 +24,8 @@ class Portal {
 
         // Only some doors can be locked. By default they're not.
         virtual bool isLocked(LockTable *) { return false; } 
+        virtual bool isLockable() { return false; }
+        virtual const char *getCode() { return NULL; }
 
         Portal(const led_t _led = -1) :led(_led) { };
         virtual ~Portal() { };
