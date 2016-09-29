@@ -29,9 +29,6 @@ class Map {
         // We keep track of which rooms are on each floor
         floorRooms_t floorRooms;
 
-        // TODO: Remove if not needed.
-        // std::multimap<floor_t, DoorPortal *> floorDoors;
-
         // The map needs to know what's locked.
 
         void dumpVector(path_t *vector);
@@ -71,7 +68,7 @@ class Map {
             for (map_t::iterator i = map.begin(); i != map.end(); ++i) {
                 delete i->second;
             }
-            // TODO: Delete floorRooms and floorDoors 
+            // TODO: Delete floorRooms
         }
 
 };

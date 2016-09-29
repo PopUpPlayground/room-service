@@ -198,7 +198,11 @@ bool Map::lockFloor(const code_t code, Puzzle *puzzle, codeVector_t *out) {
     std::pair<floorRooms_t::iterator, floorRooms_t::iterator> range = floorRooms.equal_range(code);
 
     for (floorRooms_t::iterator it = range.first; it != range.second; ++it) {
-        anyLocked = lockRoom(code, puzzle, out) || anyLocked;
+        const char *roomCode = it->second->code;
+
+        if (roomCode != NULL) {
+            anyLocked = lockRoom(roomCode, puzzle, out) || anyLocked;
+        }
     }
 
     return anyLocked;
