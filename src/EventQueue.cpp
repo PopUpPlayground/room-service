@@ -1,4 +1,5 @@
 #include "EventQueue.h"
+#include "UnlockEvent.h"
 
 void EventQueue::runEvents(print_f print, millis_t time, Game *game) {
 
@@ -10,30 +11,7 @@ void EventQueue::runEvents(print_f print, millis_t time, Game *game) {
         i != events.end() && i->first <= time;
         // Increment happens in the main loop.
     ) {
-
-        // Process the event
-#ifdef DEBUG
-        print("Firing event...\n");
-#endif
-        bool clearMem = i->second->processEvent(print, game);
-
-        // The event has fired! Now we deconstruct it if requested.
-        if (clearMem) {
-#ifdef DEBUG
-            print("Clearing event memory\n");
-#endif
-            delete i->second;
-        }
-
-        // And now let's delete the element in the multimap itself. This would
-        // be easy if we were using C++11, but apparently gcc doesn't support
-        // that, so I'm going to cry into this code instead. (Thanks,
-        // Stackoverflow....)
-
-        events_t::iterator save = i;
-        ++save;
-        events.erase(i);
-        i = save;
+        i = fireEvent(print,game,i);
     }
 }
 
@@ -41,4 +19,38 @@ void EventQueue::runEvents(print_f print, millis_t time, Game *game) {
 // next time runEvents is called).
 void EventQueue::scheduleEvent(millis_t time, Event *event) {
     events.insert( std::make_pair( time, event) );
+}
+
+// Fires all locks now.
+void EventQueue::clearLocks(print_f print, Game *game) {
+    for ( events_t::iterator i = events.begin(); i != events.end(); ) {
+
+        if (i->second->isUnlockEvent()) {
+            i = fireEvent(print, game, i);
+        }
+        else {
+            ++i;
+        }
+    }
+}
+
+// Fires an event, returns iterator to next event
+events_t::iterator EventQueue::fireEvent(print_f print, Game *game, events_t::iterator ev) {
+    
+    bool clearMem = ev->second->processEvent(print, game);
+
+    // The event has fired! Now we deconstruct it if requested.
+    if (clearMem) {
+        delete ev->second;
+    }
+
+    // And now let's delete the element in the multimap itself. This would
+    // be easy if we were using C++11, but apparently gcc doesn't support
+    // that, so I'm going to cry into this code instead. (Thanks,
+    // Stackoverflow....)
+
+    events_t::iterator save = ev;
+    ++save;
+    events.erase(ev);
+    return save;
 }

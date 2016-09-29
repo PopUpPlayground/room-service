@@ -4,6 +4,7 @@
 #include "GoalEvent.h"
 #include "UnlockEvent.h"
 #include "UnlockConsoleEvent.h"
+#include "PlayerHaxxedEvent.h"
 
 void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     time = _time;   // Record game start time. :)
@@ -32,6 +33,12 @@ void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
             // Calculate our goals
             scheduleOffsetEvent(offSet, &((*i)->goalEvent));
         }
+    }
+
+    print("Scheduling H4xX0rZ 1337 5k1llZ\n");
+
+    for (haxxVector_t::iterator i = haxx.begin(); i != haxx.end(); ++i) {
+        runEvent(*i);
     }
 }
 
@@ -147,4 +154,5 @@ void Game::lockConsole(std::string line1, std::string line2, millis_t time) {
     state = DISPLAY_MSG;
     displayMsg = std::make_pair(line1,line2);
     scheduleOffsetEvent(time, &unlock);
+    dirty = true;
 }

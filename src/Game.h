@@ -9,7 +9,10 @@
 #include "Actor.h"
 #include <vector>
 
+class PlayerHaxxedEvent;
+
 typedef std::vector<Actor *> actors_t ;
+typedef std::vector<PlayerHaxxedEvent *> haxxVector_t;
 typedef std::map<puzzle_t, Puzzle *> puzzlesMap_t;
 
 // This is a top level game class. It's a composite of everything one needs to run the game,
@@ -28,6 +31,7 @@ class Game {
         game_state_t state;
         strpair_t displayMsg;
         puzzlesMap_t puzzlesMap;
+        haxxVector_t haxx;
 
         // Dirty is set when the game state changes (eg: actors move) and
         // cleared when the state is displayed to the player.

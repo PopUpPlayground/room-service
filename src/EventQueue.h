@@ -16,9 +16,12 @@ class EventQueue {
     private:
         events_t events;
 
+        events_t::iterator fireEvent(print_f, Game *, events_t::iterator);
+
     public:
         void runEvents(print_f stream, millis_t time, Game *game);
         void scheduleEvent(millis_t time, Event *event);
+        void clearLocks(print_f, Game *);
 };
 
 #endif
