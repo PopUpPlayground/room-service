@@ -85,9 +85,16 @@ void Game::processInput(print_f print, const std::string *input) {
             // by lockConsole later in the switch.
             state = WAIT_PUZZLE;
 
+            bool emergency = false;
+
             switch(puzzle->type) {
+                case EMERGENCY:
+                    emergency = true;
+                    // Intentional fall-through to door case with emergency
+                    // flag set.
+                    
                 case DOOR: {
-                    if ( map.lockDoor(*input,puzzle) ) {
+                    if ( map.lockDoor(*input,puzzle,emergency) ) {
                         // Successful lock! Schedule unlock
                         lockConsole("Door locked","",1000);
                         scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*input,puzzle));
@@ -127,9 +134,6 @@ void Game::processInput(print_f print, const std::string *input) {
 
                     break;
                 }
-
-                case EMERGENCY:
-                    break;
             }
 
             // Regardless of locks, reset our puzle.
