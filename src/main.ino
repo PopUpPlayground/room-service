@@ -128,6 +128,9 @@ void setup() {
 
     delay(2000);
 
+    // The game assumes we begin with a clear LCD.
+    hw.lcd.clear();
+
     game.start(consolePrint, millis()*SPEED_MULTIPLY);
 
     ram_checkpoint = millis();
