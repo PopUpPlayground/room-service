@@ -5,16 +5,16 @@
 // XXX: Race condition; if the console is already locked, it'll unlock early for the players.
 bool PlayerHaxxedEvent::processEvent(print_f print, Game *game) {
 
-    print("Testing haxx\n");
+    // print("Testing haxx\n");
 
     // Have we cooled down enough since the last hack?
     if (lastHaxx + coolDown < game->time) {
-        print("Haxx window opened\n");
+        // print("Haxx window opened\n");
         maybeHaxx(print, game);
     }
 
     // Schedule our next tick
-    print("Scheduling next haxx check\n");
+    // print("Scheduling next haxx check\n");
     game->scheduleOffsetEvent(checkFreq,this);
 
     return false; // Don't clear event memory.
@@ -25,7 +25,7 @@ void PlayerHaxxedEvent::maybeHaxx(print_f print, Game *game) {
     for (actors_t::iterator actor_it = game->actors.begin(); actor_it != game->actors.end(); ++actor_it) {
         if ((*actor_it)->room == room) {
             
-            print("H4xX0r in position\n");
+            // print("H4xX0r in position\n");
 
             // Aww yis, prepared to be h4xX0r3d
             
@@ -39,13 +39,13 @@ void PlayerHaxxedEvent::maybeHaxx(print_f print, Game *game) {
             print("!!!\n");
 
             // Clear all the door locks.
-            print("Clearing locks\n");
+            // print("Clearing locks\n");
             game->events.clearLocks(print, game);
 
-            print("Yielding\n");
+            // print("Yielding\n");
 
             return;
         }
     }
-    print("No H4xX0rs in position");
+    // print("No H4xX0rs in position");
 }
