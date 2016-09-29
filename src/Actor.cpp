@@ -4,6 +4,30 @@
 #include "GoalEvent.h"
 #include "MoveEvent.h"
 
+Event *Actor::pathTo(print_f print, Map *map, const Destination *dest) {
+    // Release previous path if exists
+    path.clear();
+
+    // Find out how to get there.
+    // print("...looking for a way to get there.\n");
+    // print("Starting pathfinder...\n");
+    bool pathFound = map->findPath(room, dest->room, &path, print);
+    // print("...done\n");
+
+    if (!pathFound) {
+        // Can't get there, schedule next event to be a recompute.
+        // print("...no path found; sleeping instead.\n");
+        destination = NULL;
+        return &goalEvent;
+    }
+
+    // Aww yis, we're heading somewhere. Schedule a move.
+    // print("...path found, scheduling move.\n");
+
+    destination = dest;
+    return &moveEvent;
+}
+
 Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
 
     print("Finding goal for ");
@@ -22,29 +46,11 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
     }
     print("\n");
     
-    // Release previous path if exists
-    path.clear();
-    
     // Find a place to go.
     // print("...looking for some place to go.\n");
-    destination = goalTable->findGoal(room);
 
-    // Find out how to get there.
-    // print("...looking for a way to get there.\n");
-    // print("Starting pathfinder...\n");
-    bool pathFound = map->findPath(room, destination->room, &path, print);
-    // print("...done\n");
-
-    if (!pathFound) {
-        // Can't get there, schedule next event to be a recompute.
-        // print("...no path found; sleeping instead.\n");
-        destination = NULL;
-        return &goalEvent;
-    }
-
-    // Aww yis, we're heading somewhere. Schedule a move.
-    // print("...path found, scheduling move.\n");
-    return &moveEvent;
+    // Find a goal and path to it.
+    return pathTo(print, map, goalTable->findGoal(room));
 }
 
 void Actor::showPath(print_f print) {

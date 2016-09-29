@@ -38,13 +38,18 @@ class Actor {
         path_t path;
         const Destination *destination;
 
+        // Our first move goal, if we have one,
+        const Destination *firstMove;
+
+        Event *pathTo(print_f, Map *, const Destination *dest);
         Event *recomputeGoal(print_f, Map *, const hunger_t);
         void showPath(print_f);
         
         Actor(
             const char *_name, const speed_t _speed, const room_t starting_room,
             const hunger_t _hungerBreak,
-            Goals *_regularGoals, Goals *_hungryGoals, const millis_t _activateTime = 0
+            Goals *_regularGoals, Goals *_hungryGoals, const millis_t _activateTime = 0,
+            const Destination *_firstMove = NULL
         )
             : goalEvent(this)
             , moveEvent(this)
@@ -55,6 +60,7 @@ class Actor {
             , hungerBreak(_hungerBreak)
             , regularGoals(_regularGoals)
             , hungryGoals(_hungryGoals)
+            , firstMove(_firstMove)
             { 
                 // Reserving up front might help prevent memory fragmentation
                 path.reserve(MAX_PATH_LENGTH);

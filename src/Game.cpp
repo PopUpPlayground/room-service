@@ -20,7 +20,18 @@ void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
 
     print("Scheduling actor wake-ups...\n");
     for (actors_t::iterator i = actors.begin(); i != actors.end(); ++i) {
-        scheduleOffsetEvent((*i)->activateTime, new GoalEvent(*i));
+        const Destination *firstMove = (*i)->firstMove;
+        const millis_t offSet = (*i)->activateTime;
+
+        if (firstMove != NULL) {
+            // Path to our programmed first move.
+            Event *event = (*i)->pathTo(print, &map, firstMove);
+            scheduleOffsetEvent(offSet, event);
+        }
+        else {
+            // Calculate our goals
+            scheduleOffsetEvent(offSet, &((*i)->goalEvent));
+        }
     }
 }
 
