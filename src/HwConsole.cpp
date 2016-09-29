@@ -63,6 +63,13 @@ void HwConsole::updateConsole(Game *game) {
 }
 
 void HwConsole::updateLCDs(Game *game) {
+
+    if (game->justUnlocked) {
+        playerInput = "";
+        clearLcdLine(1);
+        game->justUnlocked = false;
+    }
+
     if (game->state == WAIT_PUZZLE) {
         displayLcd("Enter code...");
     } 
@@ -169,7 +176,7 @@ void HwConsole::displayLcdCode(const char *code, byte target) {
 // TODO: Use target
 void HwConsole::clearLcdLine(byte line, byte target) {
     lcd.setCursor(0,line);
-    lcd.print("               ");   // Ugly, but clears the line.
+    lcd.print("                ");   // Ugly, but clears the line.
     lcd.setCursor(0,line);
 }
 

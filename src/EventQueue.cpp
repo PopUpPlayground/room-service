@@ -34,6 +34,20 @@ void EventQueue::clearLocks(print_f print, Game *game) {
     }
 }
 
+void EventQueue::clearUnlockConsoleEvents() {
+    for ( events_t::iterator i = events.begin(); i != events.end(); ) {
+        if (i->second->isUnlockConsoleEvent()) {
+            events_t::iterator save = i;
+            ++save;
+            events.erase(i);
+            i = save;
+        }
+        else {
+            ++i;
+        }
+    }
+}
+
 // Fires an event, returns iterator to next event
 events_t::iterator EventQueue::fireEvent(print_f print, Game *game, events_t::iterator ev) {
     

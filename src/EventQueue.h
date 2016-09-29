@@ -22,6 +22,7 @@ class EventQueue {
         void runEvents(print_f stream, millis_t time, Game *game);
         void scheduleEvent(millis_t time, Event *event);
         void clearLocks(print_f, Game *);
+        void clearUnlockConsoleEvents();
 };
 
 #endif

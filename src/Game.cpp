@@ -153,6 +153,7 @@ void Game::lockConsole(std::string line1, std::string line2, millis_t time) {
     static UnlockConsoleEvent unlock;
     state = DISPLAY_MSG;
     displayMsg = std::make_pair(line1,line2);
+    events.clearUnlockConsoleEvents();
     scheduleOffsetEvent(time, &unlock);
     dirty = true;
 }

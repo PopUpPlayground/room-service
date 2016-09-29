@@ -9,6 +9,7 @@ class Puzzle;
 class UnlockConsoleEvent : public Event {
     public:
         bool processEvent(print_f print, Game *);
+        bool isUnlockConsoleEvent() { return true; }
 };
 
 #endif

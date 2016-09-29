@@ -16,6 +16,7 @@ class Event {
         // (a lot of events will re-use themselves).
         virtual bool processEvent(print_f print, Game *) = 0;
         virtual bool isUnlockEvent() { return false; }
+        virtual bool isUnlockConsoleEvent() { return false; }
 
         // This is how we let child classes manage deletion, yes?
         virtual ~Event() { }
