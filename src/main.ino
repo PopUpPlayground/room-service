@@ -124,7 +124,7 @@ millis_t ram_checkpoint;
 void setup() {
     // Our hw object has already done most init for us. :)
 
-    // testLights();
+    testLights();
 
     Serial.print("Starting game soon");
     hw.displayLcd("Reticulating","splines...");
@@ -138,7 +138,7 @@ void setup() {
         Serial.print(".");
     }
 
-    waitStartGame();
+    // waitStartGame();
 
     Serial.print("\nStarting game....\n");
     Serial.print(game.map.errors.c_str());
