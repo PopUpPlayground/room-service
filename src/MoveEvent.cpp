@@ -14,12 +14,12 @@ bool MoveEvent::processEvent(print_f print, Game *game) {
     game->dirty = true;
 
     // print("Move event triggered for ");
-    print(actor->name);
-    print(": ");
+    // print(actor->name);
+    // print(": ");
 
-    const Room *currentRoom = game->map.map[actor->room];
+    // const Room *currentRoom = game->map.map[actor->room];
 
-    print(currentRoom->name);
+    // print(currentRoom->name);
     
     // Pop the first element off the route.
     room_t next = *(actor->path.begin());
@@ -36,8 +36,8 @@ bool MoveEvent::processEvent(print_f print, Game *game) {
         return false;
     }
 
-    print(" -> ");
-    print(room->name);
+    // print(" -> ");
+    // print(room->name);
 
     if (door == NULL) {
         print("...BUT THE DOOR, LIKE THE CAKE, IS A LIE!\n");

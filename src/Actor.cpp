@@ -30,8 +30,8 @@ Event *Actor::pathTo(print_f print, Map *map, const Destination *dest) {
 
 Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
 
-    print("Finding goal for ");
-    print(name);
+    // print("Finding goal for ");
+    // print(name);
 
     assert(map != NULL);
 
@@ -41,10 +41,10 @@ Event *Actor::recomputeGoal(print_f print, Map *map, const hunger_t hunger) {
     Goals *goalTable = regularGoals;
 
     if (hungerRoll > hungerBreak) {
-        print(" (HUNGRY!)");
+        // print(" (HUNGRY!)");
         goalTable = hungryGoals;
     }
-    print("\n");
+    // print("\n");
     
     // Find a place to go.
     // print("...looking for some place to go.\n");

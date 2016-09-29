@@ -36,10 +36,16 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
             print(" has no fixed destination! This is **A BUG** unless we're unit testing.\n");
         }
         else if (actor->destination->room == dst->number) {
-            // print(actor->name);
+
+            const Room *currentRoom = game->map.map[actor->room];
+
+            print(actor->name);
+            print(" -> ");
+            print(currentRoom->name);
+            print("\n");
             // print(" has arrived at their final destination!\n");
             
-            print(" (now resting)\n");
+            // print(" (now resting)\n");
 
             // Schedule next goal.
             // TODO: Use sigmas
@@ -50,7 +56,7 @@ void DoorPortal::trigger(print_f print, Actor *actor, const Room *dst, Game *gam
             // print(actor->name);
             // print(" is in transit, scheduling next move.\n");
 
-            print("\n");    // No extra info to provide.
+            // print("\n");    // No extra info to provide.
 
             game->scheduleOffsetEvent( actor->speed, &(actor->moveEvent) );
         }

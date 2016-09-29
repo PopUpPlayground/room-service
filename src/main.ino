@@ -104,12 +104,27 @@ void testLights() {
     }
 }
 
+void waitStartGame() {
+    hw.displayLcd("Press any key","to start.");
+
+    while (true) {
+        char key = hw.keypad.getKey();
+        if (key != NO_KEY) {
+            break;
+        }
+    }
+
+    hw.displayLcd("Majordomo boot","please wait...");
+
+    delay(90 * 1000);
+}
+
 millis_t ram_checkpoint;
 
 void setup() {
     // Our hw object has already done most init for us. :)
 
-    testLights();
+    // testLights();
 
     Serial.print("Starting game soon");
     hw.displayLcd("Reticulating","splines...");
@@ -122,6 +137,8 @@ void setup() {
         delay(1000);
         Serial.print(".");
     }
+
+    waitStartGame();
 
     Serial.print("\nStarting game....\n");
     Serial.print(game.map.errors.c_str());
@@ -140,12 +157,14 @@ void loop() {
 
     // Display RAM usage.
     
+    /*
     if (millis() - ram_checkpoint > (10000/SPEED_MULTIPLY)) {
         Serial.print("Free RAM: ");
         Serial.print(freeRam());
         Serial.print("\n");
         ram_checkpoint = millis();
     }
+    */
 
     // Aww yis, running a game!
     game.tick(consolePrint, millis()*SPEED_MULTIPLY);

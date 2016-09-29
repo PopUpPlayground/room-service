@@ -5,6 +5,7 @@
 #include "UnlockEvent.h"
 #include "UnlockConsoleEvent.h"
 #include "PlayerHaxxedEvent.h"
+#include "MsgEvent.h"
 
 void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     time = _time;   // Record game start time. :)
@@ -40,6 +41,12 @@ void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
     for (haxxVector_t::iterator i = haxx.begin(); i != haxx.end(); ++i) {
         runEvent(*i);
     }
+
+    // HACKZZ MESSAGES
+    scheduleOffsetEvent(180 * 1000, new MsgEvent("\n\n****** Reynold heading to roof! ******\n\n"));
+    scheduleOffsetEvent(15 * 60 * 1000, new MsgEvent("\n\n****** 15 minute mark! ******\n\n"));
+    scheduleOffsetEvent(28 * 60 * 1000, new MsgEvent("\n\n****** 28 minute mark! ******\n\n"));
+    scheduleOffsetEvent(30 * 60 * 1000, new MsgEvent("\n\n****** GAME OVER!! ******\n\n"));
 }
 
 void Game::tick(print_f print, millis_t _time) {
@@ -104,6 +111,11 @@ void Game::processInput(print_f print, const std::string *input) {
                     if ( map.lockDoor(*input,puzzle,emergency) ) {
                         // Successful lock! Schedule unlock
                         lockConsole("Door locked","",1000);
+
+                        if (emergency) {
+                            print("\n\n ****** EMERGENCY DOOR LOCK USED ******\n\n");
+                        }
+
                         scheduleOffsetEvent(puzzle->duration, new UnlockEvent(*input,puzzle));
                     }
                     else {
