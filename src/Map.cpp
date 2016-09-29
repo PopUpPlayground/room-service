@@ -79,7 +79,7 @@ void Map::newStair(const room_t r1, const room_t r2) {
 
 // Bi-directional door creation. Rooms must exist first.
 // TODO: Add to door/floor table
-void Map::newBiDoor(const room_t r1, const room_t r2, const char *code, const led_t led) {
+void Map::newBiDoor(const room_t r1, const room_t r2, const char *code, const led_t led, const bool emergencyOnly) {
 
     if (map.find(r1) == map.end()) {
         errors += "Attempt to make BiDoor from void room ";
@@ -104,8 +104,8 @@ void Map::newBiDoor(const room_t r1, const room_t r2, const char *code, const le
     
     // The doors are different objects in memory, but share the same ID,
     // and hence the same locks.
-    map[r1]->exits[r2] = new DoorPortal(code,led);
-    map[r2]->exits[r1] = new DoorPortal(code,led);
+    map[r1]->exits[r2] = new DoorPortal(code,led,emergencyOnly);
+    map[r2]->exits[r1] = new DoorPortal(code,led,emergencyOnly);
 
     if (code != NULL) {
         portalCodes[code] = map[r1]->exits[r2];
@@ -130,12 +130,21 @@ bool Map::isLocked(const room_t src, const Room *dst) {
 }
 
 // Returns true if request was valid, false otherwise.
-bool Map::lockDoor(const code_t code, Puzzle *puzzle) {
+bool Map::lockDoor(const code_t code, Puzzle *puzzle, const bool emergency) {
 
-    if (portalCodes.find(code) == portalCodes.end()) {
+    portalCodes_t::iterator it = portalCodes.find(code);
+
+    if (it == portalCodes.end()) {
+        // Not a valid code.
         return false;
     }
 
+    if (it->second->isEmergencyOnly() && !emergency) {
+        // Emergency code not used
+        return false;
+    }
+
+    // Lock the door!
     locks.addLock(code, puzzle);
     puzzle->used = true;
     return true;

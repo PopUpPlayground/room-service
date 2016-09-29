@@ -53,14 +53,14 @@ class Map {
         bool isLocked(const room_t src, const room_t dst);
         bool isLocked(const room_t src, const Room *dst);
 
-        bool lockDoor(const code_t code, Puzzle *puzzle);
+        bool lockDoor(const code_t code, Puzzle *puzzle, const bool emergency = false);
         bool lockRoom(const code_t code, Puzzle *puzzle, codeVector_t *out);
         bool lockFloor(const code_t code, Puzzle *puzzle, codeVector_t *out);
 
         void unlockDoor(const code_t code, Puzzle *puzzle);
 
         void newRoom(const char *name, const room_t number, const code_t floor, const char *code = NULL, const led_t led = -1);
-        void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL, const led_t led = -1);
+        void newBiDoor(const room_t r1, const room_t r2, const char *code = NULL, const led_t led = -1, const bool emergencyOnly = false);
         void newStair(const room_t r1, const room_t r2);
         led_t getPortalLed(std::string code);
 
