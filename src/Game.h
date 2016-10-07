@@ -19,9 +19,6 @@ typedef std::map<puzzle_t, Puzzle *> puzzlesMap_t;
 // but with no hardware dependence so we can test it in the cloud.
 
 class Game {
-    private:
-        Puzzle *puzzle;        // Last puzzle code players entered.
-
     public:
         hunger_t globalHunger;
         EventQueue events;
@@ -32,6 +29,7 @@ class Game {
         strpair_t displayMsg;
         puzzlesMap_t puzzlesMap;
         haxxVector_t haxx;
+        Puzzle *puzzle;        // Last puzzle code players entered.
 
         // Dirty is set when the game state changes (eg: actors move) and
         // cleared when the state is displayed to the player.

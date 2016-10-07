@@ -74,7 +74,19 @@ void HwConsole::updateLCDs(Game *game) {
         displayLcd("Enter code...");
     } 
     else if (game->state == WAIT_CODE) {
-        displayLcd("Lock what?");
+        switch(game->puzzle->type) {
+            case FLOOR:
+                displayLcd("Which floor?");
+                break;
+            case ROOM:
+                displayLcd("Which room?");
+                break;
+            case DOOR:
+            case EMERGENCY:
+                // Same display message for both.
+                displayLcd("Which door?");
+                break;
+        }
     } 
     else if (game->state == DISPLAY_MSG) {
         displayLcd(game->displayMsg);
