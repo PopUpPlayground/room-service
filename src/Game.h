@@ -14,6 +14,7 @@ class PlayerHaxxedEvent;
 typedef std::vector<Actor *> actors_t ;
 typedef std::vector<PlayerHaxxedEvent *> haxxVector_t;
 typedef std::map<puzzle_t, Puzzle *> puzzlesMap_t;
+typedef std::vector<std::pair<millis_t, std::string> > msgVector_t;
 
 // This is a top level game class. It's a composite of everything one needs to run the game,
 // but with no hardware dependence so we can test it in the cloud.
@@ -28,6 +29,7 @@ class Game {
         game_state_t state;
         strpair_t displayMsg;
         puzzlesMap_t puzzlesMap;
+        msgVector_t msgVector;            // Scheduled messages to run during game.
         haxxVector_t haxx;
         Puzzle *puzzle;        // Last puzzle code players entered.
 

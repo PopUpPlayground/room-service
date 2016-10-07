@@ -11,6 +11,7 @@ class MsgEvent : public Event {
 
     public:
         MsgEvent(const char *str) : msg(str) { };
+        MsgEvent(const std::string str) : msg(str) { };
         bool processEvent(print_f print, Game *);
 };
 

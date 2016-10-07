@@ -42,11 +42,12 @@ void Game::start(print_f print, millis_t _time, hunger_t startingHunger) {
         runEvent(*i);
     }
 
-    // HACKZZ MESSAGES
-    scheduleOffsetEvent(180 * 1000, new MsgEvent("\n\n****** Reynold heading to roof! ******\n\n"));
-    scheduleOffsetEvent(15 * 60 * 1000, new MsgEvent("\n\n****** 15 minute mark! ******\n\n"));
-    scheduleOffsetEvent(28 * 60 * 1000, new MsgEvent("\n\n****** 28 minute mark! ******\n\n"));
-    scheduleOffsetEvent(30 * 60 * 1000, new MsgEvent("\n\n****** GAME OVER!! ******\n\n"));
+    print("Scheduling timed messages for game runner.\n");
+
+    for (msgVector_t::iterator it = msgVector.begin(); it != msgVector.end(); ++it) {
+        scheduleOffsetEvent(it->first, new MsgEvent(it->second));
+    }
+
 }
 
 void Game::tick(print_f print, millis_t _time) {
