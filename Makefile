@@ -4,19 +4,23 @@ all:
 game:
 	platformio run -e roomservice
 
-native:
+native: version
 	platformio run -e native
 
-install:
+install: version
 	platformio run -e roomservice --target upload
 
 clean:
 	rm -rf .pioenvs
+	rm -rf src/version.h
 
 test:	always
 	platformio test -e local
 
 monitor:
 	platformio device monitor
+
+version:
+	perl -Mautodie -e'my $$version = `git describe --tags`; chomp $$version; open($$fh,">","src/version.h"); print {$$fh} "#ifndef VERSION_H\n#define VERSION_H\n#define VERSION \"$$version\"\n#endif\n";'
 
 always:

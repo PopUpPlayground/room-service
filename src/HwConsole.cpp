@@ -2,6 +2,7 @@
 #ifndef NATIVE
 
 #include "HwConsole.h"
+#include "version.h"
 #include "Game.h"
 #include "Actor.h"
 
@@ -63,6 +64,11 @@ void HwConsole::updateConsole(Game *game) {
 }
 
 void HwConsole::updateLCDs(Game *game) {
+
+    // Right now our second LCD is unused.
+    std::string version = "Majordomo ";
+    version += VERSION;
+    displayLcd("Winterview Manor",version,1);
 
     if (game->justUnlocked) {
         playerInput = "";
@@ -160,18 +166,17 @@ void HwConsole::updateKeypad(game_state_t state, std::string *out) {
     return;
 }
 
-// TODO: Actually use the target (we will have multiple LCDs)
 void HwConsole::displayLcd(const char *line1, const char *line2, byte target) {
-    clearLcdLine(0);
-    lcd.print(line1);
+    clearLcdLine(0,target);
+    lcds[target]->print(line1);
     if (line2 != NULL) {
-        clearLcdLine(1);
-        lcd.print(line2);
+        clearLcdLine(1,target);
+        lcds[target]->print(line2);
     }
 }
 
 void HwConsole::displayLcd(const std::string line1, const std::string line2, byte target) {
-    displayLcd(line1.c_str(), line2.c_str());
+    displayLcd(line1.c_str(), line2.c_str(), target);
 }
 
 void HwConsole::displayLcd(strpair_t msg, byte target) {
@@ -179,17 +184,15 @@ void HwConsole::displayLcd(strpair_t msg, byte target) {
 }
 
 // Displays a code on the second line of the LCD, leaving the first unchanged.
-// TODO: Use target
 void HwConsole::displayLcdCode(const char *code, byte target) {
-    clearLcdLine(1);
-    lcd.print(code);
+    clearLcdLine(1,target);
+    lcds[target]->print(code);
 }
 
-// TODO: Use target
 void HwConsole::clearLcdLine(byte line, byte target) {
-    lcd.setCursor(0,line);
-    lcd.print("                ");   // Ugly, but clears the line.
-    lcd.setCursor(0,line);
+    lcds[target]->setCursor(0,line);
+    lcds[target]->print("                ");   // Ugly, but clears the line.
+    lcds[target]->setCursor(0,line);
 }
 
 void HwConsole::clearLcds() {

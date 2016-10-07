@@ -2,3 +2,4 @@
 *.swp
 *.bak
 GameData
+src/version.h
