@@ -192,5 +192,11 @@ void HwConsole::clearLcdLine(byte line, byte target) {
     lcd.setCursor(0,line);
 }
 
+void HwConsole::clearLcds() {
+    for(int i=0; i < numDisplays; ++i) {
+        lcds[i]->clear();
+    }
+}
+
 #endif // NATIVE
 #endif // UNIT_TEST

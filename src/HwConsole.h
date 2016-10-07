@@ -24,7 +24,8 @@ class HwConsole {
         const byte tlcClock = 16;
         const byte tlcData  = 17;
 
-        const byte lcdAddr = 0x27;
+        const byte lcdAddr  = 0x27;
+        const byte lcdAddr2 = 0x26;
         const byte lcdBacklightPin = 3;
 
         std::string playerInput;
@@ -35,19 +36,30 @@ class HwConsole {
 
         void displayLcdCode(const char *, byte target = 0);
 
+        // This is a rather awful way of doing this; we should
+        // have code that supports N displays.
+        static const byte numDisplays = 2;
+        LiquidCrystal_I2C lcd;
+        LiquidCrystal_I2C lcd2;
+
     public:
         Keypad keypad;
         Adafruit_TLC5947 tlc;
-        LiquidCrystal_I2C lcd;
+        LiquidCrystal_I2C *lcds[numDisplays];
 
         HwConsole()
             : playerInput("")
+            , lcd(LiquidCrystal_I2C(lcdAddr,  2,1,0,4,5,6,7))
+            , lcd2(LiquidCrystal_I2C(lcdAddr2,2,1,0,4,5,6,7))
             , keypad(InitKeypad())
             , tlc(Adafruit_TLC5947(tlcQty, tlcClock, tlcData, tlcLatch))
-            , lcd(LiquidCrystal_I2C(lcdAddr,2,1,0,4,5,6,7))
         {
             Serial.begin(9600);
             tlc.begin();
+
+            // Ugh, kludgy.
+            lcds[0] = &lcd;
+            lcds[1] = &lcd2;
 
             // Set up power LED and tlc output enable.
             pinMode(pwrLed, OUTPUT);
@@ -63,15 +75,17 @@ class HwConsole {
             clearLights();
             enableLights();
 
-            // Enable our 16x2 display.
+            // Enable our 16x2 displays
             
-            lcd.begin(16,2);
-            lcd.setBacklightPin(lcdBacklightPin,POSITIVE);
-            lcd.setBacklight(HIGH);
-            lcd.home(); // Cursor -> 0,0
-            lcd.print("Stay A While");
-            lcd.setCursor(0,1);
-            lcd.print("Stay... FOREVER");
+            for (int i=0; i < numDisplays; ++i) {
+                lcds[i]->begin(16,2);
+                lcds[i]->setBacklightPin(lcdBacklightPin,POSITIVE);
+                lcds[i]->setBacklight(HIGH);
+                lcds[i]->home(); // Cursor -> 0,0
+                lcds[i]->print("Stay A While");
+                lcds[i]->setCursor(0,1);
+                lcds[i]->print("Stay... FOREVER");
+            }
         }
 
         void enableLights();
@@ -82,6 +96,7 @@ class HwConsole {
         void updateConsole(Game *);
         void updateKeypad(game_state_t, std::string *);
 
+        void clearLcds();
         void displayLcd(const std::string line1, const std::string line2, byte target = 0);
         void displayLcd(const char *line1, const char *line2 = NULL, byte target = 0);
         void displayLcd(strpair_t, byte target = 0);

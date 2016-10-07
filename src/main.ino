@@ -146,7 +146,7 @@ void setup() {
     delay(2000);
 
     // The game assumes we begin with a clear LCD.
-    hw.lcd.clear();
+    hw.clearLcds();
 
     game.start(consolePrint, millis()*SPEED_MULTIPLY);
 
