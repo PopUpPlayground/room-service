@@ -1,7 +1,7 @@
-all:
+all: version
 	platformio run -e teensy32
 
-game:
+game: version
 	platformio run -e roomservice
 
 native: version
