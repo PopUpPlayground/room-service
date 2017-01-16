@@ -7,6 +7,9 @@ game: version
 native: version
 	platformio run -e native
 
+valgrind: native
+	valgrind .pioenvs/native/program
+
 install: version
 	platformio run -e roomservice --target upload
 
